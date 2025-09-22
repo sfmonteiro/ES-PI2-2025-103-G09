@@ -1,0 +1,99 @@
+/*Responsável: Guilherme Mascarenhas Plácido Corrêa
+RA: 25020685 */
+
+img{
+    width: 300px;
+}
+
+body {
+    font-family: comfortaa;
+    background-color: #1e87a3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.container{
+    margin-top: 175px;
+    text-align: center;
+    background-color: white;
+    padding: 20px 50px;
+    border-radius: 40px;
+    box-shadow: 0 0 30px #075c74;
+    width: 400px;
+    height: 400px;
+}
+
+/*Textos*/
+
+h1 {
+    margin-top: 0px;
+    margin-bottom: 24px;
+    font-size: 35px;
+    text-align: center;
+    color: #2a3a8e;
+}
+
+p{
+    margin-top: 24px;
+    font-size: 18px;
+}
+
+/*Formulário e inputs*/
+form{
+    font-size: 22px;
+}
+
+.emailbox{
+    position: relative;
+    display: inline-block;
+    margin: 15px 0 20px;
+}
+
+.email-input{
+    box-sizing: border-box;
+    background-size: 20px;
+    padding: 8px 14px;
+    width: 300px;
+    height: 40px;
+    padding-left: 40px;
+    margin: 0;
+    border-radius: 50px;
+    border: 3px solid #1e87a3;
+    font-family: comfortaa;
+    display: block;
+    font-size: 18px;
+}
+
+.emailbox .icon {
+    position: absolute; /*Mantendo a posição do icon para não ser sobrescrito por autofill, por exemplo*/
+    left: 10px;
+    top:0;
+    bottom:0;
+    margin: auto 0;
+    width: 25px;
+    height: 25px;
+    pointer-events: none;
+}
+
+/* Foco nos campos clicados */
+input:focus {
+    border-color: #6db0c1;
+    box-shadow: 0 0 0 3px #9ed9e9;
+    outline: none;
+}
+
+/*Botões*/
+button[type="submit"] {
+    width: 250px;
+    font-size: 17px;
+    padding: 9px 12px;
+    border: none;
+    border-radius: 50px;
+    background-color:#2a3a8e;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.25s ease;
+    display:inline-block;
+}
