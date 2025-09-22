@@ -1,0 +1,34 @@
+<!--Gabriel Figueira Albasini / RA:25019916-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova Senha</title>
+    <link rel="stylesheet" href="estiloReSenha.css">
+    <!---Ícone (logo) no navegador: chamada "favicon"-->
+    <link rel="icon" type="image/png" href="icone_NotaDez.png">
+
+    <link rel="stylesheet" href="style.css">
+
+    <!--importação da fonte Comfortaa pelo Google Fonts-->
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap" rel="stylesheet"> 
+
+</head>
+<body>
+    <div class="container">
+        <h1>Alterar Senha</h1>
+        <form>
+            <!--Campos para digitar a nova senha e confirmar ela-->
+            <label for="nova-senha">Nova senha:</label>
+            <input type="password" id="nova-senha" name="nova-senha" placeholder="Digite sua nova senha" required>
+            <small class="hint">Min. 8, com maiúscula, minúscula, número e símbolo.</small>
+            
+            <label for="confirmar-senha">Confirme a nova senha:</label>
+            <input type="password" id="confirmar-senha" name="confirmar-senha" placeholder="Confirme sua nova senha" required>
+            <!--Botão para confirmar a mudança de senhaa-->
+            <button type="submit">Alterar Senha</button>
+        </form>
+    </div>
+</body>
+</html>
