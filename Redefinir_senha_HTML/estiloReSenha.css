@@ -1,6 +1,7 @@
 /*Responsável: Guilherme Mascarenhas Plácido Corrêa
 RA: 25020685 */
 
+/*Geral*/
 img{
     width: 300px;
 }
@@ -86,8 +87,9 @@ input:focus {
 
 /*Botões*/
 button[type="submit"] {
+    font-family: comfortaa;
     width: 250px;
-    font-size: 17px;
+    font-size: 15px;
     padding: 9px 12px;
     border: none;
     border-radius: 50px;

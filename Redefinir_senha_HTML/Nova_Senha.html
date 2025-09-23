@@ -4,10 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nova Senha</title>
+    <title>Criar nova senha</title>
+
     <!---Ícone (logo) no navegador: chamada "favicon"-->
     <link rel="icon" type="image/png" href="icone_NotaDez.png">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="estiloNovaSenha.css">
+
     <!--importação da fonte Comfortaa pelo Google Fonts-->
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap" rel="stylesheet"> 
 
@@ -15,15 +17,29 @@
 </head>
 <body>
     <div class="container">
+
+        <img src="logo_NotaDez.png" alt="ícone usuário" class="icon">
+
         <h1>Alterar Senha</h1>
+
         <form>
             <!--Campos para digitar a nova senha e confirmar ela-->
             <label for="nova-senha">Nova senha:</label>
-            <input type="password" id="nova-senha" name="nova-senha" placeholder="Digite sua nova senha" required>
-            <small class="hint">Min. 8, com maiúscula, minúscula, número e símbolo.</small>
+            <div class="senhabox">
+                <img src="icone_cadeado.png" alt="" class="cadeado1">
+                <input type="password" id="nova-senha" name="nova-senha" class="senha" placeholder="Digite sua nova senha" required>
+            </div>
+
+            <br><small class="hint">Minímo 8 caracteres com pelo menos:<br> 1 Maiúscula, 1 Minúscula, 1 número e 1 símbolo.</small><br>
             
-            <label for="confirmar-senha">Confirme a nova senha:</label>
-            <input type="password" id="confirmar-senha" name="confirmar-senha" placeholder="Confirme sua nova senha" required>
+            <label for="confirmar-senha" class="textconfirmar">Confirme a nova senha:</label>
+            <div class="confirmarbox">
+                <img src="icone_cadeado.png" alt="" class="cadeado2">
+                <input type="password" id="confirmar-senha" name="confirmar-senha" class= "confirmarsenha" placeholder="Confirme sua nova senha" required>
+            </div>
+
+            <br><small class="hint">Minímo 8 caracteres com pelo menos:<br> 1 Maiúscula, 1 Minúscula, 1 número e 1 símbolo.</small><br>
+
             <!--Botão para confirmar a mudança de senhaa-->
             <button type="submit">Alterar Senha</button>
         </form>
