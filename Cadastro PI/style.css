@@ -1,0 +1,111 @@
+/* ---------- GERAL ---------- */
+body {
+    font-family: comfortaa;
+    background-color: #1e87a3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* ---------- CONTAINER ---------- */
+.container {
+    background-color: white;
+    padding: 30px 50px;
+    border-radius: 40px;
+    box-shadow: 0 0 30px #075c74;
+    width: 450px;
+    text-align: center;
+}
+
+/* ---------- TÍTULO ---------- */
+.container h2 {
+    margin-bottom: 20px;
+    font-size: 28px;
+    color: #2a3a8e;
+}
+
+/* ---------- FORMULÁRIO ---------- */
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;   /* centraliza os grupos dentro do form */
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.form-group {
+    width: 100%;
+    max-width: 380px;      /* largura máxima para centralizar inputs */
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #2a3a8e;
+}
+
+.form-group input {
+    width: 100%;
+    display: block;
+    padding: 12px;
+    border-radius: 50px;
+    border: 3px solid #1e87a3;
+    font-family: comfortaa;
+    padding-left: 15px;
+    box-sizing: border-box;
+}
+
+.form-group input::placeholder {
+    font-weight: bold;
+    color: rgb(165, 165, 165);
+}
+
+/* Foco nos campos */
+.form-group input:focus {
+    border-color: #6db0c1;
+    box-shadow: 0 0 0 3px #9ed9e9;
+    outline: none;
+}
+
+/* ---------- BOTÃO ---------- */
+.btn {
+    font-family: comfortaa;   /*fonte padrão*/
+    width: 100%;
+    max-width: 380px;         /* mesma largura dos inputs */
+    display: block;
+    padding: 12px;            /* mesma altura dos inputs */
+    border: none;
+    border-radius: 50px;
+    background-color: #2a3a8e;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.25s ease;
+    font-weight: bold;
+    margin-top: 10px;
+    box-sizing: border-box;
+}
+
+.btn:hover {
+    background-color:#192562;
+}
+
+/* ---------- RODAPÉ ---------- */
+.footer {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #333;
+}
+
+.footer a {
+    text-decoration: none;
+    color: #1e87a3;
+    font-weight: bold;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
