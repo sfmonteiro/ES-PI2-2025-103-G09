@@ -1,0 +1,121 @@
+/*Aluno: Sara Fernandes Monteiro | RA: 25024107*/
+
+img {
+    width: 200px;
+    margin-bottom: 30px;
+
+}
+
+.container {
+    text-align: center;
+    padding: 20px 50px;
+}
+
+body {
+
+    font-family: comfortaa;
+    align-items: center; /*alinha verticalmente*/
+    justify-content: center; /*alinha horizontalmente*/
+    height: 100vh;
+    display: flex;
+    margin: 0;
+    background-color: #fff;
+}
+
+h1 {
+    font-size: 30px;
+    margin-bottom: 50px;
+}
+
+h2 {
+    font-size: 20px;
+    margin-bottom: 0;
+}
+
+
+
+.input-container {
+    position: relative;
+    margin-bottom: 30px;
+}
+
+input {
+
+    border-radius: 50px;
+    border: 2px solid rgb(165, 165, 165);
+    font-family: comfortaa;
+    padding: 12px; 
+    padding-left: 100px;
+    width: 400px;
+    height: 30px;
+    transition: 0.3s ease all; /*transiçao da borda*/
+    color: rgb(0, 0, 0);
+}
+
+label {
+    position: absolute;
+    left: 40px;
+    top: 20px;
+    display: flex;
+    align-items: center;
+    transition: 0.2s ease all;
+    pointer-events: none; /*para clicar no input, e nao no label*/
+    font-size: 15px;
+    background-color: transparent; /*fundo inicial transparente*/
+    padding: 0 4px; /*espaço horizontal para nao cortar as letras*/
+    color: #a5a5a5;
+
+}
+
+input:focus + label,
+input:not(:placeholder-shown) + label {
+    top: -6px;
+    font-size: 13px;
+    background-color: #fff;
+    color:#25e4d1;
+
+}
+
+/* muda a cor da borda quando o input está preenchido */
+input:not(:placeholder-shown) {
+    border-color: #25e4d1;
+    transition: border-color 0.3s ease; /* deixa suave */
+}
+
+/* Mudança no input todo quando focado */
+input:focus {
+    border-color: #25e4d1;
+    outline: none;
+}
+
+.input-instituicao {
+    background: url(icone_instituicao.png) no-repeat 10px center;
+    background-size: 20px;
+    padding: 12px;
+    padding-left: 45px;
+}
+
+.input-curso {
+    background: url(icone_curso.png) no-repeat 10px center;
+    background-size: 22px;
+    padding: 12px;
+    padding-left: 45px;
+}
+
+button {
+
+    padding: 9px 14px;
+    border: none;
+    border-radius: 50px;
+    background-color:#1e87a3;
+    color:white;
+    cursor: pointer;
+    transition: background-color 0.25s ease;
+    display: center;
+    font-weight: bold;
+    width: 140px;
+    font-family: comfortaa;
+    outline: none;
+
+}
+
