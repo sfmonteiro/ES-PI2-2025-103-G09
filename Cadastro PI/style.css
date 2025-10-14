@@ -111,6 +111,23 @@ form {
 .footer a:hover {
     text-decoration: underline;
 }
+/* ---------- DICA DE SENHA ---------- */
+.hint {
+  display: block;
+  font-size: 12px;
+  color: #666;
+  margin-top: 4px;
+  margin-bottom: 10px;
+  text-align: left;
+  max-width: 380px;
+}
+/* ---------- CAMPO OBRIGATÓRIO ---------- */
+label.required::after {
+  content: " *";
+  color: #d33;
+  font-weight: bold;
+  margin-left: 4px;
+}
 /* ---------- MENSAGENS ---------- */
 .mensagem {
   position: fixed;
