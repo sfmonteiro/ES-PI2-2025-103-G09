@@ -16,9 +16,16 @@ document.addEventListener("DOMContentLoaded", () => {
     const senhaRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
 
     // Verificações
-    if (!nome) {
-      mostrarErro("Por favor, preencha o nome completo.");
-      return;
+   if (!nome) {
+    mostrarErro("Por favor, preencha o nome completo.");
+    return;
+    }
+      // Verifica se o nome contém apenas letras e espaços
+    const apenasLetras = /^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/;
+
+    if (!apenasLetras.test(nome)) {
+    mostrarErro("O nome deve conter apenas letras.");
+    return;
     }
 
     if (!emailRegex.test(email)) {
@@ -72,3 +79,4 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => overlay.remove(), 3000);
   }
 });
+
