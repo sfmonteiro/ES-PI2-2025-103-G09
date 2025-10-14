@@ -63,11 +63,11 @@ document.addEventListener("DOMContentLoaded", () => {
     document.body.appendChild(div);
     setTimeout(() => div.remove(), 3000);
   }
-
-  // Função para mostrar tela de sucesso
+    // Função para mostrar tela de sucesso e redirecionar
   function mostrarSucesso() {
     const overlay = document.createElement("div");
     overlay.className = "overlay-sucesso";
+    overlay.style.transition = "opacity 1s"; 
     overlay.innerHTML = `
       <div class="caixa-sucesso">
         <img src="icone_NotaDez.png" alt="Sucesso" class="icone-sucesso">
@@ -76,7 +76,14 @@ document.addEventListener("DOMContentLoaded", () => {
     `;
     document.body.appendChild(overlay);
 
-    setTimeout(() => overlay.remove(), 3000);
+    // Faz o fade-out e depois redireciona
+    setTimeout(() => {
+      overlay.style.opacity = "0";
+      setTimeout(() => {
+        overlay.remove();
+        window.location.href = "login.html";
+      }, 1000); // tempo do fade
+    }, 2000); // mostra o sucesso por 2s antes de sumir
   }
-});
+
 
