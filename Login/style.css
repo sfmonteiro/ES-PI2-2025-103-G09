@@ -49,7 +49,7 @@ p {
     font-size: 12px;
     color:rgb(149, 149, 149);
     cursor: pointer;
-    margin-top: 0;
+    margin-top: 5px;
     margin-bottom: 30px;
 }
 
@@ -65,6 +65,14 @@ ul li {
     margin-bottom: 10px;
 }
 
+.erro {
+    padding: 0;
+    margin-bottom: 0;
+    line-height: 1;
+    display: block;
+    color:red;
+    font-size: 0.9em;
+}
 
 /*-------------------FORMULÁRIO E INPUTS*/
 
@@ -78,7 +86,8 @@ form {
     width: 100%;
     padding: 12px;
     padding-left: 40px;
-    margin-bottom: 20px;
+    margin-top: 10px;
+    margin-bottom: 2px;
     border-radius: 50px;
     border: 3px solid #1e87a3;
     font-family: comfortaa;
@@ -90,7 +99,8 @@ form {
     width: 100%;
     padding: 12px;
     padding-left: 40px;
-    margin-bottom: 20px;
+    margin-top: 10px;
+    margin-bottom: 2px;
     border-radius: 50px;
     border: 3px solid #1e87a3;
     font-family: comfortaa;
@@ -116,7 +126,7 @@ input:focus {
     display: flex;
     gap: 8px;
     justify-content: center;
-    margin-top: 40px;
+    margin-top: 35px;
 }
 
 button[type="submit"] {
