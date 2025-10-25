@@ -89,14 +89,14 @@ input:focus {
 }
 
 .input-instituicao {
-    background: url(icone_instituicao.png) no-repeat 10px center;
+    background: url(../images/icone_instituicao.png) no-repeat 10px center;
     background-size: 20px;
     padding: 12px;
     padding-left: 45px;
 }
 
 .input-curso {
-    background: url(icone_curso.png) no-repeat 10px center;
+    background: url(../images/icone_curso.png) no-repeat 10px center;
     background-size: 22px;
     padding: 12px;
     padding-left: 45px;
@@ -119,3 +119,6 @@ button {
 
 }
 
+button:hover {
+    background-color:#1d6f86 ;
+}
