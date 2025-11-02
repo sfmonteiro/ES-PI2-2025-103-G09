@@ -74,6 +74,7 @@ body {
 
 }
 
+/* LOGO */
 .logo-area {
     display: flex;
     align-items: center;
@@ -84,14 +85,15 @@ body {
     height: 50px;
 }
 
+/* INSTITUIÇÃO*/
 .faculdade-area {
     position: absolute;
-    top: 50%; /* ajuste pra centralizar na topbar se quiser */
+    top: 50%;                                           /* ajuste pra centralizar na topbar se quiser */
     left: 50%;
     transform: translate(-50%, -50%);
     display: flex;
     align-items: center;
-    gap: 10px; /* espaço entre texto e caixa */
+    gap: 10px;                                          /* espaço entre texto e caixa */
 }
 
 /* caixa arredondada no centro */
@@ -124,4 +126,95 @@ body {
     font-weight: 500;
     color: #000000;
     font-size: 14px;
+}
+
+/* MINHA CONTA */
+
+.user-menu {
+    position: absolute;
+    right: 25px;   /* distância da borda direita */
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    gap: 10px; /* espaço entre ícone e texto */
+    font-style: bold;
+}
+
+/* ícone */
+.pessoa-icon {
+    width: 18px;
+    height: 18px;
+}
+
+/* botão de clique/hover */
+.user-btn {
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* menu suspenso */
+
+.dropdown {
+    position: absolute;
+    top: 23px;
+    right: 0;
+    background: white;
+    border: 1px solid #cccccc;
+    border-radius: 0 0 10px 10px;
+    box-shadow: 0 0 6px rgba(0,0,0,.15);
+    list-style: none;
+    padding: 5px 10px;
+    width: 150px;
+
+    /* animação */
+    opacity: 0;
+    transform: translateY(-8px);
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* itens */
+.dropdown li {
+    width: 100%;
+}
+
+.dropdown a {
+    position: relative;      /* ✅ necessário p/ o ícone absolute */
+    text-decoration: none;
+    color: #000000;
+    display: block;
+    padding: 10px;
+    padding-left: 35px;      /* espaço para o ícone */
+    border-radius: 50px;
+    transition: background 0.3s;
+    font-size: 10px;
+}
+
+
+.dropdown a:hover {
+    color: #1e87a3;
+    border-radius: 50px;
+}
+
+/* MOSTRAR menu ao passar mouse */
+.user-menu.open .dropdown {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.dropdown p {
+    font-size: 9px;
+    color: #414141;
+}
+
+
+.minha-conta-icon {
+    position: absolute; 
+    left: 12px;
+    top: 50%;                /* ✅ faltava */
+    transform: translateY(-50%);
+    width: 15px;
+    height: 15px;
 }
