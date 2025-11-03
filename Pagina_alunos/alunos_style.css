@@ -1,0 +1,298 @@
+/* ALUNO: SARA FERNANDES MONTEIRO || RA: 25024107 */
+
+body {
+    font-family: comfortaa;
+    font-size: 11px;
+    background-color: #f6f6f6;
+}
+
+
+
+/* ----------------BARRA LATERAL ---------------*/
+
+.sidebar {
+    position: fixed;                                 /*FIXAR NA LATERAL*/
+    top: 50px;
+    left: 0;
+    width: 130px;
+    height: 100vh;
+    background-color: white;
+    padding: 10px;
+    border-right: 1px solid #ccc;                  /* LINHA DE DIVISAO */
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);       /* sombra na borda direita */
+
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar li {
+    margin: 15px 0;
+    font-weight: bold;
+
+}
+
+.sidebar a {
+    text-decoration: none;
+    color: #1e87a3;
+    display: block;
+    padding: 10px;
+    border-radius: 50px;
+    transition: background 0.3s;
+    font-size: 10px;
+
+}
+
+.sidebar a:hover {
+    background-color: #86d1e6;
+    color: white;
+    border-radius: 50px;
+}
+
+.sidebar a.active {
+    background-color: #1e87a3;
+    color: white;
+}
+
+
+/* ----------------BARRA SUPERIOR ---------------*/
+
+.topbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 50px;
+    background-color: white;
+    border-bottom: 1px solid #ccc;
+    display: flex;                                     /*COLOCA OS ITENS LADO A LADO*/
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);       /* sombra na borda direita */
+    align-items: center;
+
+}
+
+/* LOGO */
+.logo-area {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo {
+    height: 50px;
+}
+
+/* INSTITUIÇÃO*/
+.faculdade-area {
+    position: absolute;
+    top: 50%;                                           /* ajuste pra centralizar na topbar se quiser */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    gap: 10px;                                          /* espaço entre texto e caixa */
+}
+
+/* caixa arredondada no centro */
+.faculdade-box {
+    position: relative; /* permite posicionar o ícone dentro */
+    display: flex;
+    align-items: center;
+    justify-content: center; /* centraliza o texto */
+    background: white;
+    border-radius: 50px;
+    padding: 8px 40px; /* espaço maior pros lados */
+    border: 1px solid #25e4d1;
+    font-weight: 600;
+    color: #000000;
+    box-shadow: 0 0 3px #25e4d1;
+    width: 400px;
+}
+
+.instituicao-icon {
+    position: absolute; 
+    left: 12px; /* deixa o ícone colado à esquerda */
+    top: 50%;
+    transform: translateY(-50%); /* centraliza verticalmente */
+    width: 18px;
+    height: 18px;
+}
+
+
+.texto-local {
+    font-weight: 500;
+    color: #000000;
+    font-size: 14px;
+}
+
+/* MINHA CONTA */
+
+.user-menu {
+    position: absolute;
+    right: 25px;   /* distância da borda direita */
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    gap: 10px; /* espaço entre ícone e texto */
+    font-style: bold;
+}
+
+/* ícone */
+.pessoa-icon {
+    width: 18px;
+    height: 18px;
+}
+
+/* botão de clique/hover */
+.user-btn {
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* menu suspenso */
+
+.dropdown {
+    position: absolute;
+    top: 23px;
+    right: 0;
+    background: white;
+    border: 1px solid #cccccc;
+    border-radius: 0 0 10px 10px;
+    box-shadow: 0 0 6px rgba(0,0,0,.15);
+    list-style: none;
+    padding: 5px 10px;
+    width: 150px;
+
+    /* animação */
+    opacity: 0;
+    transform: translateY(-8px);
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* itens */
+.dropdown li {
+    width: 100%;
+}
+
+.dropdown a {
+    position: relative;      /* ✅ necessário p/ o ícone absolute */
+    text-decoration: none;
+    color: #000000;
+    display: block;
+    padding: 10px;
+    padding-left: 35px;      /* espaço para o ícone */
+    border-radius: 50px;
+    transition: background 0.3s;
+    font-size: 10px;
+}
+
+
+.dropdown a:hover {
+    color: #1e87a3;
+    border-radius: 50px;
+}
+
+/* MOSTRAR menu ao passar mouse */
+.user-menu.open .dropdown {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.dropdown p {
+    font-size: 9px;
+    color: #414141;
+}
+
+
+.minha-conta-icon {
+    position: absolute; 
+    left: 12px;
+    top: 50%;                /* ✅ faltava */
+    transform: translateY(-50%);
+    width: 15px;
+    height: 15px;
+}
+
+.pagina-atual {
+    margin-top: 75px;
+    margin-left: 175px;
+}
+.pagina-ref {
+    display: inline-block;
+    font-size: 30px;  
+    color:#1e87a3; 
+    text-decoration: none;
+    margin-bottom: 30px;
+}
+
+/*-------------------BOTOES----------------------*/
+
+button {
+    padding: 9px 14px;
+    border: none;
+    border-radius: 50px;
+    background-color:#1e87a3;
+    color:white;
+    cursor: pointer;
+    transition: background-color 0.25s ease;
+    display: inline-block;
+    font-weight: bold;
+    width: 200px;
+    font-family: comfortaa;
+}
+
+button:hover {
+    background-color:#1d6f86 ;
+}
+
+.botoes {
+    display: flex;
+    gap: 8px;
+    justify-content: left;
+    margin-bottom: 35px;
+}
+
+/*---------------TABELA ALUNOS------------------*/
+
+table {
+    width: 90%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    border: 10px solid #ccc;
+    border-radius: 12px;
+    overflow: hidden; /* corta os cantos para o border-radius funcionar */
+    background-color: white;
+    text-align: center;
+    
+}
+
+
+/* Cabeçalho */
+table th {
+    background-color: #ffffff;
+    color: #1e87a3;
+    padding: 10px;
+    border-bottom: 2px solid #1e87a3; /* só borda inferior para destacar */
+    font-weight: bold;
+    font-size: 13px;
+}
+
+/* Células */
+table td {
+    padding: 10px;
+    border: 1.5px solid #ccc;
+    font-size: 10px;
+}
+
+
+/* Hover nas linhas */
+table tr:hover td {
+    background-color: #eefaff;
+    transition: background-color 0.3s ease;
+}

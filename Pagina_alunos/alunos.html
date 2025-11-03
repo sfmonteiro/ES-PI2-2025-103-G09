@@ -1,0 +1,120 @@
+<!---* ALUNO: SARA FERNANDES MONTEIRO || RA: 25024107 -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alunos</title>
+
+    <!---Ícone (logo) no navegador: chamada "favicon"-->
+     <link rel="icon" type="image/png" href="../images/icone_NotaDez.png">
+
+    <!--importação da fonte Comfortaa pelo Google Fonts-->
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="alunos_style.css">
+
+</head>
+<body>
+    
+    <!--- BARRA LATERAL  -->
+    <aside class="sidebar">
+        <ul>
+            <li><a href="inicio.html">INÍCIO</a></li>       <!---Class ACTIVE define a página atual-->
+            <li><a href="#">INSTITUIÇÃO</a></li>
+            <li><a href="#">CURSOS</a></li>
+            <li><a href="#">DISCIPLINAS</a></li>
+            <li><a href="alunos.html" class="active">ALUNOS</a></li>
+            <li><a href="#">ATIVIDADES</a></li>
+        </ul>
+    </aside>
+
+    <!--- BARRA SUPERIOR  -->
+    <header class="topbar">
+
+        <div class="logo-area">
+            <img src="../images/logo_NotaDez.png" alt="Logo" class="logo">
+        </div>
+
+         <!-- caixa com nome da faculdade (apenas exibição) -->
+        <div class="faculdade-area">
+                <span class="texto-local">Você está em:</span>
+
+            <div class="faculdade-box">
+                <img src="../images/icone_instituicao.png" alt="Logo Instituição" class="instituicao-icon">
+                *APARECER A SELECIONADA NA PAGINA 'INICIO'*
+            </div>
+        </div>
+
+        <div class="user-menu">
+            <img src="../images/icone_pessoa.png" alt="Ícone Pessoa" class="pessoa-icon">
+            <span id="user-btn" class="user-btn">Olá, *PRIMEIRO NOME*!   ▼</span>
+
+            <ul class="dropdown">
+
+                <li><a href="#">
+                    <img src="../images/icone_pessoa.png" alt="Ícone Pessoa" class="minha-conta-icon">
+                    Minha Conta
+                    </a>
+                </li>
+
+                <li><a href="#">
+                    <img src="../images/icone_sair.png" alt="Ícone Pessoa" class="minha-conta-icon">
+                    Sair
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+
+    </header>
+
+    <div class="pagina-atual">
+        <a href="alunos.html" class="pagina-ref">alunos</a>
+
+        <div class="botoes">
+            <button type="button" id="cadasto-aluno">CADASTRAR ALUNO</button>
+
+        </div>
+
+            <!--------------TABELA ALUNOS--------------->
+
+        
+        <table id="tabela-alunos">
+            <tr>
+                <th>RA</th>
+                <th>NOME COMPLETO</th>
+                <th>INSTITUIÇÃO</th>
+                <th>CURSO</th>
+                <th>DISCIPLINA</th>
+                <th>AÇÕES</th>
+            </tr>
+
+            <tr>
+                <td>25024107</td>
+                <td>SARA FERNANDES MONTEIRO</td>
+                <td>PUC-CAMPINAS</td>
+                <td>ENGENHARIA DE SOFTWARE</td>
+                <td>1.1.2 TECNOLOGIAS WEB</td>
+                <td>+ -</td>
+            </tr>
+
+                <tr>
+                <td>25024579</td>
+                <td>LEONARDO FONSECA DE OLIVEIRA</td>
+                <td>PUC-CAMPINAS</td>
+                <td>ENGENHARIA DE SOFTWARE</td>
+                <td>1.1.3 ENGENHARIA DE ELICITAÇÕES E REQUISITOS DE SOFTWARE</td>
+                <td>+ -</td>
+            </tr>
+        </table>
+
+    </div>
+
+
+
+    <script src="alunos.js"></script>
+</body>
+</html>
