@@ -20,26 +20,35 @@
 <body>
     
     <div class = container>
-        <img src="../images/logo_NotaDez.png">
 
-        <h2>Seja bem-vindo(a)!</h2>
-        <h1>Para continuar, indique:</h1>
+        <div class = cabecario>
 
-        <div class = input-container>
-
-            <input type="text" id="instituicao" class = "input-instituicao" placeholder=" " required>
-            <label for="instituicao"><b>Selecione sua instituição</b></label>
+            <img src="../images/logo_NotaDez.png">
+            <h2>Seja bem-vindo(a)!</h2>
+            <h1>Para continuar, indique:</h1>
 
         </div>
 
         <div class = input-container>
 
-            <input type="text" id="curso" class="input-curso" placeholder=" " requ>
+            <img src="../images/icone_instituicao.png" alt="Ícone Insituição" class="icon">
+            <input type="text" id="instituicao" class = "input-instituicao" placeholder=" " required>
+            <label for="instituicao"><b>Digite sua instituição</b></label>
+
+
+
+        </div>
+
+        <div class = input-container>
+
+            <img src="../images/icone_curso.png" alt="Ícone Curso" class="icon">
+            <input type="text" id="curso" class="input-curso" placeholder=" " required>
             <label for="curso"><b>Digite seu curso</b></label>
 
+
         </div>
 
-        <button type="submit">CONTINUAR</button>
+        <button type="submit" id="continuar">CONTINUAR</button>
 
     </div>
     
