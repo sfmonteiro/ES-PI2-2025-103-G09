@@ -3,13 +3,15 @@
 
 /* ---------- GERAL ---------- */
 body {
-    font-family: comfortaa;
+    font-family: 'comfortaa', sans-serif,;
     background-color: #1e87a3;
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100vh;
+    min-height: 100vh;
     margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 /* ---------- CONTAINER ---------- */
@@ -18,8 +20,11 @@ body {
     padding: 30px 50px;
     border-radius: 40px;
     box-shadow: 0 0 30px #075c74;
-    width: 450px;
+    max-width: 450px;
     text-align: center;
+    width: 100%;
+    padding: 30px 5vw;
+    margin: auto;
 }
 
 /* ---------- TÍTULO ---------- */
@@ -192,16 +197,75 @@ label.required::after {
 }
 /* ---------- RESPONSIVO ---------- */
 @media (max-width: 500px) {
+    body {
+        padding: 15px;
+    }
+
     .container {
-        width: 90%;
-        padding: 20px 30px;
+        width: 100%;
+        padding: 20px;
+        border-radius: 20px;
+        margin: 10px;
+    }
+
+    .container h2 {
+        font-size: 24px;
     }
 
     .form-group {
         max-width: 100%;
     }
 
+    .form-group input {
+        padding: 10px;
+        font-size: 14px;
+    }
+
     .btn {
         max-width: 100%;
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .caixa-sucesso {
+        padding: 20px 30px;
+        width: 80%;
+        margin: 0 10px;
+    }
+
+    .icone-sucesso {
+        width: 70px;
+        height: 70px;
+    }
+
+    .caixa-sucesso p {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 350px) {
+    .container {
+        padding: 15px;
+    }
+
+    .container h2 {
+        font-size: 20px;
+    }
+
+    .form-group input {
+        padding: 8px;
+        font-size: 13px;
+    }
+
+    .form-group label {
+        font-size: 14px;
+    }
+
+    .hint {
+        font-size: 11px;
+    }
+
+    .erro {
+        font-size: 12px;
     }
 }
