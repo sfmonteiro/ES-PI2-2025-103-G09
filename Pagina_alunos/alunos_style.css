@@ -224,7 +224,48 @@ body {
     margin-left: 175px;
 }
 .pagina-ref {
+    display: inline-block;
     font-size: 30px;  
     color:#1e87a3; 
     text-decoration: none;
+    margin-bottom: 30px;
+}
+
+/*---------------TABELA ALUNOS------------------*/
+
+table {
+    width: 90%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    border: 10px solid #ccc;
+    border-radius: 12px;
+    overflow: hidden; /* corta os cantos para o border-radius funcionar */
+    background-color: white;
+    text-align: center;
+    
+}
+
+
+/* Cabeçalho */
+table th {
+    background-color: #ffffff;
+    color: #1e87a3;
+    padding: 10px;
+    border-bottom: 2px solid #1e87a3; /* só borda inferior para destacar */
+    font-weight: bold;
+    font-size: 13px;
+}
+
+/* Células */
+table td {
+    padding: 10px;
+    border: 1.5px solid #ccc;
+    font-size: 10px;
+}
+
+
+/* Hover nas linhas */
+table tr:hover td {
+    background-color: #eefaff;
+    transition: background-color 0.3s ease;
 }

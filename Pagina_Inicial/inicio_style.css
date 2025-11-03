@@ -224,7 +224,9 @@ body {
     margin-left: 175px;
 }
 .pagina-ref {
+    display: inline-block;
     font-size: 30px;  
     color:#1e87a3; 
     text-decoration: none;
+    margin-bottom: 30px;
 }
