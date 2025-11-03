@@ -85,5 +85,5 @@ document.addEventListener("DOMContentLoaded", () => {
       }, 1000); // tempo do fade
     }, 2000); // mostra o sucesso por 2s antes de sumir
   }
-
+})
 
