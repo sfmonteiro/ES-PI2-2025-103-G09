@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Início</title>
+    <title>Alunos</title>
 
     <!---Ícone (logo) no navegador: chamada "favicon"-->
      <link rel="icon" type="image/png" href="../images/icone_NotaDez.png">
@@ -14,7 +14,7 @@
     <!--importação da fonte Comfortaa pelo Google Fonts-->
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="inicio_style.css">
+    <link rel="stylesheet" href="alunos_style.css">
 
 </head>
 <body>
@@ -22,11 +22,11 @@
     <!--- BARRA LATERAL  -->
     <aside class="sidebar">
         <ul>
-            <li><a href="#" class="active">INÍCIO</a></li>       <!---Class ACTIVE define a página atual-->
+            <li><a href="inicio.html">INÍCIO</a></li>       <!---Class ACTIVE define a página atual-->
             <li><a href="#">INSTITUIÇÃO</a></li>
             <li><a href="#">CURSOS</a></li>
             <li><a href="#">DISCIPLINAS</a></li>
-            <li><a href="#">ALUNOS</a></li>
+            <li><a href="alunos.html" class="active">ALUNOS</a></li>
             <li><a href="#">ATIVIDADES</a></li>
         </ul>
     </aside>
@@ -71,10 +71,10 @@
 
     </header>
 
-    <div class="dashboard">
-        <a href="inicio.html" class="pagina-ref">dashboard</a>
+    <div class="pagina-atual">
+        <a href="alunos.html" class="pagina-ref">alunos</a>
     </div>
 
-    <script src="inicio.js"></script>
+    <script src="alunos.js"></script>
 </body>
 </html>
