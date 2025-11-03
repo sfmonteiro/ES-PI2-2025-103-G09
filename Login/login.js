@@ -1,3 +1,5 @@
+//Responsável:Guilherme Mascarenhas Plácido Corrêa
+//RA: 25020685
 document.getElementById("submit").addEventListener("click",function (event) {
     event.preventDefault();
 
@@ -32,9 +34,9 @@ document.getElementById("submit").addEventListener("click",function (event) {
 });
 
 document.getElementById("cadastro").addEventListener("click",function (event) {
-    window.location.href = "PI.html";
+    window.location.href = "../Cadastro/Cadastro.html";
 });
 
 document.getElementById("esqueceuSenha").addEventListener("click", function() {
-    window.location.href = "ReSenha.html";
+    window.location.href = "../Redefinir_senha/ReSenha.html";
 });
