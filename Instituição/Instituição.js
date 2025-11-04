@@ -23,7 +23,7 @@ function mostrarSucesso() {
   overlay.innerHTML = `
       <div class="caixa-sucesso">
           <img src="../images/icone_NotaDez.png" alt="Sucesso" class="icone-sucesso">
-          <p>Cadastro realizado com sucesso!</p>
+          <p>Instituição selecionada com sucesso!</p>
       </div>
   `;
   document.body.appendChild(overlay);
