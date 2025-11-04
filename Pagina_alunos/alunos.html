@@ -75,41 +75,84 @@
         <a href="alunos.html" class="pagina-ref">alunos</a>
 
         <div class="botoes">
-            <button type="button" id="cadasto-aluno">CADASTRAR ALUNO</button>
+            <button type="button" id="cadastro-aluno">CADASTRAR ALUNO</button>
 
         </div>
 
             <!--------------TABELA ALUNOS--------------->
 
-        
-        <table id="tabela-alunos">
-            <tr>
-                <th>RA</th>
-                <th>NOME COMPLETO</th>
-                <th>INSTITUIÇÃO</th>
-                <th>CURSO</th>
-                <th>DISCIPLINA</th>
-                <th>AÇÕES</th>
-            </tr>
-
-            <tr>
-                <td>25024107</td>
-                <td>SARA FERNANDES MONTEIRO</td>
-                <td>PUC-CAMPINAS</td>
-                <td>ENGENHARIA DE SOFTWARE</td>
-                <td>1.1.2 TECNOLOGIAS WEB</td>
-                <td>+ -</td>
-            </tr>
+        <div class="container-alunos">
+            <table id="tabela-alunos">
+                <tr>
+                    <th>RA</th>
+                    <th>NOME COMPLETO</th>
+                    <th>INSTITUIÇÃO</th>
+                    <th>CURSO</th>
+                    <th>DISCIPLINA</th>
+                    <th>AÇÕES</th>
+                </tr>
 
                 <tr>
-                <td>25024579</td>
-                <td>LEONARDO FONSECA DE OLIVEIRA</td>
-                <td>PUC-CAMPINAS</td>
-                <td>ENGENHARIA DE SOFTWARE</td>
-                <td>1.1.3 ENGENHARIA DE ELICITAÇÕES E REQUISITOS DE SOFTWARE</td>
-                <td>+ -</td>
-            </tr>
-        </table>
+                    <td>25024107</td>
+                    <td>SARA FERNANDES MONTEIRO</td>
+                    <td>PUC-CAMPINAS</td>
+                    <td>ENGENHARIA DE SOFTWARE</td>
+                    <td>1.1.2 TECNOLOGIAS WEB</td>
+                    <td>+ -</td>
+                </tr>
+
+                    <tr>
+                    <td>25024579</td>
+                    <td>LEONARDO FONSECA DE OLIVEIRA</td>
+                    <td>PUC-CAMPINAS</td>
+                    <td>ENGENHARIA DE SOFTWARE</td>
+                    <td>1.1.3 ENGENHARIA DE ELICITAÇÕES E REQUISITOS DE SOFTWARE</td>
+                    <td>+ -</td>
+                </tr>
+            </table>
+        </div>
+
+        <!------------------JANELA MODAL PARA CADASTRO------------->
+
+        <div id="modal" class="modal">
+            <div class="janela-modal">
+
+                <!-- Botão fechar -->
+                <span class="fechar">
+                    <img src="../images/icone_x.png" alt="Fechar" class="fechar-icon">
+                </span>
+
+                <h2>CADASTRAR ALUNO</h2>
+
+                <div class="grupo-input">
+                    <input id="raAluno" type="text" placeholder=" " required>
+                    <label>RA</label>
+                </div>
+
+                <div class="grupo-input">
+                    <input id="nomeAluno" type="text" placeholder=" " required>
+                    <label>NOME COMPLETO</label>
+                </div>
+
+                <div class="grupo-input">
+                    <input id="instAluno" type="text" placeholder=" " required>
+                    <label>INSTITUIÇÃO</label>
+                </div>
+
+                <div class="grupo-input">
+                    <input id="cursoAluno" type="text" placeholder=" " required>
+                    <label>CURSO</label>
+                </div>
+
+                <div class="grupo-input">
+                    <input id="discAluno" type="text" placeholder=" " required>
+                    <label>DISCIPLINA</label>
+                </div>
+
+                <button id="confirmar-cadastro" class="btn-confirmar">CADASTRAR</button>
+
+            </div>
+        </div>
 
     </div>
 
