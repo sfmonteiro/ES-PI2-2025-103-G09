@@ -22,3 +22,5 @@ function redirecionar(id, destino) {
         });
     }
 }
+
+redirecionar("entrar", "../Login/login.html");
