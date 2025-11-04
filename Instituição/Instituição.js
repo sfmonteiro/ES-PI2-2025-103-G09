@@ -117,3 +117,15 @@ window.addEventListener('DOMContentLoaded', async () => {
     locais.forEach(nome => adicionarOpcaoSelect(nome));
   }
 });
+
+function redirecionar(id, destino) {
+    const elemento = document.getElementById(id);
+    if (elemento) {
+        elemento.addEventListener('click', (e) => {
+            e.preventDefault(); // impede recarregar a página com o #
+            window.location.href = destino;
+        });
+    }
+}
+
+redirecionar("entrar", "../Pagina_Inicial/inicio.html");
