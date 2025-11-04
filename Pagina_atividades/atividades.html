@@ -1,0 +1,110 @@
+<!-- Gabriel Figueira Albasini || 25019916 -->
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="../images/icone_NotaDez.png">
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap" rel="stylesheet">
+
+  <title>NotaDez - Atividades</title>
+  <link rel="stylesheet" href="pagina_atividades_estilo.css">
+</head>
+<body>
+   <aside class="sidebar">
+        <ul>
+            <li><a href="#">INÍCIO</a></li>       <!---Class ACTIVE define a página atual-->
+            <li><a href="#">INSTITUIÇÃO</a></li>
+            <li><a href="#">CURSOS</a></li>
+            <li><a href="#">DISCIPLINAS</a></li>
+            <li><a href="#">ALUNOS</a></li>
+            <li><a href="#"  class="active">ATIVIDADES</a></li>
+        </ul>
+    </aside>
+
+     <header class="topbar">
+
+        <div class="logo-area">
+            <img src="../images/logo_NotaDez.png" alt="Logo" class="logo">
+        </div>
+
+         <!-- caixa com nome da faculdade (apenas exibição) -->
+        <div class="faculdade-area">
+                <span class="texto-local">Você está em:</span>
+
+            <div class="faculdade-box">
+                <img src="../images/icone_instituicao.png" alt="Logo Instituição" class="instituicao-icon">
+                *APARECER A SELECIONADA NA PAGINA 'INICIO'*
+            </div>
+        </div>
+
+        <div class="user-menu">
+            <img src="../images/icone_pessoa.png" alt="Ícone Pessoa" class="pessoa-icon">
+            <span id="user-btn" class="user-btn">Olá, *PRIMEIRO NOME*!   ▼</span>
+
+            <ul class="dropdown">
+
+                <li><a href="#">
+                    <img src="../images/icone_pessoa.png" alt="Ícone Pessoa" class="minha-conta-icon">
+                    Minha Conta
+                    </a>
+                </li>
+
+                <li><a href="#">
+                    <img src="../images/icone_sair.png" alt="Ícone Pessoa" class="minha-conta-icon">
+                    Sair
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+
+    </header>
+
+  <div class="container">
+    <div class="header">
+      <h2>Atividades</h2>
+      <div>
+        <button class="btn btn-criar">Criar Atividade</button>
+        <button class="btn btn-exportar">Exportar Notas</button>
+      </div>
+    </div>
+
+    <table>
+      <tr>
+        <th>RA</th>
+        <th>Nome Completo</th>
+        <th>P1</th>
+        <th>P2</th>
+        <th>REP1</th>
+        <th>Notas Finais</th>
+      </tr>
+      <tr>
+        <td>1234567</td>
+        <td>Sara Fernandes Monteiro</td>
+        <td></td><td></td><td></td><td></td>
+      </tr>
+      <tr>
+        <td>12345678</td>
+        <td>Brunos Lobo de Jesus</td>
+        <td></td><td></td><td></td><td></td>
+      </tr>
+      <tr>
+        <td>126546458</td>
+        <td>Gabriel Figueira Albosini</td>
+        <td></td><td></td><td></td><td></td>
+      </tr>
+      <tr>
+        <td>5635269</td>
+        <td>Guilherme Mascarenhas Placido Correa</td>
+        <td></td><td></td><td></td><td></td>
+      </tr>
+      <tr>
+        <td>96801456</td>
+        <td>Marialva Correa de Freitas Junior</td>
+        <td></td><td></td><td></td><td></td>
+      </tr>
+    </table>
+  </div>
+</body>
+</html>
