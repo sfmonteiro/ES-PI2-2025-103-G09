@@ -247,3 +247,10 @@ button:hover {
 .botoes-modal button:hover {
   background-color: #0e6072;
 }
+.mensagem-erro {
+  color: #e53935;
+  font-size: 0.9rem;
+  margin-top: 5px;
+  text-align: center;
+  height: 18px; /* mantém o espaço mesmo sem erro */
+}

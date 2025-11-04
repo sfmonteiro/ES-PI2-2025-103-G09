@@ -6,14 +6,19 @@ const API_URL = "http://localhost:3000/instituicoes";
 // exemplo: "https://seuservidor.com/api/instituicoes"
 
 // ======== BOTÃO ENTRAR ========
-botao.addEventListener('click', () => {
+botao.addEventListener('click', (event) => {
+  event.preventDefault(); // impede comportamento padrão
+
   const valor = select.value;
-  
+  const erro = document.getElementById('erroInstituicao');
+
   if (!valor) {
-    alert('Por favor, selecione uma instituição antes de continuar.');
-  } else {
-    mostrarSucesso();
+    erro.textContent = 'Por favor, selecione uma instituição antes de continuar.';
+    return; // ❌ impede o redirecionamento
   }
+
+  erro.textContent = ''; // limpa a mensagem
+  mostrarSucesso();
 });
 
 function mostrarSucesso() {
@@ -118,14 +123,3 @@ window.addEventListener('DOMContentLoaded', async () => {
   }
 });
 
-function redirecionar(id, destino) {
-    const elemento = document.getElementById(id);
-    if (elemento) {
-        elemento.addEventListener('click', (e) => {
-            e.preventDefault(); // impede recarregar a página com o #
-            window.location.href = destino;
-        });
-    }
-}
-
-redirecionar("entrar", "../Pagina_Inicial/inicio.html");
