@@ -188,3 +188,57 @@ input:focus {
 .btn-salvar:hover {
     background-color: #0e6075;
 }
+/* ======== ESTILO DE ERRO ======== */
+
+/* Borda vermelha no campo com erro */
+input.erro-campo {
+    border-color: #e63946;
+}
+
+/* Texto do erro logo abaixo do campo */
+span.erro {
+    display: block;
+    font-size: 11px;
+    color: #e63946;
+    margin-top: 3px;
+    font-weight: 500;
+}
+/* ======== MENSAGEM DE SUCESSO ======== */
+.overlay-sucesso {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    transition: opacity 0.5s ease;
+}
+
+.caixa-sucesso {
+    background: #fff;
+    padding: 20px 30px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    animation: surgir 0.4s ease;
+}
+
+.icone-sucesso {
+    width: 60px;
+    height: 60px;
+}
+
+.caixa-sucesso p {
+    color: #1e87a3;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+@keyframes surgir {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
