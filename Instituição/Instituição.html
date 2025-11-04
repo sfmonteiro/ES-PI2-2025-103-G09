@@ -25,9 +25,6 @@
       <img src="../images/icone_instituicao.png" alt="Instituição" class="img-instituicao">
       <select id="instituicao">
         <option value="">Selecione sua instituição...</option>
-        <option value="puc">PUC-Campinas</option>
-        <option value="usp">USP</option>
-        <option value="unicamp">Unicamp</option>
       </select>
       <i class="fa-solid fa-chevron-down arrow"></i>
     </div>
@@ -35,6 +32,17 @@
     <a href="#" class="add-link">Adicione uma nova instituição</a>
 
     <button id="entrar">ENTRAR</button>
+     <!-- MODAL PARA ADICIONAR NOVA INSTITUIÇÃO -->
+  <div id="modalInstituicao" class="modal">
+    <div class="modal-conteudo">
+      <h3>Nova Instituição</h3>
+      <input type="text" id="nomeInstituicao" placeholder="Digite o nome da instituição">
+      <div class="botoes-modal">
+        <button id="salvarInstituicao">Salvar</button>
+        <button id="cancelarModal">Cancelar</button>
+      </div>
+    </div>
+  </div>
   </main>
 
   <script src="Instituição.js"></script>
