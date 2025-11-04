@@ -33,3 +33,22 @@ window.onclick = (e) => {
         modal.style.display = "none";
     }
 };
+
+function redirecionar(id, destino) {
+    const elemento = document.getElementById(id);
+    if (elemento) {
+        elemento.addEventListener('click', (e) => {
+            e.preventDefault(); // impede recarregar a página com o #
+            window.location.href = destino;
+        });
+    }
+}
+
+redirecionar("inicio", "../Pagina_Inicial/inicio.html");
+redirecionar("instituicao", "../Instituição/Instituição.html");
+redirecionar("cursos", "");
+redirecionar("disciplinas", "");
+redirecionar("alunos", "../Pagina_alunos/alunos.html");
+redirecionar("atividades", "../Pagina_atividades/atividades.html");
+redirecionar("conta", "");
+redirecionar("sair", "../Login/login.html");

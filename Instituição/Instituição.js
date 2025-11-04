@@ -12,3 +12,13 @@ botao.addEventListener('click', () => {
     // window.location.href = `${valor}.html`;
   }
 });
+
+function redirecionar(id, destino) {
+    const elemento = document.getElementById(id);
+    if (elemento) {
+        elemento.addEventListener('click', (e) => {
+            e.preventDefault(); // impede recarregar a página com o #
+            window.location.href = destino;
+        });
+    }
+}

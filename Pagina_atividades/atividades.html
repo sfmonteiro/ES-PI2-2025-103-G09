@@ -13,12 +13,12 @@
 <body>
    <aside class="sidebar">
         <ul>
-            <li><a href="#">INÍCIO</a></li>       <!---Class ACTIVE define a página atual-->
-            <li><a href="#">INSTITUIÇÃO</a></li>
-            <li><a href="#">CURSOS</a></li>
-            <li><a href="#">DISCIPLINAS</a></li>
-            <li><a href="#">ALUNOS</a></li>
-            <li><a href="#"  class="active">ATIVIDADES</a></li>
+            <li><a href="#" id = "inicio">INÍCIO</a></li>       <!---Class ACTIVE define a página atual-->
+            <li><a href="#" id = "instituicao">INSTITUIÇÃO</a></li>
+            <li><a href="#" id = "cursos">CURSOS</a></li>
+            <li><a href="#" id = "disciplinas">DISCIPLINAS</a></li>
+            <li><a href="#" id = "alunos">ALUNOS</a></li>
+            <li><a href="#" class="active" id = "atividades">ATIVIDADES</a></li>
         </ul>
     </aside>
 
@@ -44,13 +44,13 @@
 
             <ul class="dropdown">
 
-                <li><a href="#">
+                <li><a href="#" id = "conta">
                     <img src="../images/icone_pessoa.png" alt="Ícone Pessoa" class="minha-conta-icon">
                     Minha Conta
                     </a>
                 </li>
 
-                <li><a href="#">
+                <li><a href="#" id = "sair">
                     <img src="../images/icone_sair.png" alt="Ícone Pessoa" class="minha-conta-icon">
                     Sair
                     </a>
@@ -106,5 +106,6 @@
       </tr>
     </table>
   </div>
+  <script src = "atividades.js"></script>
 </body>
 </html>
