@@ -29,7 +29,7 @@ document.getElementById("submit").addEventListener("click",function (event) {
     }
 
     if (valido) {
-        window.location.href = "Primeira_acesso.html";
+        window.location.href = "../Primeira_acesso/primeira_acesso.html";
     }
 });
 
