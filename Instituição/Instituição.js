@@ -23,4 +23,4 @@ function redirecionar(id, destino) {
     }
 }
 
-redirecionar("entrar", "../Login/login.html");
+redirecionar("entrar", "../Pagina_Inicial/inicio.html");
