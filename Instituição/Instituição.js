@@ -1,3 +1,4 @@
+// Bruno Lobo de Jesus RA:25019830
 const botao = document.getElementById('entrar');
 const select = document.getElementById('instituicao');
 

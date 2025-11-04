@@ -1,0 +1,103 @@
+<!-- Bruno Lobo de Jesus RA:25019830 -->
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minha Conta</title>
+    <link rel="icon" type="image/png" href="../images/icone_NotaDez.png">
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="minha_conta.css">
+</head>
+<body>
+
+    <!-- BARRA LATERAL -->
+    <aside class="sidebar">
+        <ul>
+            <li><a href="../Pagina_Inicial/inicio.html">INÍCIO</a></li>
+            <li><a href="../Instituição/Instituição.html">INSTITUIÇÃO</a></li>
+            <li><a href="#">CURSOS</a></li>
+            <li><a href="#">DISCIPLINAS</a></li>
+            <li><a href="../Pagina_alunos/alunos.html">ALUNOS</a></li>
+            <li><a href="../Pagina_atividades/atividades.html">ATIVIDADES</a></li>
+        </ul>
+    </aside>
+
+    <!-- BARRA SUPERIOR -->
+    <header class="topbar">
+        <div class="logo-area">
+            <img src="../images/logo_NotaDez.png" alt="Logo" class="logo">
+        </div>
+
+        <div class="faculdade-area">
+            <span class="texto-local">Você está em:</span>
+            <div class="faculdade-box">
+                <img src="../images/icone_instituicao.png" alt="Logo Instituição" class="instituicao-icon">
+                MINHA CONTA
+            </div>
+        </div>
+
+        <div class="user-menu">
+            <img src="../images/icone_pessoa.png" alt="Ícone Pessoa" class="pessoa-icon">
+            <span id="user-btn" class="user-btn">Olá, Usuário ▼</span>
+
+            <ul class="dropdown">
+                <li><a href="../Minha_Conta/minha-conta.html">
+                    <img src="../images/icone_pessoa.png" alt="Ícone Pessoa" class="minha-conta-icon">
+                    Minha Conta
+                </a></li>
+                <li><a href="../Login/login.html">
+                    <img src="../images/icone_sair.png" alt="Ícone Pessoa" class="minha-conta-icon">
+                    Sair
+                </a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="container">
+        <h1>Minha Conta</h1>
+        <form id="form-conta">
+
+            <div class="form-group">
+                <label for="nome">Nome completo:</label>
+                <input type="text" id="nome" placeholder="Digite seu nome completo">
+            </div>
+
+            <div class="form-group">
+                <label for="email">E-mail:</label>
+                <input type="email" id="email" placeholder="seuemail@exemplo.com">
+            </div>
+
+            <div class="form-group">
+                <label for="telefone">Telefone:</label>
+                <input type="tel" id="telefone" placeholder="(00) 00000-0000">
+            </div>
+
+            <hr class="divisor">
+
+            <h2>Alterar Senha</h2>
+
+            <div class="form-group">
+                <label for="senhaAtual">Senha atual:</label>
+                <input type="password" id="senhaAtual" placeholder="Digite sua senha atual">
+            </div>
+
+            <div class="form-group">
+                <label for="novaSenha">Nova senha:</label>
+                <input type="password" id="novaSenha" placeholder="Digite a nova senha">
+            </div>
+
+            <div class="form-group">
+                <label for="confirmarSenha">Confirmar nova senha:</label>
+                <input type="password" id="confirmarSenha" placeholder="Confirme a nova senha">
+            </div>
+
+            <button type="submit" class="btn-salvar">Salvar alterações</button>
+        </form>
+    </main>
+
+    <script src="minha_conta.js"></script>
+</body>
+</html>
