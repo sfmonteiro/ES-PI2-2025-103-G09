@@ -22,12 +22,12 @@
     <!--- BARRA LATERAL  -->
     <aside class="sidebar">
         <ul>
-            <li><a href="#" id = "inicio">INÍCIO</a></li>       <!---Class ACTIVE define a página atual-->
-            <li><a href="#" id = "instituicao">INSTITUIÇÃO</a></li>
-            <li><a href="#" id = "cursos">CURSOS</a></li>
-            <li><a href="#" id = "disciplinas">DISCIPLINAS</a></li>
-            <li><a href="#" class="active" id = "alunos">ALUNOS</a></li>
-            <li><a href="#" id = "atividades">ATIVIDADES</a></li>
+            <li><a href="inicio.html">INÍCIO</a></li>       <!---Class ACTIVE define a página atual-->
+            <li><a href="#">INSTITUIÇÃO</a></li>
+            <li><a href="#">CURSOS</a></li>
+            <li><a href="#">DISCIPLINAS</a></li>
+            <li><a href="alunos.html" class="active">ALUNOS</a></li>
+            <li><a href="#">ATIVIDADES</a></li>
         </ul>
     </aside>
 
@@ -43,8 +43,8 @@
                 <span class="texto-local">Você está em:</span>
 
             <div class="faculdade-box">
-                <img src="../images/icone_instituicao.png" alt="Logo Instituição" class="instituicao-icon">
-                *APARECER A SELECIONADA NA PAGINA 'INICIO'*
+                <img src="../images/icone_instituicao_verde.png" alt="Logo Instituição" class="instituicao-icon">
+                ***PUC-CAMPINAS***
             </div>
         </div>
 
@@ -54,13 +54,13 @@
 
             <ul class="dropdown">
 
-                <li><a href="#" id = "conta">
+                <li><a href="#">
                     <img src="../images/icone_pessoa.png" alt="Ícone Pessoa" class="minha-conta-icon">
                     Minha Conta
                     </a>
                 </li>
 
-                <li><a href="#" id = "sair">
+                <li><a href="#">
                     <img src="../images/icone_sair.png" alt="Ícone Pessoa" class="minha-conta-icon">
                     Sair
                     </a>
@@ -98,7 +98,10 @@
                     <td>PUC-CAMPINAS</td>
                     <td>ENGENHARIA DE SOFTWARE</td>
                     <td>1.1.2 TECNOLOGIAS WEB</td>
-                    <td>+ -</td>
+                    <td class="acoes">
+                        <img src="../images/icone_lapis.png" class="btn-acao" alt="Editar aluno">
+                        <img src="../images/icone_lixeira.png" class="btn-acao" alt="Excluir aluno">
+                    </td>
                 </tr>
 
                     <tr>
@@ -135,17 +138,12 @@
                 </div>
 
                 <div class="grupo-input">
-                    <input id="instAluno" type="text" placeholder=" " required>
-                    <label>INSTITUIÇÃO</label>
-                </div>
-
-                <div class="grupo-input">
-                    <input id="cursoAluno" type="text" placeholder=" " required>
+                    <input id="cursoAluno" type="text" placeholder=" ">
                     <label>CURSO</label>
                 </div>
 
                 <div class="grupo-input">
-                    <input id="discAluno" type="text" placeholder=" " required>
+                    <input id="discAluno" type="text" placeholder=" ">
                     <label>DISCIPLINA</label>
                 </div>
 

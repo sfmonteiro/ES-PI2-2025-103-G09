@@ -213,7 +213,7 @@ body {
 .minha-conta-icon {
     position: absolute; 
     left: 12px;
-    top: 50%;                /* ✅ faltava */
+    top: 50%;                
     transform: translateY(-50%);
     width: 15px;
     height: 15px;
