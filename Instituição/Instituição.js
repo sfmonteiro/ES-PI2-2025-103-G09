@@ -33,6 +33,10 @@ function mostrarSucesso() {
       </div>
   `;
   document.body.appendChild(overlay);
+
+  setTimeout(() => {
+    window.location.href = "../Pagina_Inicial/inicio.html";
+  }, 2000);
 }
 
 // ======== MODAL ADICIONAR NOVA INSTITUIÇÃO ========
