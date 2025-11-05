@@ -1,11 +1,12 @@
-/*-- Bruno Lobo de Jesus RA:25019830 --*/
+/* Bruno Lobo de Jesus || RA: 25019830 */
+
 body {
     font-family: comfortaa;
-    font-size: 12px;
+    font-size: 11px;
     background-color: #f6f6f6;
-    margin: 0;
 }
 
+/* ======== SIDEBAR ======== */
 .sidebar {
     position: fixed;
     top: 50px;
@@ -13,13 +14,20 @@ body {
     width: 130px;
     height: 100vh;
     background-color: white;
+    padding: 10px;
     border-right: 1px solid #ccc;
     box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
-    padding: 10px;
 }
 
-.sidebar ul { list-style: none; padding: 0; margin: 0; }
-.sidebar li { margin: 15px 0; font-weight: bold; }
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.sidebar li {
+    margin: 15px 0;
+    font-weight: bold;
+}
 .sidebar a {
     text-decoration: none;
     color: #1e87a3;
@@ -29,63 +37,36 @@ body {
     transition: background 0.3s;
     font-size: 10px;
 }
-.sidebar a:hover { background-color: #86d1e6; color: white; }
+.sidebar a:hover {
+    background-color: #86d1e6;
+    color: white;
+}
+.sidebar a.active {
+    background-color: #1e87a3;
+    color: white;
+}
 
-/* ----- BARRA SUPERIOR ----- */
+/* ======== TOPBAR ======== */
 .topbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: white;
-    height: 80px; /* aumenta a altura */
-    padding: 0 40px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
     position: fixed;
     top: 0;
     left: 0;
-    right: 0;
-    z-index: 1000;
-    font-family: 'Comfortaa', sans-serif;
-}
-
-.topbar-left {
+    width: 100%;
+    height: 50px;
+    background-color: white;
+    border-bottom: 1px solid #ccc;
     display: flex;
     align-items: center;
-    gap: 15px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
 }
 
-.topbar-text {
-    font-weight: bold;
-    color: #333;
-    font-size: 16px;
-}
-
-.pagina-atual {
-    border: 2px solid #1e87a3;
-    border-radius: 30px;
-    padding: 8px 25px;
-    font-weight: bold;
-    color: #1e87a3;
-    font-size: 16px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    box-shadow: 0 0 6px rgba(30,135,163,0.2);
-}
-
-.topbar-right {
+.logo-area {
     display: flex;
     align-items: center;
     gap: 10px;
 }
-
-.user-icon {
-    width: 20px;
-    height: 20px;
-    background-color: #1e87a3;
-    border-radius: 50%;
-}
-
 .logo { height: 50px; }
+
 .faculdade-area {
     position: absolute;
     top: 50%;
@@ -94,6 +75,11 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
+}
+.texto-local {
+    font-weight: 500;
+    color: #000;
+    font-size: 14px;
 }
 .faculdade-box {
     position: relative;
@@ -106,13 +92,19 @@ body {
     border: 1px solid #25e4d1;
     box-shadow: 0 0 3px #25e4d1;
     font-weight: 600;
+    color: #000;
+    width: 400px;
 }
 .instituicao-icon {
     position: absolute;
     left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
     width: 18px;
     height: 18px;
 }
+
+/* ======== MENU USUÁRIO ======== */
 .user-menu {
     position: absolute;
     right: 25px;
@@ -122,9 +114,14 @@ body {
     align-items: center;
     gap: 10px;
 }
-.pessoa-icon { width: 18px; height: 18px; }
-.user-btn { font-weight: 600; cursor: pointer; }
-
+.pessoa-icon {
+    width: 18px;
+    height: 18px;
+}
+.user-btn {
+    font-weight: 600;
+    cursor: pointer;
+}
 .dropdown {
     position: absolute;
     top: 23px;
@@ -147,15 +144,18 @@ body {
     pointer-events: auto;
 }
 .dropdown a {
+    position: relative;
     text-decoration: none;
     color: #000;
     display: block;
     padding: 10px;
     padding-left: 35px;
-    font-size: 10px;
     border-radius: 50px;
+    font-size: 10px;
 }
-.dropdown a:hover { color: #1e87a3; }
+.dropdown a:hover {
+    color: #1e87a3;
+}
 .minha-conta-icon {
     position: absolute;
     left: 12px;
@@ -165,56 +165,55 @@ body {
     height: 15px;
 }
 
-/* CONTEÚDO PRINCIPAL */
+/* ======== CONTEÚDO PRINCIPAL ======== */
+.dashboard {
+    margin-top: 75px;
+    margin-left: 175px;
+}
+.pagina-ref {
+    display: inline-block;
+    font-size: 30px;
+    color: #1e87a3;
+    text-decoration: none;
+    margin-bottom: 30px;
+    font-weight: bold;
+}
 .container {
-    margin-top: 80px;
-    margin-left: 180px;
-    padding: 30px;
     background-color: white;
     border-radius: 20px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    width: 500px;
+    width: 450px;
+    padding: 25px;
 }
-.container h1 {
+.container h1, h2 {
     color: #1e87a3;
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
-h2 {
-    color: #1e87a3;
-    margin-top: 20px;
-    margin-bottom: 10px;
-}
-
 .form-group {
     margin-bottom: 15px;
     display: flex;
     flex-direction: column;
 }
-
 label {
     font-weight: bold;
     margin-bottom: 5px;
 }
-
 input {
     padding: 8px 10px;
     border-radius: 10px;
     border: 1px solid #ccc;
     font-family: comfortaa;
 }
-
 input:focus {
     border-color: #1e87a3;
     outline: none;
 }
-
 .divisor {
     margin: 20px 0;
     border: none;
     border-top: 1px solid #ccc;
 }
-
 .btn-salvar {
     background-color: #1e87a3;
     color: white;
@@ -225,25 +224,10 @@ input:focus {
     font-weight: bold;
     width: 100%;
 }
-
 .btn-salvar:hover {
     background-color: #0e6075;
 }
-/* ======== ESTILO DE ERRO ======== */
 
-/* Borda vermelha no campo com erro */
-input.erro-campo {
-    border-color: #e63946;
-}
-
-/* Texto do erro logo abaixo do campo */
-span.erro {
-    display: block;
-    font-size: 11px;
-    color: #e63946;
-    margin-top: 3px;
-    font-weight: 500;
-}
 /* ======== MENSAGEM DE SUCESSO ======== */
 .overlay-sucesso {
     position: fixed;
@@ -256,30 +240,20 @@ span.erro {
     align-items: center;
     justify-content: center;
     z-index: 9999;
-    transition: opacity 0.5s ease;
 }
-
 .caixa-sucesso {
     background: #fff;
     padding: 20px 30px;
     border-radius: 15px;
     text-align: center;
     box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-    animation: surgir 0.4s ease;
 }
-
 .icone-sucesso {
     width: 60px;
     height: 60px;
 }
-
 .caixa-sucesso p {
     color: #1e87a3;
     font-weight: bold;
     margin-top: 10px;
-}
-
-@keyframes surgir {
-    from { transform: scale(0.8); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
 }

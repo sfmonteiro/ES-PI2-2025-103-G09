@@ -1,5 +1,4 @@
-<!-- Bruno Lobo de Jesus RA:25019830 -->
-
+<!-- Bruno Lobo de Jesus || RA: 25019830 -->
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -41,14 +40,13 @@
         <div class="user-menu">
             <img src="../images/icone_pessoa.png" alt="Ícone Pessoa" class="pessoa-icon">
             <span id="user-btn" class="user-btn">Olá, Usuário ▼</span>
-
             <ul class="dropdown">
-                <li><a href="../Minha_Conta/minha-conta.html">
+                <li><a href="../Minha_Conta/minha_conta.html" id="conta">
                     <img src="../images/icone_pessoa.png" alt="Ícone Pessoa" class="minha-conta-icon">
                     Minha Conta
                 </a></li>
-                <li><a href="../Login/login.html">
-                    <img src="../images/icone_sair.png" alt="Ícone Pessoa" class="minha-conta-icon">
+                <li><a href="../Login/login.html" id="sair">
+                    <img src="../images/icone_sair.png" alt="Ícone Sair" class="minha-conta-icon">
                     Sair
                 </a></li>
             </ul>
@@ -56,52 +54,54 @@
     </header>
 
     <!-- CONTEÚDO PRINCIPAL -->
-    <main class="container">
-        <h1>Minha Conta</h1>
-        <form id="form-conta" novalidate>
+    <main class="dashboard">
+        <a href="minha_conta.html" class="pagina-ref">Minha Conta</a>
 
-            <div class="form-group">
-                <label for="nome">Nome completo:</label>
-                <input type="text" id="nome" placeholder="Digite seu nome completo">
-                <span class="erro"></span>
-            </div>
+        <div class="container">
+            <form id="form-conta" novalidate>
+                <div class="form-group">
+                    <label for="nome">Nome completo:</label>
+                    <input type="text" id="nome" placeholder="Digite seu nome completo">
+                    <span class="erro"></span>
+                </div>
 
-            <div class="form-group">
-                <label for="email">E-mail:</label>
-                <input type="email" id="email" placeholder="seuemail@exemplo.com">
-                <span class="erro"></span>
-            </div>
+                <div class="form-group">
+                    <label for="email">E-mail:</label>
+                    <input type="email" id="email" placeholder="seuemail@exemplo.com">
+                    <span class="erro"></span>
+                </div>
 
-            <div class="form-group">
-                <label for="telefone">Telefone:</label>
-                <input type="tel" id="telefone" placeholder="(00) 00000-0000">
-                <span class="erro"></span>
-            </div>
+                <div class="form-group">
+                    <label for="telefone">Telefone:</label>
+                    <input type="tel" id="telefone" placeholder="(00) 00000-0000">
+                    <span class="erro"></span>
+                </div>
 
-            <hr class="divisor">
+                <hr class="divisor">
 
-            <h2>Alterar Senha</h2>
+                <h2>Alterar Senha</h2>
 
-            <div class="form-group">
-                <label for="senhaAtual">Senha atual:</label>
-                <input type="password" id="senhaAtual" placeholder="Digite sua senha atual">
-                <span class="erro"></span>
-            </div>
+                <div class="form-group">
+                    <label for="senhaAtual">Senha atual:</label>
+                    <input type="password" id="senhaAtual" placeholder="Digite sua senha atual">
+                    <span class="erro"></span>
+                </div>
 
-            <div class="form-group">
-                <label for="novaSenha">Nova senha:</label>
-                <input type="password" id="novaSenha" placeholder="Digite a nova senha">
-                <span class="erro"></span>
-            </div>
+                <div class="form-group">
+                    <label for="novaSenha">Nova senha:</label>
+                    <input type="password" id="novaSenha" placeholder="Digite a nova senha">
+                    <span class="erro"></span>
+                </div>
 
-            <div class="form-group">
-                <label for="confirmarSenha">Confirmar nova senha:</label>
-                <input type="password" id="confirmarSenha" placeholder="Confirme a nova senha">
-                <span class="erro"></span>
-            </div>
+                <div class="form-group">
+                    <label for="confirmarSenha">Confirmar nova senha:</label>
+                    <input type="password" id="confirmarSenha" placeholder="Confirme a nova senha">
+                    <span class="erro"></span>
+                </div>
 
-            <button type="submit" class="btn-salvar">Salvar alterações</button>
-        </form>
+                <button type="submit" class="btn-salvar">Salvar alterações</button>
+            </form>
+        </div>
     </main>
 
     <script src="minha_conta.js"></script>

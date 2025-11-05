@@ -1,40 +1,50 @@
-// Bruno Lobo de Jesus RA:25019830
-// MENU DO USUÁRIO
+// Bruno Lobo de Jesus || RA:25019830
+
+// MENU DO USUÁRIO (idêntico ao padrão da Sara)
 const userMenu = document.querySelector('.user-menu');
 const userBtn = document.querySelector('#user-btn');
 
 userBtn.addEventListener('click', () => {
     userMenu.classList.toggle('open');
 });
+
 document.addEventListener('click', (e) => {
     if (!userMenu.contains(e.target)) {
         userMenu.classList.remove('open');
     }
 });
 
-const form = document.getElementById("form-conta");
-const inputs = form.querySelectorAll("input");
-
-// Salva os valores iniciais
-const valoresIniciais = {};
-inputs.forEach(input => valoresIniciais[input.id] = input.value.trim());
-
-// Função para mostrar erro
-function mostrarErro(input, mensagem) {
-    const spanErro = input.parentElement.querySelector(".erro");
-    input.classList.add("erro-campo");
-    spanErro.textContent = mensagem;
+// Redirecionamentos
+function redirecionar(id, destino) {
+    const el = document.getElementById(id);
+    if (el) {
+        el.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = destino;
+        });
+    }
 }
 
-// Limpa os erros
+redirecionar("conta", "../Minha_Conta/minha_conta.html");
+redirecionar("sair", "../Login/login.html");
+
+// ===== Validação e Sucesso =====
+const form = document.getElementById("form-conta");
+const inputs = form.querySelectorAll("input");
+const valoresIniciais = {};
+inputs.forEach(i => valoresIniciais[i.id] = i.value.trim());
+
+function mostrarErro(input, msg) {
+    const span = input.parentElement.querySelector(".erro");
+    input.classList.add("erro-campo");
+    span.textContent = msg;
+}
 function limparErros() {
     inputs.forEach(input => {
         input.classList.remove("erro-campo");
         input.parentElement.querySelector(".erro").textContent = "";
     });
 }
-
-// Mostrar mensagem de sucesso visual
 function mostrarSucesso() {
     const overlay = document.createElement("div");
     overlay.className = "overlay-sucesso";
@@ -45,8 +55,6 @@ function mostrarSucesso() {
         </div>
     `;
     document.body.appendChild(overlay);
-
-    // Remove automaticamente depois de 2.5s
     setTimeout(() => {
         overlay.style.opacity = "0";
         setTimeout(() => overlay.remove(), 1000);
@@ -67,7 +75,6 @@ form.addEventListener("submit", (e) => {
     let valido = true;
     let houveMudanca = false;
 
-    // Detecta se algo mudou
     inputs.forEach(input => {
         if (input.value.trim() !== valoresIniciais[input.id]) {
             houveMudanca = true;
@@ -79,12 +86,10 @@ form.addEventListener("submit", (e) => {
         return;
     }
 
-    // Campos obrigatórios
     if (!nome.value.trim()) { mostrarErro(nome, "Preencha seu nome completo."); valido = false; }
     if (!email.value.trim()) { mostrarErro(email, "Informe seu e-mail."); valido = false; }
     if (!telefone.value.trim()) { mostrarErro(telefone, "Digite seu telefone."); valido = false; }
 
-    // Validação de senha
     const senhaPreenchida = senhaAtual.value || novaSenha.value || confirmarSenha.value;
     if (senhaPreenchida) {
         if (!senhaAtual.value) { mostrarErro(senhaAtual, "Digite sua senha atual."); valido = false; }
@@ -95,7 +100,6 @@ form.addEventListener("submit", (e) => {
             mostrarErro(novaSenha, "A nova senha deve ter pelo menos 6 caracteres.");
             valido = false;
         }
-
         if (novaSenha.value && confirmarSenha.value && novaSenha.value !== confirmarSenha.value) {
             mostrarErro(confirmarSenha, "As senhas não coincidem.");
             valido = false;
@@ -103,10 +107,6 @@ form.addEventListener("submit", (e) => {
     }
 
     if (!valido) return;
-
-    // Exibe mensagem de sucesso
     mostrarSucesso();
-
-    // Atualiza os valores iniciais após salvar
-    inputs.forEach(input => valoresIniciais[input.id] = input.value.trim());
+    inputs.forEach(i => valoresIniciais[i.id] = i.value.trim());
 });
