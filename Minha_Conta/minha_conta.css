@@ -6,7 +6,6 @@ body {
     margin: 0;
 }
 
-/* REUTILIZAÇÃO DO ESTILO DE inicio_style.css */
 .sidebar {
     position: fixed;
     top: 50px;
@@ -32,18 +31,60 @@ body {
 }
 .sidebar a:hover { background-color: #86d1e6; color: white; }
 
+/* ----- BARRA SUPERIOR ----- */
 .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    height: 80px; /* aumenta a altura */
+    padding: 0 40px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 50px;
-    background-color: white;
-    border-bottom: 1px solid #ccc;
+    right: 0;
+    z-index: 1000;
+    font-family: 'Comfortaa', sans-serif;
+}
+
+.topbar-left {
     display: flex;
     align-items: center;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    gap: 15px;
 }
+
+.topbar-text {
+    font-weight: bold;
+    color: #333;
+    font-size: 16px;
+}
+
+.pagina-atual {
+    border: 2px solid #1e87a3;
+    border-radius: 30px;
+    padding: 8px 25px;
+    font-weight: bold;
+    color: #1e87a3;
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 0 6px rgba(30,135,163,0.2);
+}
+
+.topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.user-icon {
+    width: 20px;
+    height: 20px;
+    background-color: #1e87a3;
+    border-radius: 50%;
+}
+
 .logo { height: 50px; }
 .faculdade-area {
     position: absolute;
