@@ -38,7 +38,7 @@ function redirecionar(id, destino) {
     const elemento = document.getElementById(id);
     if (elemento) {
         elemento.addEventListener('click', (e) => {
-            e.preventDefault(); // impede recarregar a página com o #
+            e.preventDefault();
             window.location.href = destino;
         });
     }
@@ -50,5 +50,5 @@ redirecionar("cursos", "");
 redirecionar("disciplinas", "");
 redirecionar("alunos", "../Pagina_alunos/alunos.html");
 redirecionar("atividades", "../Pagina_atividades/atividades.html");
-redirecionar("conta", "../Minha_Conta/minha_conta.html");
+redirecionar("conta", "");
 redirecionar("sair", "../Login/login.html");
