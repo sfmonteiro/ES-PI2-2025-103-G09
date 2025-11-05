@@ -1,0 +1,169 @@
+img {
+    width: 250px;
+}
+
+* {
+    box-sizing: border-box; /* Faz com que a largura e altura dos elementos incluam o padding e a borda, facilitando o controle do tamanho */
+}
+
+body {
+    font-family: comfortaa;
+    background-color: #1e87a3;
+    display: flex;
+    align-items: center;
+    height: 100vh;
+    justify-content: center;
+}
+
+.container {
+    text-align: center;
+    background-color: white;
+    padding: 20px 50px;
+    border-radius: 40px;
+    box-shadow: 0 0 30px #075c74 ;
+    width: 400px;
+    height: 400px;
+}
+
+
+/*-------------------TEXTOS*/
+
+h1 {
+    margin-top: 0;
+    margin-bottom: 30px;
+    font-size: 40px;
+    text-align: left;
+    color: white;
+}
+
+h2 {
+    margin-right: 50px;
+    margin-bottom: 100px;
+    font-size: 20px;
+    color: white;
+    text-align: left;
+}
+
+p {
+    text-align: center;
+    font-size: 12px;
+    color:rgb(149, 149, 149);
+    cursor: pointer;
+    margin-top: 5px;
+    margin-bottom: 30px;
+}
+
+ul {
+    padding: 8px;
+    text-align: left;
+    font-size: 15px;
+    color:white;
+
+}
+
+ul li {
+    margin-bottom: 10px;
+}
+
+.erro {
+    padding: 0;
+    margin-bottom: 0;
+    line-height: 1;
+    display: block;
+    color:red;
+    font-size: 10px;
+}
+
+/*-------------------FORMULÁRIO E INPUTS*/
+
+form {
+    margin-top: 20px;
+}
+
+.input-email {
+    background: url(icone_pessoa.png) no-repeat 10px center; /*usado para colocar icone dentro do input, no-repeat para que seja usado apenas uma vez, sem repetir para preencher o bloco */
+    background-size: 20px;
+    width: 100%;
+    padding: 12px;
+    padding-left: 40px;
+    margin-top: 10px;
+    margin-bottom: 2px;
+    border-radius: 50px;
+    border: 3px solid #1e87a3;
+    font-family: comfortaa;
+}
+
+.input-senha {
+    background: url(icone_cadeado.png) no-repeat 10px center;
+    background-size: 20px;
+    width: 100%;
+    padding: 12px;
+    padding-left: 40px;
+    margin-top: 10px;
+    margin-bottom: 2px;
+    border-radius: 50px;
+    border: 3px solid #1e87a3;
+    font-family: comfortaa;
+}
+
+input::placeholder{
+    font-weight: bold;
+    color: rgb(165, 165, 165);
+}
+
+/* Foco nos campos clicados */
+input:focus {
+    border-color: #6db0c1;
+    box-shadow: 0 0 0 3px #9ed9e9;
+    outline: none;
+}
+
+
+
+/*-------------------BOTÕES*/
+
+.botoes {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 35px;
+}
+
+button[type="submit"] {
+
+    padding: 12px 14px;
+    border: none;
+    border-radius: 50px;
+    background-color:#2a3a8e;
+    color:white;
+    cursor: pointer;
+    transition: background-color 0.25s ease;
+    display: inline-block;
+    font-weight: bold;
+    width: 140px;
+
+}
+
+button[type="submit"]:hover {
+    background-color:#192562 ;
+}
+
+button {
+
+    padding: 9px 14px;
+    border: none;
+    border-radius: 50px;
+    background-color:#1e87a3;
+    color:white;
+    cursor: pointer;
+    transition: background-color 0.25s ease;
+    display: inline-block;
+    font-weight: bold;
+    width: 140px;
+    font-family: comfortaa;
+
+}
+
+button:hover {
+    background-color:#1d6f86 ;
+}

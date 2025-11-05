@@ -1,10 +1,21 @@
 import express from "express";
-const app = express();
+import path from "path";
+import { fileURLToPath } from "url";
 
-app.listen(3000, () => {
-  console.log("Servidor ativo na porta 3000");
-}); 
+const app = express();
+const PORT = 3000;
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+app.use(express.json());
+
+app.use(express.static(path.join(__dirname, "public")));
 
 app.get("/", (req, res) => {
-  res.send("Hello, World!");
+  res.redirect("/Login/login.html");
+});
+
+app.listen(PORT, () => {
+  console.log(`Servidor ativo na porta ${PORT}`);
 });
