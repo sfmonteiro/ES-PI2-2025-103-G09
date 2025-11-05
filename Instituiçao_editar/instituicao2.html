@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Instituição</title>
+
+  <link rel="icon" type="image/png" href="../images/icone_NotaDez.png">
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="instituicao2.css">
+</head>
+<body>
+
+  <!-- BARRA LATERAL -->
+  <aside class="sidebar">
+    <ul>
+      <li><a id="inicio" href="#">INÍCIO</a></li>
+      <li><a id="instituicao" href="#" class="active">INSTITUIÇÃO</a></li>
+      <li><a href="#">CURSOS</a></li>
+      <li><a href="#">DISCIPLINAS</a></li>
+      <li><a id="alunos" href="#">ALUNOS</a></li>
+      <li><a id="atividades" href="#">ATIVIDADES</a></li>
+    </ul>
+  </aside>
+
+  <!-- BARRA SUPERIOR -->
+  <header class="topbar">
+    <div class="logo-area">
+      <img src="../images/logo_NotaDez.png" alt="Logo" class="logo">
+    </div>
+
+    <div class="faculdade-area">
+      <span class="texto-local">Você está em:</span>
+      <div class="faculdade-box">
+        <img src="../images/icone_instituicao_verde.png" alt="Logo Instituição" class="instituicao-icon">
+        ***PUC-CAMPINAS***
+      </div>
+    </div>
+
+    <div class="user-menu">
+      <img src="../images/icone_pessoa.png" alt="Ícone Pessoa" class="pessoa-icon">
+      <span id="user-btn" class="user-btn">Olá, *PRIMEIRO NOME*! ▼</span>
+      <ul class="dropdown">
+        <li><a id="conta" href="#"><img src="../images/icone_pessoa.png" class="minha-conta-icon">Minha Conta</a></li>
+        <li><a id="sair" href="#"><img src="../images/icone_sair.png" class="minha-conta-icon">Sair</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <div class="pagina-atual">
+    <a href="#" class="pagina-ref">instituição</a>
+
+    <div class="botoes">
+      <button type="button" id="cadastro-instituicao">CADASTRAR INSTITUIÇÃO</button>
+    </div>
+
+    <div class="container-instituicao">
+      <table id="tabela-instituicao">
+        <tr>
+          <th>NOME DA INSTITUIÇÃO</th>
+          <th>AÇÕES</th>
+        </tr>
+        <tr>
+          <td>PUC-CAMPINAS</td>
+          <td class="acoes">
+            <img src="../images/icone_lapis.png" class="btn-acao" alt="Editar">
+            <img src="../images/icone_lixeira.png" class="btn-acao" alt="Excluir">
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <script src="instituicao2.js"></script>
+</body>
+</html>

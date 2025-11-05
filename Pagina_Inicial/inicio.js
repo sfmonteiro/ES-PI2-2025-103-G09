@@ -24,7 +24,7 @@ function redirecionar(id, destino) {
 }
 
 redirecionar("inicio", "../Pagina_Inicial/inicio.html");
-redirecionar("instituicao", "../Instituição/Instituição.html");
+redirecionar("instituicao", "../Instituiçao_editar/instituicao2.html");
 redirecionar("cursos", "");
 redirecionar("disciplinas", "");
 redirecionar("alunos", "../Pagina_alunos/alunos.html");
