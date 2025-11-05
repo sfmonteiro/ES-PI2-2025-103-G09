@@ -99,12 +99,15 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 2000);
     }
 
-    // Botão para voltar ao login
-    const btnLogin = document.getElementById("voltarLogin");
-    if (btnLogin) {
-        btnLogin.addEventListener("click", function () {
-            window.location.href = "../Login/login.html";
-        });
+    function redirecionar(id, destino) {
+        const elemento = document.getElementById(id);
+        if (elemento) {
+            elemento.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = destino;
+    });
     }
+    }
+  redirecionar("voltarLogin", "../Login/login.html");
 });
 

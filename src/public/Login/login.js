@@ -33,10 +33,14 @@ document.getElementById("submit").addEventListener("click",function (event) {
     }
 });
 
-document.getElementById("cadastro").addEventListener("click",function (event) {
-    window.location.href = "../Cadastro/Cadastro.html";
-});
-
-document.getElementById("esqueceuSenha").addEventListener("click", function() {
-    window.location.href = "../Redefinir_senha/ReSenha.html";
-});
+function redirecionar(id, destino) {
+        const elemento = document.getElementById(id);
+        if (elemento) {
+            elemento.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = destino;
+    });
+}
+}
+redirecionar("cadastro", "../Cadastro/Cadastro.html");
+redirecionar("esqueceusenha", "../Redefinir_senha/ReSenha.html");
