@@ -179,17 +179,30 @@ body {
     font-weight: bold;
 }
 .container {
+    position: relative;
     background-color: white;
-    border-radius: 20px;
+    border-radius: 10px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    width: 450px;
-    padding: 25px;
+    width: calc(100vw - 220px); /* espaço ajustado - evita rolagem lateral */
+    height: calc(100vh - 120px); /* menor que total - deixa respiro no rodapé */
+    margin-left: 160px; /* alinhado com a sidebar */
+    margin-top: 70px; /* abaixo da topbar */
+    padding: 30px 40px;
+    overflow-y: auto; /* scroll só vertical se o conteúdo for muito grande */
 }
+
+
 .container h1, h2 {
     color: #1e87a3;
     text-align: center;
     margin-bottom: 15px;
 }
+.dashboard {
+    margin-left: 0;
+    display: flex;
+    justify-content: center;
+}
+
 .form-group {
     margin-bottom: 15px;
     display: flex;
