@@ -25,9 +25,6 @@ function redirecionar(id, destino) {
     }
 }
 
-redirecionar("conta", "../Minha_Conta/minha_conta.html");
-redirecionar("sair", "../Login/login.html");
-
 // ===== Validação e Sucesso =====
 const form = document.getElementById("form-conta");
 const inputs = form.querySelectorAll("input");
@@ -110,3 +107,12 @@ form.addEventListener("submit", (e) => {
     mostrarSucesso();
     inputs.forEach(i => valoresIniciais[i.id] = i.value.trim());
 });
+
+redirecionar("inicio", "../Pagina_Inicial/inicio.html");
+redirecionar("instituicao", "../Instituiçao_editar/instituicao2.html");
+redirecionar("cursos", "");
+redirecionar("disciplinas", "");
+redirecionar("alunos", "../Pagina_alunos/alunos.html");
+redirecionar("atividades", "../Pagina_atividades/atividades.html");
+redirecionar("conta", "../Minha_Conta/minha_conta.html");
+redirecionar("sair", "../Login/login.html");
