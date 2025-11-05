@@ -29,5 +29,5 @@ redirecionar("cursos", "");
 redirecionar("disciplinas", "");
 redirecionar("alunos", "../Pagina_alunos/alunos.html");
 redirecionar("atividades", "../Pagina_atividades/atividades.html");
-redirecionar("conta", "");
+redirecionar("conta", "../Minha_Conta/minha_conta.html");
 redirecionar("sair", "../Login/login.html");
