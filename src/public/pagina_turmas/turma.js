@@ -56,7 +56,7 @@ configurarModal("cadastro-aluno", "modal-aluno");
 
 redirecionar("inicio", "../Pagina_Inicial/inicio.html");
 redirecionar("instituicao", "../Instituiçao_editar/instituicao2.html");
-redirecionar("cursos", "../pagina_curso/curso.html");
+redirecionar("cursos", "../cursos/cursos.html");
 redirecionar("turmas", "../pagina_turmas/turma.html");
 redirecionar("alunos", "../Pagina_alunos/alunos.html");
 redirecionar("atividades", "../Pagina_atividades/atividades.html");

@@ -110,7 +110,7 @@ form.addEventListener("submit", (e) => {
 
 redirecionar("inicio", "../Pagina_Inicial/inicio.html");
 redirecionar("instituicao", "../Instituiçao_editar/instituicao2.html");
-redirecionar("cursos", "");
+redirecionar("cursos", "../cursos/cursos.html");
 redirecionar("disciplinas", "");
 redirecionar("alunos", "../Pagina_alunos/alunos.html");
 redirecionar("atividades", "../Pagina_atividades/atividades.html");

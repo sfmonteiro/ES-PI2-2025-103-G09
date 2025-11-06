@@ -101,7 +101,7 @@ function redirecionar(botaoId, destino) {
 // Mapeamento das páginas
 redirecionar("inicio", "../Pagina_Inicial/inicio.html");
 redirecionar("instituicao", "../Instituiçao_editar/instituicao2.html");
-redirecionar("cursos", "../Cursos/cursos.html");
+redirecionar("cursos", "../cursos/cursos.html");
 redirecionar("turmas",);
 redirecionar("alunos", "../Pagina_alunos/alunos.html");
 redirecionar("atividades", "../Pagina_atividades/atividades.html");
