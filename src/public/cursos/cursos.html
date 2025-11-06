@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cursos</title>
+
+  <link rel="icon" type="image/png" href="../images/icone_NotaDez.png">
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="cursos.css">
+</head>
+<body>
+
+  <!-- BARRA LATERAL -->
+  <aside class="sidebar">
+    <ul>
+      <li><a id="inicio" href="#">INÍCIO</a></li>
+      <li><a id="instituicao" href="#">INSTITUIÇÃO</a></li>
+      <li><a id="cursos" href="#" class="active">CURSOS</a></li>
+      <li><a id="turmas" href="#">TURMAS</a></li>
+      <li><a id="alunos" href="#">ALUNOS</a></li>
+      <li><a id="atividades" href="#">ATIVIDADES</a></li>
+    </ul>
+  </aside>
+
+  <!-- BARRA SUPERIOR -->
+  <header class="topbar">
+    <div class="logo-area">
+      <img src="../images/logo_NotaDez.png" alt="Logo" class="logo">
+    </div>
+
+    <div class="faculdade-area">
+      <span class="texto-local">Você está em:</span>
+      <div class="faculdade-box">
+        <img src="../images/icone_instituicao_verde.png" alt="Ícone Curso" class="instituicao-icon">
+        ***CURSOS***
+      </div>
+    </div>
+
+    <div class="user-menu">
+      <img src="../images/icone_pessoa.png" alt="Ícone Pessoa" class="pessoa-icon">
+      <span id="user-btn" class="user-btn">Olá, *PRIMEIRO NOME*! ▼</span>
+      <ul class="dropdown">
+        <li><a id="conta" href="#"><img src="../images/icone_pessoa.png" class="minha-conta-icon">Minha Conta</a></li>
+        <li><a id="sair" href="#"><img src="../images/icone_sair.png" class="minha-conta-icon">Sair</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <div class="pagina-atual">
+    <a href="#" class="pagina-ref">Cursos</a>
+
+    <div class="botoes">
+      <button type="button" id="cadastro-curso">Cadastrar Curso</button>
+    </div>
+
+    <div class="container-cursos" id="lista-cursos">
+      <!-- Cards de cursos aparecem aqui -->
+    </div>
+  </div>
+
+  <!-- MODAL CADASTRAR CURSO -->
+  <div class="modal" id="modalCurso">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Cadastrar Curso</h2>
+        <span class="close" id="closeModalCurso">&times;</span>
+      </div>
+      <div class="form-group">
+        <label>Código do Curso:</label>
+        <input type="text" id="codigoCurso">
+      </div>
+      <div class="form-group">
+        <label>Nome do Curso:</label>
+        <input type="text" id="nomeCurso">
+      </div>
+      <div class="form-group">
+        <label>Quantidade de Turmas:</label>
+        <input type="number" id="qtdTurmas">
+      </div>
+      <div class="form-group">
+        <label>Quantidade de Alunos:</label>
+        <input type="number" id="qtdAlunos">
+      </div>
+      <button class="btn-save" id="salvarCurso">Salvar</button>
+    </div>
+  </div>
+
+  <!-- MODAL DISCIPLINA -->
+  <div class="modal" id="modalDisciplina">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Cadastrar Disciplina</h2>
+        <span class="close" id="closeModalDisciplina">&times;</span>
+      </div>
+      <div class="form-group">
+        <label>Nome da Disciplina:</label>
+        <input type="text" id="nomeDisciplina">
+      </div>
+      <div class="form-group">
+        <label>Código da Disciplina:</label>
+        <input type="text" id="codigoDisciplina">
+      </div>
+      <button class="btn-add" id="adicionarDisciplina">Adicionar</button>
+      <div class="disciplinas-list" id="listaDisciplinas"></div>
+    </div>
+  </div>
+
+  <script src="cursos.js"></script>
+</body>
+</html>
