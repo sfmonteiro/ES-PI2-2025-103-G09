@@ -1,5 +1,4 @@
-/*Gabriel Figueira Albasini || 25019916*/
-/* ======= ESTILOS GERAIS ======= */
+/* ALUNO: SARA FERNANDES MONTEIRO || RA: 25024107 */
 
 @media (min-width: 1600px) {
   html { zoom: 1.25; }
@@ -8,11 +7,14 @@
   html { zoom: 1.5; }
 }
 
+
 body {
     font-family: comfortaa;
     font-size: 11px;
     background-color: #f6f6f6;
 }
+
+
 
 /* ----------------BARRA LATERAL ---------------*/
 
@@ -118,6 +120,7 @@ body {
     box-shadow: 0 0 3px #25e4d1;
     width: 400px;
 }
+
 .instituicao-icon {
     position: absolute; 
     left: 12px; /* deixa o ícone colado à esquerda */
@@ -219,15 +222,16 @@ body {
 .minha-conta-icon {
     position: absolute; 
     left: 12px;
-    top: 50%;                /* ✅ faltava */
+    top: 50%;                
     transform: translateY(-50%);
     width: 15px;
     height: 15px;
 }
 
-.dashboard {
+.pagina-atual {
     margin-top: 75px;
     margin-left: 175px;
+    margin-right: 50px;
 }
 .pagina-ref {
     display: inline-block;
@@ -235,145 +239,55 @@ body {
     color:#1e87a3; 
     text-decoration: none;
     margin-bottom: 30px;
+    font-weight: bold;
 }
 
-/* ======= CONTEÚDO PRINCIPAL ======= */
-.container {
-  margin-left: 150px; /* Aumentar margem */
-  margin-top: 70px;   /* Adicionar margem superior */
-  padding: 40px;
-}
+/*-------------------BOTOES----------------------*/
 
-/* ======= CABEÇALHO ======= */
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 15px;
-  margin-bottom: 30px;
-}
-
-.header h2 {
-  font-size: 1.8rem;
-  color: #1d8ea4;
-  text-transform: lowercase;
-}
-
-/* ======= BOTÕES ======= */
-.btn {
-  background: #073f48;
-  color: #fff;
-  border: none;
-  padding: 12px 28px;
-  border-radius: 30px;
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 0.9rem;
-  margin-right: 10px;
-  transition: background 0.3s ease;
-}
-
-.btn:hover {
-  background: #055261;
-}
-
-.btn:nth-child(2) {
-  background: #2ca6c4;
-}
-
-.btn:nth-child(2):hover {
-  background: #2294ad;
-}
-
-.btn-criar {
-    background-color: #1e87a3;
-    color: white;
+button {
+    padding: 9px 14px;
     border: none;
-    border-radius: 5px;
-    padding: 10px 20px;
-    font-family: 'Comfortaa', sans-serif;
+    border-radius: 50px;
+    background-color:#1e87a3;
+    color:white;
     cursor: pointer;
+    transition: background-color 0.25s ease;
+    display: inline-block;
+    font-weight: bold;
+    width: 200px;
+    font-family: comfortaa;
 }
 
-.btn-exportar {
-    background-color: #6ec1e4;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 20px;
-    font-family: 'Comfortaa', sans-serif;
-    cursor: pointer;
+button:hover {
+    background-color:#1d6f86 ;
 }
 
-/* ======= TABELA ======= */
-table {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  background: #fff;
-  border-radius: 0;
-  box-shadow: none;
+.container-cursos {
+    background-color: #ffffff;
+    width: 100%;
+    margin-top: 50px;
+    padding: 10px;
+    border-radius: 15px;               /* bordas arredondadas */
+    box-shadow: 0px 4px 12px rgba(0,0,0,0.1); /* efeito card */
+    height: 400px;                     /* altura fixa */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;       /* conteúdo no topo */
+    align-items: center;               /* centraliza a tabela */
 }
 
-/* Cabeçalhos principais (ALUNOS / NOTAS / NOTAS FINAIS) */
-th {
-  background: #1e87a3;
-  color: #fff;
-  padding: 15px;
-  font-weight: 600;
+.nada-cadastrado {
   text-align: center;
-  border-bottom: 2px solid #eaeaea;
-  font-size: 12px;
+  color: #666;
 }
 
-/* Subcabeçalhos */
-tr:first-child th:first-child {
-  border-top-left-radius: 10px;
-}
-tr:first-child th:last-child {
-  border-top-right-radius: 10px;
+.img-nada-cadastrado {
+  width: 300px;
+  opacity: 0.8;
 }
 
-td {
-  padding: 10px 12px;
-  text-align: left;
-  border-bottom: 1px solid #eaeaea;
-  font-size: 12px;
-}
-
-th:nth-child(3),
-th:nth-child(4),
-th:nth-child(5),
-th:nth-child(6),
-td:nth-child(3),
-td:nth-child(4),
-td:nth-child(5),
-td:nth-child(6) {
-  text-align: center;
-}
-
-tr:nth-child(even) td {
-  background: #f7fbfc;
-}
-
-/* ======= AJUSTES VISUAIS ======= */
-table tr:hover td {
-  background: #e9f6f8;
-  transition: 0.2s;
-}
-
-@media (max-width: 768px) {
-  .container {
-    margin-left: 70px;
-    padding: 20px;
-  }
-
-  table, th, td {
-    font-size: 0.8rem;
-  }
-
-  .btn {
-    padding: 10px 18px;
-    font-size: 0.8rem;
-  }
+.nada-cadastrado p {
+    margin-top: 50px;
+    font-size: 20px;
+    font-weight: bold;
 }

@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Início</title>
+    <title>Cursos</title>
 
     <!---Ícone (logo) no navegador: chamada "favicon"-->
      <link rel="icon" type="image/png" href="../images/icone_NotaDez.png">
@@ -14,7 +14,7 @@
     <!--importação da fonte Comfortaa pelo Google Fonts-->
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="inicio_style.css">
+    <link rel="stylesheet" href="curso_style.css">
 
 </head>
 <body>
@@ -22,9 +22,9 @@
     <!--- BARRA LATERAL  -->
     <aside class="sidebar">
         <ul>
-            <li><a href="#" class="active" id = "inicio">INÍCIO</a></li>       <!---Class ACTIVE define a página atual-->
+            <li><a href="#" id = "inicio">INÍCIO</a></li>       <!---Class ACTIVE define a página atual-->
             <li><a href="#" id = "instituicao">INSTITUIÇÃO</a></li>
-            <li><a href="#" id = "cursos">CURSOS</a></li>
+            <li><a href="curso.html" class="active"  id = "cursos">CURSOS</a></li>
             <li><a href="#" id = "turmas">TURMAS</a></li>
             <li><a href="#" id = "alunos">ALUNOS</a></li>
             <li><a href="#" id = "atividades">ATIVIDADES</a></li>
@@ -44,7 +44,7 @@
 
             <div class="faculdade-box">
                 <img src="../images/icone_instituicao_verde.png" alt="Logo Instituição" class="instituicao-icon">
-                *APARECER A SELECIONADA NA PAGINA 'INICIO'*
+                PUC-CAMPINAS
             </div>
         </div>
 
@@ -71,8 +71,20 @@
 
     </header>
 
-    <div class="dashboard">
-        <a href="inicio.html" class="pagina-ref">dashboard</a>
+    <div class="pagina-atual">
+        <a href="cursos.html" class="pagina-ref">cursos</a>
+
+    <div class="botoes">
+        <button type="button" id="cadastro-curso">CADASTRAR CURSO</button>
+    </div>
+
+    <div class="container-cursos">
+
+        <div class="nada-cadastrado">
+            <p>NENHUM CURSO CADASTRADO AINDA...</p>
+            <img src="../images/imagem_alunos.png" alt="Nenhum lançamento realizado ainda." class="img-nada-cadastrado">
+        </div>
+
     </div>
 
     <script src="inicio.js"></script>

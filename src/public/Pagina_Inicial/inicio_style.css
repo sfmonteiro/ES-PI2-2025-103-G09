@@ -1,5 +1,13 @@
 /* ALUNO: SARA FERNANDES MONTEIRO || RA: 25024107 */
 
+@media (min-width: 1600px) {
+  html { zoom: 1.25; }
+}
+@media (max-width: 1200px) {
+  html { zoom: 1.5; }
+}
+
+
 body {
     font-family: comfortaa;
     font-size: 11px;
@@ -99,15 +107,16 @@ body {
 /* caixa arredondada no centro */
 .faculdade-box {
     position: relative; /* permite posicionar o ícone dentro */
-    display: flex;
+    display: flex;                                                                                             
     align-items: center;
     justify-content: center; /* centraliza o texto */
     background: white;
     border-radius: 50px;
     padding: 8px 40px; /* espaço maior pros lados */
     border: 1px solid #25e4d1;
-    font-weight: 600;
-    color: #000000;
+    font-weight: bold;
+    font-size: 15px;
+    color: #00576f;
     box-shadow: 0 0 3px #25e4d1;
     width: 400px;
 }
