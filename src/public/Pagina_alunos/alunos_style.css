@@ -1,11 +1,17 @@
 /* ALUNO: SARA FERNANDES MONTEIRO || RA: 25024107 */
+@media (min-width: 1600px) {
+  html { zoom: 1.25; }
+}
+@media (max-width: 1200px) {
+  html { zoom: 1.5; }
+}
+
 
 body {
     font-family: comfortaa;
     font-size: 11px;
     background-color: #f6f6f6;
 }
-
 
 
 /* ----------------BARRA LATERAL ---------------*/

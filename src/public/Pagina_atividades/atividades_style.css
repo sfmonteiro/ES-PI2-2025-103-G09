@@ -1,5 +1,13 @@
 /*Gabriel Figueira Albasini || 25019916*/
 /* ======= ESTILOS GERAIS ======= */
+
+@media (min-width: 1600px) {
+  html { zoom: 1.25; }
+}
+@media (max-width: 1200px) {
+  html { zoom: 1.5; }
+}
+
 body {
     font-family: comfortaa;
     font-size: 11px;
