@@ -265,11 +265,11 @@ button:hover {
 .container-cursos {
     background-color: #ffffff;
     width: 100%;
-    margin-top: 50px;
+    margin-top: 40px;
     padding: 10px;
     border-radius: 15px;               /* bordas arredondadas */
     box-shadow: 0px 4px 12px rgba(0,0,0,0.1); /* efeito card */
-    height: 400px;                     /* altura fixa */
+    height: 350px;                     /* altura fixa */
     display: flex;
     flex-direction: column;
     justify-content: flex-start;       /* conteúdo no topo */
@@ -284,6 +284,7 @@ button:hover {
 .img-nada-cadastrado {
   width: 300px;
   opacity: 0.8;
+  margin-top: 20px;
 }
 
 .nada-cadastrado p {

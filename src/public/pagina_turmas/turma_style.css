@@ -1,11 +1,19 @@
 /* ALUNO: SARA FERNANDES MONTEIRO || RA: 25024107 */
 
+@media (min-width: 1600px) {
+  html { zoom: 1.25; }
+}
+@media (max-width: 1200px) {
+  html { zoom: 1.5; }
+}
+
+
 body {
     font-family: comfortaa;
     font-size: 11px;
     background-color: #f6f6f6;
-
 }
+
 
 
 /* ----------------BARRA LATERAL ---------------*/
@@ -214,7 +222,7 @@ body {
 .minha-conta-icon {
     position: absolute; 
     left: 12px;
-    top: 50%;                /* ✅ faltava */
+    top: 50%;                
     transform: translateY(-50%);
     width: 15px;
     height: 15px;
@@ -223,7 +231,8 @@ body {
 .pagina-atual {
     margin-top: 75px;
     margin-left: 175px;
-    margin-right: 30px;
+    margin-right: 50px;
+    margin-bottom: 30px;
 }
 .pagina-ref {
     display: inline-block;
@@ -235,6 +244,12 @@ body {
 }
 
 /*-------------------BOTOES----------------------*/
+
+.botoes {
+    gap: 10px;
+    display: flex;
+
+}
 
 button {
     padding: 9px 14px;
@@ -254,73 +269,38 @@ button:hover {
     background-color:#1d6f86 ;
 }
 
-.botoes {
-    display: flex;
-    gap: 8px;
-    justify-content: left;
-    margin-bottom: 35px;
-}
-
-/*---------------TABELA ALUNOS------------------*/
-.container-alunos {
+.container-cursos {
     background-color: #ffffff;
-    width: 85%;
-    margin: auto;
+    width: 100%;
+    margin-top: 40px;
     padding: 10px;
     border-radius: 15px;               /* bordas arredondadas */
     box-shadow: 0px 4px 12px rgba(0,0,0,0.1); /* efeito card */
-    height: 400px;                     /* altura fixa */
+    height: 350px;                     /* altura fixa */
     display: flex;
     flex-direction: column;
     justify-content: flex-start;       /* conteúdo no topo */
     align-items: center;               /* centraliza a tabela */
 }
 
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    background-color: white;
-    text-align: center;
-    
+.nada-cadastrado {
+  text-align: center;
+  color: #666;
 }
 
-
-/* Cabeçalho */
-table th {
-    background-color: #ffffff;
-    color: #1e87a3;
-    padding: 10px;
-    border-bottom: 2px solid #1e87a3; /* só borda inferior para destacar */
-    font-weight: bold;
-    font-size: 13px;
+.img-nada-cadastrado {
+  width: 300px;
+  opacity: 0.8;
+  margin-top: 20px;
 }
 
-/* Células */
-table td {
-    padding: 10px;
-    border-top: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
-    border-right: 1px solid #ccc; /* linha vertical interna */
-    font-size: 10px;
+.nada-cadastrado p {
+    margin-top: 50px;
+    font-size: 20px;
     font-weight: bold;
 }
 
-/* Remove a borda da última coluna */
-table td:last-child {
-    border-right: none;
-}
-
-
-/* Hover nas linhas */
-table tr:hover td {
-    background-color: #eefaff;
-    transition: background-color 0.3s ease;
-}
-
-
-
-/*--------------JANELA MODAL-------------------*/
+/*--------------JANELA MODAL ALUNOS-------------------*/
 
 /* Fundo escurecido */
 .modal {
@@ -419,19 +399,4 @@ table tr:hover td {
 .grupo-input input:not(:placeholder-shown) {
     border-color: #25e4d1;
     outline: none;
-}
-
-/*--------------BOTAO AÇÃO NA TABELA (EDITAR E EXCLUIR)*/
-
-td.acoes {
-    display: flex;
-    justify-content: center;
-    gap: 10px
-}
-
-.btn-acao {
-    width: 14px;
-    height: 14px;
-    cursor: pointer;
-    transition: .2s;
 }

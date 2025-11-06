@@ -1,0 +1,177 @@
+<!---* ALUNO: SARA FERNANDES MONTEIRO || RA: 25024107 -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cursos</title>
+
+    <!---Ícone (logo) no navegador: chamada "favicon"-->
+     <link rel="icon" type="image/png" href="../images/icone_NotaDez.png">
+
+    <!--importação da fonte Comfortaa pelo Google Fonts-->
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="turma_style.css">
+
+</head>
+<body>
+    
+    <!--- BARRA LATERAL  -->
+    <aside class="sidebar">
+        <ul>
+            <li><a href="#" id = "inicio">INÍCIO</a></li>       <!---Class ACTIVE define a página atual-->
+            <li><a href="#" id = "instituicao">INSTITUIÇÃO</a></li>
+            <li><a href="curso.html" id = "cursos">CURSOS</a></li>
+            <li><a href="#"  class="active"  id = "turmas">TURMAS</a></li>
+            <li><a href="#" id = "alunos">ALUNOS</a></li>
+            <li><a href="#" id = "atividades">ATIVIDADES</a></li>
+        </ul>
+    </aside>
+
+    <!--- BARRA SUPERIOR  -->
+    <header class="topbar">
+
+        <div class="logo-area">
+            <img src="../images/logo_NotaDez.png" alt="Logo" class="logo">
+        </div>
+
+         <!-- caixa com nome da faculdade (apenas exibição) -->
+        <div class="faculdade-area">
+                <span class="texto-local">Você está em:</span>
+
+            <div class="faculdade-box">
+                <img src="../images/icone_instituicao_verde.png" alt="Logo Instituição" class="instituicao-icon">
+                PUC-CAMPINAS
+            </div>
+        </div>
+
+        <div class="user-menu">
+            <img src="../images/icone_pessoa.png" alt="Ícone Pessoa" class="pessoa-icon">
+            <span id="user-btn" class="user-btn">Olá, *PRIMEIRO NOME*!   ▼</span>
+
+            <ul class="dropdown">
+
+                <li><a href="#" id = "conta">
+                    <img src="../images/icone_pessoa.png" alt="Ícone Pessoa" class="minha-conta-icon">
+                    Minha Conta
+                    </a>
+                </li>
+
+                <li><a href="#" id = "sair">
+                    <img src="../images/icone_sair.png" alt="Ícone Pessoa" class="minha-conta-icon">
+                    Sair
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+
+    </header>
+
+    <div class="pagina-atual">
+        <a href="cursos.html" class="pagina-ref">turmas</a>
+
+    <div class="botoes">
+        <button type="button" id="cadastro-turma">CADASTRAR TURMA</button>
+        <button type="button" id="cadastro-aluno">CADASTRAR ALUNO</button>
+
+    </div>
+
+    <div class="container-cursos">
+
+        <div class="nada-cadastrado">
+            <p>NENHUMA TURMA CADASTRADA AINDA...</p>
+            <img src="../images/imagem_alunos.png" alt="Nenhum lançamento realizado ainda." class="img-nada-cadastrado">
+        </div>
+
+    </div>
+
+    <!------------------JANELA MODAL PARA CADASTRO ALUNO------------->
+
+    <div id="modal-aluno" class="modal">
+            <div class="janela-modal">
+
+                <!-- Botão fechar -->
+                <span class="fechar">
+                    <img src="../images/icone_x.png" alt="Fechar" class="fechar-icon">
+                </span>
+
+                <h2>CADASTRAR ALUNO</h2>
+
+                <div class="grupo-input">
+                    <input id="raAluno" type="text" placeholder=" " required>
+                    <label>RA</label>
+                </div>
+
+                <div class="grupo-input">
+                    <input id="nomeAluno" type="text" placeholder=" " required>
+                    <label>NOME COMPLETO</label>
+                </div>
+
+                <div class="grupo-input">
+                    <input id="cursoAluno" type="text" placeholder=" ">
+                    <label>CURSO</label>
+                </div>
+
+                <div class="grupo-input">
+                    <input id="discAluno" type="text" placeholder=" ">
+                    <label>DISCIPLINA</label>
+                </div>
+
+                <button id="confirmar-cadastro" class="btn-confirmar">CADASTRAR</button>
+
+            </div>
+        </div>
+
+    </div>
+
+        <!------------------JANELA MODAL PARA CADASTRO TURMA------------->
+
+    <div id="modal-turma" class="modal">
+            <div class="janela-modal">
+
+                <!-- Botão fechar -->
+                <span class="fechar">
+                    <img src="../images/icone_x.png" alt="Fechar" class="fechar-icon">
+                </span>
+
+                <h2>CADASTRAR TURMA</h2>
+
+                <div class="grupo-input">
+                    <input id="codTurma" type="text" placeholder=" " required>
+                    <label>CÓDIGO</label>
+                </div>
+
+                <div class="grupo-input">
+                    <input id="nomeTurma" type="text" placeholder=" " required>
+                    <label>NOME DA TURMA</label>
+                </div>
+
+                <div class="grupo-input">
+                    <input id="periodTurma" type="text" placeholder=" ">
+                    <label>PERÍODO DO CURSO</label>
+                </div>
+
+                <div class="grupo-input">
+                    <input id="cursoTurma" type="text" placeholder=" ">
+                    <label>CURSO</label>
+                </div>
+
+                <div class="grupo-input">
+                    <input id="discTurma" type="text" placeholder=" ">
+                    <label>DISCIPLINA</label>
+                </div>
+
+                <button id="confirmar-cadastro" class="btn-confirmar">CADASTRAR</button>
+
+            </div>
+        </div>
+
+    </div>
+
+    <script src="turma.js"></script>
+</body>
+</html>
