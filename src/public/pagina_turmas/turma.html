@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cursos</title>
+    <title>Turmas</title>
 
     <!---Ícone (logo) no navegador: chamada "favicon"-->
      <link rel="icon" type="image/png" href="../images/icone_NotaDez.png">
@@ -80,12 +80,16 @@
 
     </div>
 
-    <div class="container-cursos">
+    <div class="container-turmas">
 
         <div class="nada-cadastrado">
             <p>NENHUMA TURMA CADASTRADA AINDA...</p>
             <img src="../images/imagem_alunos.png" alt="Nenhum lançamento realizado ainda." class="img-nada-cadastrado">
         </div>
+
+        <div class="card-turma">
+        </div>
+
 
     </div>
 
@@ -131,7 +135,7 @@
         <!------------------JANELA MODAL PARA CADASTRO TURMA------------->
 
     <div id="modal-turma" class="modal">
-            <div class="janela-modal">
+        <div class="janela-modal">
 
                 <!-- Botão fechar -->
                 <span class="fechar">
@@ -159,20 +163,27 @@
                     <label for="cursoTurma">CURSO</label>
                     <select id="cursoTurma" required>
                         <option value="">SELECIONE UM CURSO</option>
+                        <option value="Engenharia">Engenharia</option>
+                        <option value="Direito">Direito</option>
+                        <option value="Medicina">Medicina</option>
                     </select>
 
                 </div>
 
-                <div class="grupo-select">
-                <label for="discTurma">DISCIPLINA</label>
-                <select id="discTurma" disabled required>
-                    <option value="">SELECIONE UMA DISCIPLINA</option>
-                </select>
+                <div class="grupo-disciplinas">
+                    <label for="discTurma">DISCIPLINA</label>
+                    <div class="lista-disciplinas">
+                        <label><input type="checkbox"><span>Banco de Dados</span></label>
+                        <label><input type="checkbox"><span>Tecnologias WEB</span></label>
+                        <label><input type="checkbox"><span>Tecnologias TI</span></label>
+                        <label><input type="checkbox"><span>Engenharia de Elicitações e Requisitos</span></label>
+                        <label><input type="checkbox"><span>Métodos de Engenharia de Software</span></label>
+                        <!-- repita conforme necessário -->
+                    </div>
                 </div>
 
                 <button id="confirmar-cadastro" class="btn-confirmar">CADASTRAR</button>
 
-            </div>
         </div>
 
     </div>
