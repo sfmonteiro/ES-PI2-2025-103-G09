@@ -155,14 +155,19 @@
                     <label>PERÍODO DO CURSO</label>
                 </div>
 
-                <div class="grupo-input">
-                    <input id="cursoTurma" type="text" placeholder=" ">
-                    <label>CURSO</label>
+                <div class="grupo-select">
+                    <label for="cursoTurma">CURSO</label>
+                    <select id="cursoTurma" required>
+                        <option value="">SELECIONE UM CURSO</option>
+                    </select>
+
                 </div>
 
-                <div class="grupo-input">
-                    <input id="discTurma" type="text" placeholder=" ">
-                    <label>DISCIPLINA</label>
+                <div class="grupo-select">
+                <label for="discTurma">DISCIPLINA</label>
+                <select id="discTurma" disabled required>
+                    <option value="">SELECIONE UMA DISCIPLINA</option>
+                </select>
                 </div>
 
                 <button id="confirmar-cadastro" class="btn-confirmar">CADASTRAR</button>
