@@ -1,0 +1,572 @@
+/* ALUNO: SARA FERNANDES MONTEIRO || RA: 25024107 */
+
+@media (min-width: 1600px) {
+  html { zoom: 1.25; }
+}
+@media (max-width: 1200px) {
+  html { zoom: 1.5; }
+}
+
+
+body {
+    font-family: comfortaa;
+    font-size: 11px;
+    background-color: #f6f6f6;
+}
+
+
+
+/* ----------------BARRA LATERAL ---------------*/
+
+.sidebar {
+    position: fixed;                                 /*FIXAR NA LATERAL*/
+    top: 50px;
+    left: 0;
+    width: 130px;
+    height: 100vh;
+    background-color: white;
+    padding: 10px;
+    border-right: 1px solid #ccc;                  /* LINHA DE DIVISAO */
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);       /* sombra na borda direita */
+
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar li {
+    margin: 15px 0;
+    font-weight: bold;
+
+}
+
+.sidebar a {
+    text-decoration: none;
+    color: #1e87a3;
+    display: block;
+    padding: 10px;
+    border-radius: 50px;
+    transition: background 0.3s;
+    font-size: 10px;
+
+}
+
+.sidebar a:hover {
+    background-color: #86d1e6;
+    color: white;
+    border-radius: 50px;
+}
+
+.sidebar a.active {
+    background-color: #1e87a3;
+    color: white;
+}
+
+
+/* ----------------BARRA SUPERIOR ---------------*/
+
+.topbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 50px;
+    background-color: white;
+    border-bottom: 1px solid #ccc;
+    display: flex;                                     /*COLOCA OS ITENS LADO A LADO*/
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);       /* sombra na borda direita */
+    align-items: center;
+
+}
+
+/* LOGO */
+.logo-area {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo {
+    height: 50px;
+}
+
+/* INSTITUIÇÃO*/
+.faculdade-area {
+    position: absolute;
+    top: 50%;                                           /* ajuste pra centralizar na topbar se quiser */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    gap: 10px;                                          /* espaço entre texto e caixa */
+}
+
+/* caixa arredondada no centro */
+.faculdade-box {
+    position: relative; /* permite posicionar o ícone dentro */
+    display: flex;                                                                                             
+    align-items: center;
+    justify-content: center; /* centraliza o texto */
+    background: white;
+    border-radius: 50px;
+    padding: 8px 40px; /* espaço maior pros lados */
+    border: 1px solid #25e4d1;
+    font-weight: bold;
+    font-size: 15px;
+    color: #00576f;
+    box-shadow: 0 0 3px #25e4d1;
+    width: 400px;
+}
+
+.instituicao-icon {
+    position: absolute; 
+    left: 12px; /* deixa o ícone colado à esquerda */
+    top: 50%;
+    transform: translateY(-50%); /* centraliza verticalmente */
+    width: 18px;
+    height: 18px;
+}
+
+
+.texto-local {
+    font-weight: 500;
+    color: #000000;
+    font-size: 14px;
+}
+
+/* MINHA CONTA */
+
+.user-menu {
+    position: absolute;
+    right: 25px;   /* distância da borda direita */
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    gap: 10px; /* espaço entre ícone e texto */
+    font-style: bold;
+}
+
+/* ícone */
+.pessoa-icon {
+    width: 18px;
+    height: 18px;
+}
+
+/* botão de clique/hover */
+.user-btn {
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* menu suspenso */
+
+.dropdown {
+    position: absolute;
+    top: 23px;
+    right: 0;
+    background: white;
+    border: 1px solid #cccccc;
+    border-radius: 0 0 10px 10px;
+    box-shadow: 0 0 6px rgba(0,0,0,.15);
+    list-style: none;
+    padding: 5px 10px;
+    width: 150px;
+
+    /* animação */
+    opacity: 0;
+    transform: translateY(-8px);
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* itens */
+.dropdown li {
+    width: 100%;
+}
+
+.dropdown a {
+    position: relative;      /* ✅ necessário p/ o ícone absolute */
+    text-decoration: none;
+    color: #000000;
+    display: block;
+    padding: 10px;
+    padding-left: 35px;      /* espaço para o ícone */
+    border-radius: 50px;
+    transition: background 0.3s;
+    font-size: 10px;
+}
+
+
+.dropdown a:hover {
+    color: #1e87a3;
+    border-radius: 50px;
+}
+
+/* MOSTRAR menu ao passar mouse */
+.user-menu.open .dropdown {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.dropdown p {
+    font-size: 9px;
+    color: #414141;
+}
+
+
+.minha-conta-icon {
+    position: absolute; 
+    left: 12px;
+    top: 50%;                
+    transform: translateY(-50%);
+    width: 15px;
+    height: 15px;
+}
+
+.pagina-atual {
+    margin-top: 75px;
+    margin-left: 175px;
+    margin-right: 50px;
+    margin-bottom: 30px;
+}
+.pagina-ref {
+    display: inline-block;
+    font-size: 30px;  
+    color:#1e87a3; 
+    text-decoration: none;
+    margin-bottom: 30px;
+    font-weight: bold;
+}
+
+/*-------------------BOTOES----------------------*/
+
+.botoes {
+    gap: 10px;
+    display: flex;
+
+}
+
+button {
+    padding: 9px 14px;
+    border: none;
+    border-radius: 50px;
+    background-color:#1e87a3;
+    color:white;
+    cursor: pointer;
+    transition: background-color 0.25s ease;
+    display: inline-block;
+    font-weight: bold;
+    width: 200px;
+    font-family: comfortaa;
+}
+
+button:hover {
+    background-color:#1d6f86 ;
+}
+
+.container-turmas {
+    width: 100%;
+    margin-top: 40px;
+    padding: 10px;
+    height: 350px;                     /* altura fixa */
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;       /* conteúdo no topo */
+    align-items: flex-start;               /* centraliza a tabela */
+    gap: 20px;
+}
+
+.nada-cadastrado {
+  margin: auto;
+  text-align: center;
+  color: #666;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+
+.img-nada-cadastrado {
+  width: 300px;
+  margin-top: 20px;
+}
+
+.nada-cadastrado p {
+    margin-top: 50px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/*--------------JANELA MODAL ALUNOS-------------------*/
+
+/* Fundo escurecido */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+/* Caixa do modal */
+.janela-modal {
+  background: #fff;
+  padding: 30px;
+  border-radius: 30px;
+  width: 420px;
+  position: relative;
+  text-align: center;
+  animation: crescer .2s ease;
+}
+
+/* Animação ao abrir */
+@keyframes crescer {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* Botão fechar */
+.fechar {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  cursor: pointer;
+}
+
+.fechar-icon {
+  width: 18px;
+}
+
+/* Título */
+.janela-modal h2 {
+  color:#1e87a3;
+  margin-bottom: 25px;
+  font-size: 18px;
+}
+
+/* Container dos campos do modal */
+.grupo-input {
+    position: relative;
+    margin-bottom: 20px;
+    width: 95%;
+    justify-content: center;
+}
+
+/* Input animado */
+.grupo-input input {
+    width: 90%;
+    padding: 10px 20px;
+    border-radius: 50px;
+    border: 2px solid rgb(165, 165, 165);
+    font-family: Comfortaa;
+    transition: 0.3s ease all;
+    color: black;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+/* Label animado */
+.grupo-input label {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: 0.2s ease all;
+    pointer-events: none;
+    font-size: 11px;
+    background-color: transparent;
+    padding: 0 4px;
+    color: #a5a5a5;
+}
+
+/* Ao focar ou preencher */
+.grupo-input input:focus + label,
+.grupo-input input:not(:placeholder-shown) + label {
+    top: 1px;
+    font-size: 10px;
+    background-color: #fff;
+    color: #25e4d1;
+}
+
+/* Borda quando focado ou preenchido */
+.grupo-input input:focus,
+.grupo-input input:not(:placeholder-shown) {
+    border-color: #25e4d1;
+    outline: none;
+}
+
+/* ===== DROPDOWN COM LABEL FIXA ===== */
+.grupo-select {
+  position: relative;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+/* Label fixa acima do select */
+.grupo-select label {
+  position: absolute;
+  left: 18px;
+  top: -4px; /* bem rente à borda */
+  font-size: 10px;
+  background-color: #fff;
+  color: #a5a5a5;
+  font-family: Comfortaa;
+  font-weight: bold;
+  padding: 0 4px;
+  pointer-events: none;
+  transition: 0.3s ease all;
+
+  z-index: 10; /* 🔧 NOVO → garante que a label fica acima do select */
+}
+
+/* Select estilizado */
+.grupo-select select {
+  width: 95%;
+  padding: 10px 20px;
+  border-radius: 50px;
+  border: 2px solid rgb(165, 165, 165);
+  font-family: Comfortaa;
+  font-size: 10px;
+  font-weight: bold;
+  color: black;
+  background-color: white;
+  appearance: none;
+  transition: 0.3s ease all;
+
+  position: relative; /* 🔧 NOVO → necessário pro z-index funcionar */
+  z-index: 1;          /* 🔧 NOVO → faz o select ficar abaixo da label */
+
+    /* seta personalizada */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3E%3Cpath fill='%231e87a3' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 18px center;
+  background-size: 10px;
+  appearance: none;
+  transition: 0.3s ease all;
+}
+
+/* Efeito ao focar: muda cor da label e borda */
+.grupo-select:focus-within label {
+  color: #25e4d1;
+}
+
+.grupo-select select:focus {
+  border-color: #25e4d1;
+  outline: none;
+}
+
+
+/*============CHECKBOX DISCIPLINAS=================*/
+.grupo-disciplinas {
+  margin-bottom: 20px;
+  text-align: left;
+  width: 95%;
+  font-family: Comfortaa;
+  font-weight: bold;
+  font-size: 11px;
+  color: #1e87a3;
+  position: relative;
+}
+
+/* Label do grupo (Título "DISCIPLINA") */
+.grupo-disciplinas > label {
+  position: absolute;
+  left: 18px;
+  top: -4px; /* bem rente à borda */
+  font-size: 10px;
+  background-color: #fff;
+  color: #a5a5a5;
+  font-family: Comfortaa;
+  font-weight: bold;
+  padding: 0 4px;
+  pointer-events: none;
+  transition: 0.3s ease all;
+
+  z-index: 10; /* 🔧 NOVO → garante que a label fica acima do select */
+}
+
+/* Container dos checkboxes, com scroll se tiver muitos */
+.lista-disciplinas {
+  border: 2px solid rgb(165, 165, 165);
+  border-radius: 20px;
+  padding: 10px 20px;
+  max-height: 150px; /* limita altura pra ativar scroll */
+  overflow-y: auto;
+  background-color: white;
+}
+
+/* Cada label do checkbox */
+.lista-disciplinas label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  margin-bottom: 8px;
+  font-weight: 600;
+  font-size: 12px;
+  color: #000000;
+}
+
+/* Checkbox estilizado */
+.lista-disciplinas input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #25e4d1;/* cor da checkbox moderna */
+}
+
+/* Último item sem margin bottom para não ter espaçamento extra */
+.lista-disciplinas label:last-child {
+  margin-bottom: 0;
+}
+
+.lista-disciplinas input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #25e4d1;
+  vertical-align: middle;
+  margin-right: 10px;
+}
+
+.lista-disciplinas:hover + label[for="discTurma"],
+label[for="discTurma"]:hover {
+  color: #25e4d1;
+  border-color: #25e4d1;
+}
+
+
+/*======================CARD TURMAS===============================================================================*/
+
+.card-turma {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  padding: 15px;
+  margin-bottom: 15px;
+  width: 150px;
+  height: 200px;
+}
+
+.card-turma:empty {
+  display: none;
+}
+
+.nome-turma {
+  color: #1e87a3; /* Azul parecido com o seu padrão */
+  font-weight: bold; /* opcional */
+}
+
+
