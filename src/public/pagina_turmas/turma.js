@@ -77,13 +77,12 @@ checkboxes.forEach(chk => {
 atualizarEstilos();
 
 
-//===========================================CARDS E CADASTRO DAS TURMAS===================================================
-
 const containerTurmas = document.querySelector('.container-turmas');
 const modalTurma = document.getElementById('modal-turma');
-const btnConfirmarCadastroTurma = modalTurma.querySelector('#confirmar-cadastro');
+const btnConfirmarCadastroTurma = modalTurma.querySelector('#confirmar-cadastro-turma');
 
 let turmas = []; // vai armazenar as turmas cadastradas na sessão
+let turmaEditando = null; // vai guardar a turma que está sendo editada
 
 function criarCardTurma(turma) {
   const card = document.createElement('div');
@@ -94,12 +93,57 @@ function criarCardTurma(turma) {
     <p><strong>Período:</strong> ${turma.periodo}</p>
     <p><strong>Curso:</strong> ${turma.curso}</p>
     <p><strong>Disciplinas:</strong> ${turma.disciplinas.join(', ')}</p>
+
+    <div class="botoes-card">
+      <button class="btn-card adicionar">Alunos</button>
+      <button class="btn-card editar">Editar</button>
+      <button class="btn-card excluir">Excluir</button>
+    </div>
   `;
+
+  const btnAdicionar = card.querySelector('.adicionar');
+  const btnEditar = card.querySelector('.editar');
+  const btnExcluir = card.querySelector('.excluir');
+
+  btnAdicionar.addEventListener('click', () => {
+    alert(`Adicionar aluno à turma ${turma.nome}`);
+  });
+
+  btnEditar.addEventListener('click', () => {
+    turmaEditando = turma; // marca a turma que está sendo editada
+    abrirModalEdicao(turma);
+  });
+
+  btnExcluir.addEventListener('click', () => {
+    if (confirm(`Tem certeza que deseja excluir a turma "${turma.nome}"?`)) {
+      turmas = turmas.filter(t => t.codigo !== turma.codigo);
+      atualizarListaTurmas();
+    }
+  });
+
   return card;
+}
+
+function abrirModalEdicao(turma) {
+  // Preenche os campos da modal
+  document.getElementById('codTurma').value = turma.codigo;
+  document.getElementById('nomeTurma').value = turma.nome;
+  document.getElementById('periodTurma').value = turma.periodo;
+  document.getElementById('cursoTurma').value = turma.curso;
+
+  // marca as disciplinas que já estavam selecionadas
+  const checkboxes = document.querySelectorAll('.lista-disciplinas input[type="checkbox"]');
+  checkboxes.forEach(chk => {
+    chk.checked = turma.disciplinas.includes(chk.parentElement.textContent.trim());
+  });
+
+  // abre o modal
+  modalTurma.style.display = 'flex';
 }
 
 function atualizarListaTurmas() {
   containerTurmas.innerHTML = ''; // limpa o conteúdo
+
   if (turmas.length === 0) {
     containerTurmas.innerHTML = `
       <div class="nada-cadastrado">
@@ -109,6 +153,7 @@ function atualizarListaTurmas() {
     `;
     return;
   }
+
   turmas.forEach(turma => {
     const card = criarCardTurma(turma);
     containerTurmas.appendChild(card);
@@ -116,11 +161,11 @@ function atualizarListaTurmas() {
 }
 
 btnConfirmarCadastroTurma.addEventListener('click', () => {
-  // Pegar os valores dos inputs
   const codigo = document.getElementById('codTurma').value.trim();
   const nome = document.getElementById('nomeTurma').value.trim();
   const periodo = document.getElementById('periodTurma').value.trim();
-  const curso = document.getElementById('cursoTurma').value; // select
+  const curso = document.getElementById('cursoTurma').value;
+
   const checkboxElements = document.querySelectorAll('.lista-disciplinas input[type="checkbox"]:checked');
   const disciplinas = Array.from(checkboxElements).map(chk => chk.parentElement.textContent.trim());
 
@@ -129,22 +174,24 @@ btnConfirmarCadastroTurma.addEventListener('click', () => {
     return;
   }
 
-  // Criar objeto turma
-  const novaTurma = {
-    codigo,
-    nome,
-    periodo,
-    curso,
-    disciplinas
-  };
+  if (turmaEditando) {
+    // 🟡 modo edição
+    turmaEditando.codigo = codigo;
+    turmaEditando.nome = nome;
+    turmaEditando.periodo = periodo;
+    turmaEditando.curso = curso;
+    turmaEditando.disciplinas = disciplinas;
+    turmaEditando = null; // limpa controle
+  } else {
+    // 🟢 novo cadastro
+    const novaTurma = { codigo, nome, periodo, curso, disciplinas };
+    turmas.push(novaTurma);
+  }
 
-  turmas.push(novaTurma); // adiciona no array
+  atualizarListaTurmas();
+  modalTurma.style.display = 'none';
 
-  atualizarListaTurmas(); // atualiza a tela
-
-  modalTurma.style.display = 'none'; // fecha modal
-
-  // limpar formulário (opcional)
+  // limpar formulário
   document.getElementById('codTurma').value = '';
   document.getElementById('nomeTurma').value = '';
   document.getElementById('periodTurma').value = '';
@@ -152,14 +199,15 @@ btnConfirmarCadastroTurma.addEventListener('click', () => {
   document.querySelectorAll('.lista-disciplinas input[type="checkbox"]').forEach(chk => chk.checked = false);
 });
 
+// Esconde cards vazios
 const cards = document.querySelectorAll('.card-turma');
-
 cards.forEach(card => {
-  // trim para remover espaços e quebras de linha
   if (card.textContent.trim() === '') {
     card.style.display = 'none';
   }
 });
+
+
 
 
 

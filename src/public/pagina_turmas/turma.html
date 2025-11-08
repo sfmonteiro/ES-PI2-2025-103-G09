@@ -76,7 +76,7 @@
 
     <div class="botoes">
         <button type="button" id="cadastro-turma">CADASTRAR TURMA</button>
-        <button type="button" id="cadastro-aluno">CADASTRAR ALUNO</button>
+        <button type="button" id="cadastro-aluno">Adicionar</button>
 
     </div>
 
@@ -88,6 +88,11 @@
         </div>
 
         <div class="card-turma">
+              <div class="botoes-card">
+                <button class="btn-card adicionar">Adicionar</button>
+                <button class="btn-card editar">Editar</button>
+                <button class="btn-card excluir">Excluir</button>
+            </div>
         </div>
 
 
@@ -125,7 +130,7 @@
                     <label>DISCIPLINA</label>
                 </div>
 
-                <button id="confirmar-cadastro" class="btn-confirmar">CADASTRAR</button>
+                <button id="confirmar-cadastro-aluno" class="btn-confirmar">CADASTRAR</button>
 
             </div>
         </div>
@@ -145,17 +150,17 @@
                 <h2>CADASTRAR TURMA</h2>
 
                 <div class="grupo-input">
-                    <input id="codTurma" type="text" placeholder=" " required>
+                    <input id="codTurma" type="text" placeholder="EX: T11" required>
                     <label>CÓDIGO</label>
                 </div>
 
                 <div class="grupo-input">
-                    <input id="nomeTurma" type="text" placeholder=" " required>
+                    <input id="nomeTurma" type="text" placeholder="EX: TURMA 11" required>
                     <label>NOME DA TURMA</label>
                 </div>
 
                 <div class="grupo-input">
-                    <input id="periodTurma" type="text" placeholder=" ">
+                    <input id="periodTurma" type="text" placeholder="EX: 1º SEMESTRE">
                     <label>PERÍODO DO CURSO</label>
                 </div>
 
@@ -182,7 +187,7 @@
                     </div>
                 </div>
 
-                <button id="confirmar-cadastro" class="btn-confirmar">CADASTRAR</button>
+                <button id="confirmar-cadastro-turma" class="btn-confirmar">CADASTRAR</button>
 
         </div>
 

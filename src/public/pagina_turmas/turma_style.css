@@ -356,56 +356,66 @@ button:hover {
   font-size: 18px;
 }
 
-/* Container dos campos do modal */
+/* ===== CAMPOS COM LABEL FIXA ===== */
 .grupo-input {
-    position: relative;
-    margin-bottom: 20px;
-    width: 95%;
-    justify-content: center;
+  position: relative;
+  margin-bottom: 20px;
+  width: 95%;
+  text-align: left;
+  font-family: Comfortaa;
 }
 
-/* Input animado */
-.grupo-input input {
-    width: 90%;
-    padding: 10px 20px;
-    border-radius: 50px;
-    border: 2px solid rgb(165, 165, 165);
-    font-family: Comfortaa;
-    transition: 0.3s ease all;
-    color: black;
-    font-size: 10px;
-    font-weight: bold;
-}
-
-/* Label animado */
+/* Label fixa acima do input */
 .grupo-input label {
-    position: absolute;
-    left: 18px;
-    top: 50%;
-    transform: translateY(-50%);
-    transition: 0.2s ease all;
-    pointer-events: none;
-    font-size: 11px;
-    background-color: transparent;
-    padding: 0 4px;
-    color: #a5a5a5;
+  position: absolute;
+  left: 18px;
+  top: -4px;
+  font-size: 10px;
+  background-color: #fff;
+  color: #a5a5a5;
+  font-weight: bold;
+  padding: 0 4px;
+  pointer-events: none;
+  z-index: 10;
+  transition: 0.3s ease all;
+
 }
 
-/* Ao focar ou preencher */
-.grupo-input input:focus + label,
-.grupo-input input:not(:placeholder-shown) + label {
-    top: 1px;
-    font-size: 10px;
-    background-color: #fff;
-    color: #25e4d1;
+/* Input padrão */
+.grupo-input input {
+  width: 90%;
+  padding: 10px 20px;
+  border-radius: 50px;
+  border: 2px solid rgb(165, 165, 165);
+  font-family: Comfortaa;
+  font-size: 10px;
+  font-weight: bold;
+  color: black;
+  background-color: white;
+  transition: 0.3s ease all;
 }
 
-/* Borda quando focado ou preenchido */
-.grupo-input input:focus,
+/* 🔹 Quando o input está focado */
+.grupo-input input:focus {
+  border-color: #25e4d1;
+  outline: none;
+}
+
+/* 🔹 Quando o input está focado → muda cor da label também */
+.grupo-input:focus-within label {
+  color: #25e4d1;
+}
+
+/* 🔹 Quando o campo tem valor (não está vazio) */
 .grupo-input input:not(:placeholder-shown) {
-    border-color: #25e4d1;
-    outline: none;
+  border-color: #25e4d1;
 }
+
+/* 🔹 E também colore a label quando o campo tem valor */
+.grupo-input input:not(:placeholder-shown) + label {
+  color: #25e4d1;
+}
+
 
 /* ===== DROPDOWN COM LABEL FIXA ===== */
 .grupo-select {
@@ -466,6 +476,18 @@ button:hover {
   border-color: #25e4d1;
   outline: none;
 }
+
+/* 🔹 Mantém cor quando uma opção é selecionada */
+.grupo-select select:not([value=""]) {
+  border-color: #25e4d1;
+}
+
+/* 🔹 Mantém label colorida também quando há valor (label antes do select) */
+.grupo-select:has(select:not([value=""])) label {
+  color: #25e4d1;
+}
+
+
 
 
 /*============CHECKBOX DISCIPLINAS=================*/
@@ -560,7 +582,62 @@ label[for="discTurma"]:hover {
   height: 200px;
 }
 
+.card-turma h3 {
+  background-color: #25e4d1; /* 💙 faixa azul */
+  color: white;
+  font-family: Comfortaa;
+  font-size: 15px;
+  font-weight: bold;
+  text-align: center;
+  padding: 15px 0;
+  border-radius: 12px 12px 0 0; /* arredonda só em cima */
+  margin: -15px -15px 10px -15px; /* expande até as bordas do card */
+}
+
 .card-turma:empty {
   display: none;
 }
 
+/* Container dos botões */
+.botoes-card {
+  display: flex;
+  justify-content: space-between;
+  margin-top: auto;
+}
+
+/* Estilo base dos botões */
+.btn-card {
+  flex: 1;
+  margin: 0 3px;
+  padding: 6px 0;
+  border: none;
+  border-radius: 50px;
+  font-family: Comfortaa;
+  font-size: 10px;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s ease all;
+}
+
+/* Cores individuais */
+.btn-card.adicionar {
+  background-color: #25e4d1; /* Azul */
+}
+.btn-card.adicionar:hover {
+  background-color: #1eb7a8;
+}
+
+.btn-card.editar {
+  background-color: #ffb347; /* Laranja */
+}
+.btn-card.editar:hover {
+  background-color: #e29b30;
+}
+
+.btn-card.excluir {
+  background-color: #ff6b6b; /* Vermelho */
+}
+.btn-card.excluir:hover {
+  background-color: #d9534f;
+}
