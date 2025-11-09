@@ -114,12 +114,13 @@ body {
 /* ======== MENU USUÁRIO ======== */
 .user-menu {
     position: absolute;
-    right: 25px;
+    right: 25px;   /* distância da borda direita */
     top: 50%;
     transform: translateY(-50%);
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 10px; /* espaço entre ícone e texto */
+    font-weight: bold;
 }
 .pessoa-icon {
     width: 18px;

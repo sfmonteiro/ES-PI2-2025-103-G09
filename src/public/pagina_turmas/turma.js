@@ -49,7 +49,8 @@ function configurarModal(botaoId, modalId) {
 
 // ======== CONFIGURAR AS DUAS MODAIS ========
 configurarModal("cadastro-turma", "modal-turma");
-configurarModal("cadastro-aluno", "modal-aluno");
+configurarModal("cadastro-turma", "modal-turma");
+
 
 
 
@@ -92,7 +93,7 @@ function salvarTurmasLocalStorage() {
 function criarCardTurma(turma) {
   const card = document.createElement('div');
   card.classList.add('card-turma');
- card.innerHTML = `
+  card.innerHTML = `
   <h3>${turma.nome}</h3>
   <p><strong>Código:</strong> ${turma.codigo}</p>
   <p><strong>Período:</strong> ${turma.periodo}</p>
@@ -109,14 +110,14 @@ function criarCardTurma(turma) {
   </div>
 `;
 
-
   const btnAdicionar = card.querySelector('.adicionar');
-  btnAdicionar.addEventListener('click', () => {
-    const modalAluno = document.getElementById('modal-aluno');
-    modalAluno.style.display = 'flex'; // abre a modal
-    atualizarListaAlunos(); // atualiza a lista na hora de abrir
-  });
 
+  // ### ADICIONADO: variavel global para turma selecionada
+  btnAdicionar.addEventListener('click', () => {
+    turmaSelecionada = turma; // guarda turma clicada na variável global
+    modalAluno.style.display = 'flex'; // abre o modal de alunos
+    atualizarListaAlunos(); // atualiza lista de alunos da turma selecionada
+  });
 
   const btnEditar = card.querySelector('.editar');
   const btnExcluir = card.querySelector('.excluir');
@@ -197,7 +198,7 @@ btnConfirmarCadastroTurma.addEventListener('click', () => {
     turmaEditando = null;
   } else {
     // 🟢 novo cadastro
-    const novaTurma = { codigo, nome, periodo, curso, disciplinas, alunos: [] };
+    const novaTurma = { codigo, nome, periodo, curso, disciplinas, alunos: [] }; // alunos inicia vazio
     turmas.push(novaTurma);
   }
 
@@ -225,7 +226,7 @@ cards.forEach(card => {
 });
 
 
-///////////////////////==================================LISTAGEM E CADASTRO DE ALUNOS
+// ########################## LISTAGEM E CADASTRO DE ALUNOS ########################
 
 // Elementos do formulário e tabela
 const modalAluno = document.getElementById('modal-aluno');
@@ -235,19 +236,21 @@ const raInput = document.getElementById('raAluno');
 const nomeInput = document.getElementById('nomeAluno');
 const tbodyAlunos = document.getElementById('corpo-lista-alunos');
 
+// ### ADICIONADO: variável global para turma selecionada (declaração no topo do arquivo, aqui só reforço)
+let turmaSelecionada = null;
 
-let alunos = JSON.parse(localStorage.getItem('alunos')) || [];
 let alunoEditandoIndex = null;
 
-// Atualiza a tabela de alunos
+// Atualiza a tabela de alunos (só da turma selecionada)
 function atualizarListaAlunos() {
   tbodyAlunos.innerHTML = '';
-  if (alunos.length === 0) {
-    tbodyAlunos.innerHTML = `<tr><td colspan="3" style="text-align:center; font-style: italic;">Nenhum aluno cadastrado.</td></tr>`;
+
+  if (!turmaSelecionada || !turmaSelecionada.alunos || turmaSelecionada.alunos.length === 0) {
+    tbodyAlunos.innerHTML = `<tr><td colspan="3" style="text-align:center; font-style: italic;">Nenhum aluno cadastrado nesta turma.</td></tr>`;
     return;
   }
 
-  alunos.forEach((aluno, index) => {
+  turmaSelecionada.alunos.forEach((aluno, index) => {
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td>${aluno.ra}</td>
@@ -281,27 +284,22 @@ function atualizarListaAlunos() {
 
 // Carrega os dados do aluno para edição no formulário
 function carregarAlunoParaEdicao(index) {
-  const aluno = alunos[index];
+  const aluno = turmaSelecionada.alunos[index];
   raInput.value = aluno.ra;
   nomeInput.value = aluno.nome;
   alunoEditandoIndex = index;
-  btnConfirmarCadastroAluno.textContent = 'Salvar';
+  btnConfirmarCadastroAluno.textContent = 'SALVAR';
   modalAluno.style.display = 'flex'; // abre modal para editar
 }
 
 // Excluir aluno
 function excluirAluno(index) {
   if (confirm('Deseja realmente excluir este aluno?')) {
-    alunos.splice(index, 1);
-    salvarAlunosLocalStorage();
+    turmaSelecionada.alunos.splice(index, 1);
+    salvarTurmasLocalStorage();  // salva alteração nas turmas
     atualizarListaAlunos();
     limparFormularioAluno();
   }
-}
-
-// Salvar no localStorage
-function salvarAlunosLocalStorage() {
-  localStorage.setItem('alunos', JSON.stringify(alunos));
 }
 
 // Limpar formulário
@@ -312,7 +310,7 @@ function limparFormularioAluno() {
   btnConfirmarCadastroAluno.textContent = 'CADASTRAR';
 }
 
-// Evento do botão cadastrar/salvar
+// Evento do botão cadastrar/salvar aluno
 btnConfirmarCadastroAluno.addEventListener('click', () => {
   const ra = raInput.value.trim();
   const nome = nomeInput.value.trim();
@@ -322,34 +320,36 @@ btnConfirmarCadastroAluno.addEventListener('click', () => {
     return;
   }
 
-  // Verifica duplicidade de RA no cadastro novo
-  if (alunoEditandoIndex === null && alunos.some(a => a.ra === ra)) {
-    alert('RA já cadastrado!');
+  if (!turmaSelecionada.alunos) {
+    turmaSelecionada.alunos = [];
+  }
+
+  // Verifica duplicidade de RA no cadastro novo da turma selecionada
+  if (alunoEditandoIndex === null && turmaSelecionada.alunos.some(a => a.ra === ra)) {
+    alert('RA já cadastrado nesta turma!');
     return;
   }
 
   if (alunoEditandoIndex !== null) {
-    // Editar aluno existente
-    alunos[alunoEditandoIndex].ra = ra;
-    alunos[alunoEditandoIndex].nome = nome;
+    turmaSelecionada.alunos[alunoEditandoIndex].ra = ra;
+    turmaSelecionada.alunos[alunoEditandoIndex].nome = nome;
   } else {
-    // Novo aluno
-    alunos.push({ ra, nome });
+    turmaSelecionada.alunos.push({ ra, nome });
   }
 
-  salvarAlunosLocalStorage();
+  salvarTurmasLocalStorage(); // salva localStorage geral das turmas
   atualizarListaAlunos();
   limparFormularioAluno();
 
-  // NÃO fecha modal aqui!
+  // NÃO fecha modal aqui para facilitar cadastros sequenciais
   // modalAluno.style.display = 'none'; // removido para manter aberto
 });
 
-
-// Botão fechar modal
+// Botão fechar modal alunos
 btnFecharAluno.addEventListener('click', () => {
   modalAluno.style.display = 'none';
   limparFormularioAluno();
+  turmaSelecionada = null; // limpa turma selecionada ao fechar modal
 });
 
 // Fecha modal clicando fora
@@ -357,11 +357,15 @@ window.addEventListener('click', (e) => {
   if (e.target === modalAluno) {
     modalAluno.style.display = 'none';
     limparFormularioAluno();
+    turmaSelecionada = null; // limpa turma selecionada ao fechar modal
   }
 });
 
-// Inicializa tabela no carregamento da página
-atualizarListaAlunos();
+// ** REMOVIDO **
+// Não inicializar lista global de alunos, pois agora é por turma selecionada
+// atualizarListaAlunos(); 
+
+
 
 
 
