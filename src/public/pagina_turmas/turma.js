@@ -5,8 +5,7 @@ userBtn.addEventListener('click', () => {
     userMenu.classList.toggle('open');
 });
 
-//FECHAR SE CLICAR FORA
-
+// FECHAR SE CLICAR FORA
 document.addEventListener('click', (e) => {
     if (!userMenu.contains(e.target)) {
         userMenu.classList.remove('open');
@@ -53,6 +52,8 @@ configurarModal("cadastro-turma", "modal-turma");
 configurarModal("cadastro-aluno", "modal-aluno");
 
 
+
+
 //========================modal cadastro - disciplinas===================
 
 const checkboxes = document.querySelectorAll('.lista-disciplinas input[type="checkbox"]');
@@ -76,38 +77,49 @@ checkboxes.forEach(chk => {
 
 atualizarEstilos();
 
-
 const containerTurmas = document.querySelector('.container-turmas');
 const modalTurma = document.getElementById('modal-turma');
 const btnConfirmarCadastroTurma = modalTurma.querySelector('#confirmar-cadastro-turma');
 
-let turmas = []; // vai armazenar as turmas cadastradas na sessão
+// CARREGAR TURMAS DO LOCALSTORAGE
+let turmas = JSON.parse(localStorage.getItem('turmas')) || [];
 let turmaEditando = null; // vai guardar a turma que está sendo editada
+
+function salvarTurmasLocalStorage() {
+  localStorage.setItem('turmas', JSON.stringify(turmas));
+}
 
 function criarCardTurma(turma) {
   const card = document.createElement('div');
   card.classList.add('card-turma');
-  card.innerHTML = `
-    <h3>${turma.nome}</h3>
-    <p><strong>Código:</strong> ${turma.codigo}</p>
-    <p><strong>Período:</strong> ${turma.periodo}</p>
-    <p><strong>Curso:</strong> ${turma.curso}</p>
-    <p><strong>Disciplinas:</strong> ${turma.disciplinas.join(', ')}</p>
+ card.innerHTML = `
+  <h3>${turma.nome}</h3>
+  <p><strong>Código:</strong> ${turma.codigo}</p>
+  <p><strong>Período:</strong> ${turma.periodo}</p>
+  <p><strong>Curso:</strong> ${turma.curso}</p>
+  <div><strong>Disciplinas:</strong></div>
+  <div>
+    ${turma.disciplinas.map(d => `<div>• ${d}</div>`).join('')}
+  </div>
 
-    <div class="botoes-card">
-      <button class="btn-card adicionar">Alunos</button>
-      <button class="btn-card editar">Editar</button>
-      <button class="btn-card excluir">Excluir</button>
-    </div>
-  `;
+  <div class="botoes-card">
+    <button class="btn-card adicionar">Alunos</button>
+    <button class="btn-card editar">Editar</button>
+    <button class="btn-card excluir">Excluir</button>
+  </div>
+`;
+
 
   const btnAdicionar = card.querySelector('.adicionar');
+  btnAdicionar.addEventListener('click', () => {
+    const modalAluno = document.getElementById('modal-aluno');
+    modalAluno.style.display = 'flex'; // abre a modal
+    atualizarListaAlunos(); // atualiza a lista na hora de abrir
+  });
+
+
   const btnEditar = card.querySelector('.editar');
   const btnExcluir = card.querySelector('.excluir');
-
-  btnAdicionar.addEventListener('click', () => {
-    alert(`Adicionar aluno à turma ${turma.nome}`);
-  });
 
   btnEditar.addEventListener('click', () => {
     turmaEditando = turma; // marca a turma que está sendo editada
@@ -117,6 +129,7 @@ function criarCardTurma(turma) {
   btnExcluir.addEventListener('click', () => {
     if (confirm(`Tem certeza que deseja excluir a turma "${turma.nome}"?`)) {
       turmas = turmas.filter(t => t.codigo !== turma.codigo);
+      salvarTurmasLocalStorage(); // salvar alterações no localStorage
       atualizarListaTurmas();
     }
   });
@@ -181,13 +194,14 @@ btnConfirmarCadastroTurma.addEventListener('click', () => {
     turmaEditando.periodo = periodo;
     turmaEditando.curso = curso;
     turmaEditando.disciplinas = disciplinas;
-    turmaEditando = null; // limpa controle
+    turmaEditando = null;
   } else {
     // 🟢 novo cadastro
-    const novaTurma = { codigo, nome, periodo, curso, disciplinas };
+    const novaTurma = { codigo, nome, periodo, curso, disciplinas, alunos: [] };
     turmas.push(novaTurma);
   }
 
+  salvarTurmasLocalStorage(); // salva localStorage
   atualizarListaTurmas();
   modalTurma.style.display = 'none';
 
@@ -199,6 +213,9 @@ btnConfirmarCadastroTurma.addEventListener('click', () => {
   document.querySelectorAll('.lista-disciplinas input[type="checkbox"]').forEach(chk => chk.checked = false);
 });
 
+// Chama atualização da lista ao carregar a página
+atualizarListaTurmas();
+
 // Esconde cards vazios
 const cards = document.querySelectorAll('.card-turma');
 cards.forEach(card => {
@@ -208,6 +225,143 @@ cards.forEach(card => {
 });
 
 
+///////////////////////==================================LISTAGEM E CADASTRO DE ALUNOS
+
+// Elementos do formulário e tabela
+const modalAluno = document.getElementById('modal-aluno');
+const btnFecharAluno = document.getElementById('fecharModalAluno');
+const btnConfirmarCadastroAluno = document.getElementById('confirmar-cadastro-aluno');
+const raInput = document.getElementById('raAluno');
+const nomeInput = document.getElementById('nomeAluno');
+const tbodyAlunos = document.getElementById('corpo-lista-alunos');
+
+
+let alunos = JSON.parse(localStorage.getItem('alunos')) || [];
+let alunoEditandoIndex = null;
+
+// Atualiza a tabela de alunos
+function atualizarListaAlunos() {
+  tbodyAlunos.innerHTML = '';
+  if (alunos.length === 0) {
+    tbodyAlunos.innerHTML = `<tr><td colspan="3" style="text-align:center; font-style: italic;">Nenhum aluno cadastrado.</td></tr>`;
+    return;
+  }
+
+  alunos.forEach((aluno, index) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${aluno.ra}</td>
+      <td>${aluno.nome}</td>
+      <td>
+        <div class="botoes-acoes">
+          <button class="editar" data-index="${index}">Editar</button>
+          <button class="excluir" data-index="${index}">Excluir</button>
+        </div>
+      </td>
+    `;
+    tbodyAlunos.appendChild(tr);
+  });
+
+  // Eventos dos botões editar
+  tbodyAlunos.querySelectorAll('button.editar').forEach(btn => {
+    btn.addEventListener('click', e => {
+      const idx = e.target.getAttribute('data-index');
+      carregarAlunoParaEdicao(idx);
+    });
+  });
+
+  // Eventos dos botões excluir
+  tbodyAlunos.querySelectorAll('button.excluir').forEach(btn => {
+    btn.addEventListener('click', e => {
+      const idx = e.target.getAttribute('data-index');
+      excluirAluno(idx);
+    });
+  });
+}
+
+// Carrega os dados do aluno para edição no formulário
+function carregarAlunoParaEdicao(index) {
+  const aluno = alunos[index];
+  raInput.value = aluno.ra;
+  nomeInput.value = aluno.nome;
+  alunoEditandoIndex = index;
+  btnConfirmarCadastroAluno.textContent = 'Salvar';
+  modalAluno.style.display = 'flex'; // abre modal para editar
+}
+
+// Excluir aluno
+function excluirAluno(index) {
+  if (confirm('Deseja realmente excluir este aluno?')) {
+    alunos.splice(index, 1);
+    salvarAlunosLocalStorage();
+    atualizarListaAlunos();
+    limparFormularioAluno();
+  }
+}
+
+// Salvar no localStorage
+function salvarAlunosLocalStorage() {
+  localStorage.setItem('alunos', JSON.stringify(alunos));
+}
+
+// Limpar formulário
+function limparFormularioAluno() {
+  raInput.value = '';
+  nomeInput.value = '';
+  alunoEditandoIndex = null;
+  btnConfirmarCadastroAluno.textContent = 'CADASTRAR';
+}
+
+// Evento do botão cadastrar/salvar
+btnConfirmarCadastroAluno.addEventListener('click', () => {
+  const ra = raInput.value.trim();
+  const nome = nomeInput.value.trim();
+
+  if (!ra || !nome) {
+    alert('Preencha RA e Nome Completo!');
+    return;
+  }
+
+  // Verifica duplicidade de RA no cadastro novo
+  if (alunoEditandoIndex === null && alunos.some(a => a.ra === ra)) {
+    alert('RA já cadastrado!');
+    return;
+  }
+
+  if (alunoEditandoIndex !== null) {
+    // Editar aluno existente
+    alunos[alunoEditandoIndex].ra = ra;
+    alunos[alunoEditandoIndex].nome = nome;
+  } else {
+    // Novo aluno
+    alunos.push({ ra, nome });
+  }
+
+  salvarAlunosLocalStorage();
+  atualizarListaAlunos();
+  limparFormularioAluno();
+
+  // NÃO fecha modal aqui!
+  // modalAluno.style.display = 'none'; // removido para manter aberto
+});
+
+
+// Botão fechar modal
+btnFecharAluno.addEventListener('click', () => {
+  modalAluno.style.display = 'none';
+  limparFormularioAluno();
+});
+
+// Fecha modal clicando fora
+window.addEventListener('click', (e) => {
+  if (e.target === modalAluno) {
+    modalAluno.style.display = 'none';
+    limparFormularioAluno();
+  }
+});
+
+// Inicializa tabela no carregamento da página
+atualizarListaAlunos();
 
 
 
