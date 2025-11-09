@@ -130,6 +130,19 @@ function criarCardDOM(curso) {
 
 function renderCursos() {
   limparListaCursosDOM();
+
+  if (cursos.length === 0) {
+    listaCursosEl.innerHTML = `
+      <div class="nada-cadastrado">
+        <p>NENHUM CURSO CADASTRADO AINDA...</p>
+        <img src="../images/imagem_alunos.png" 
+             alt="Nenhum curso cadastrado ainda." 
+             class="img-nada-cadastrado">
+      </div>
+    `;
+    return;
+  }
+
   cursos.forEach(cr => criarCardDOM(cr));
 }
 
@@ -161,6 +174,7 @@ if (btnSalvarCurso) {
   btnSalvarCurso.addEventListener("click", () => {
     const codigo = inputCodigoCurso.value.trim();
     const nome = inputNomeCurso.value.trim();
+    
 
     if (!codigo || !nome) {
       alert("Preencha código e nome do curso!");
