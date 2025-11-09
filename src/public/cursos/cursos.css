@@ -8,7 +8,28 @@ body {
   background-color: #f6f6f6;
   margin: 0;
 }
+.nada-cadastrado {
+  margin: auto;
+  text-align: center;
+  color: #666;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
 
+
+.img-nada-cadastrado {
+  width: 300px;
+  margin-top: 30px;
+}
+
+.nada-cadastrado p {
+    margin-top: 50px;
+    font-size: 20px;
+    font-weight: bold;
+}
 /* ---------- BARRA LATERAL ---------- */
 .sidebar {
   position: fixed;
@@ -434,27 +455,38 @@ input {
   margin-top: 20px;
 }
 
-.disciplinas-list .disc-item {
-  background: #f0f0f0;
-  border-radius: 10px;
-  padding: 8px 12px;
-  margin-bottom: 8px;
+.disciplinas-list .disc-buttons {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 12px;
+  justify-content: flex-end;
+  gap: 8px;
 }
 
 .disciplinas-list button {
-  background: none;
   border: none;
+  border-radius: 25px;
+  padding: 6px 14px;
+  font-size: 11px;
   font-weight: bold;
-  color: #1e87a3;
+  color: white;
   cursor: pointer;
+  transition: 0.3s ease;
 }
 
-.disciplinas-list button:hover {
-  color: #166b82;
+/* Estilos individuais */
+.disciplinas-list .btn-edit {
+  background-color: #ffc107; /* amarelo */
+}
+
+.disciplinas-list .btn-edit:hover {
+  background-color: #e0a800;
+}
+
+.disciplinas-list .btn-del {
+  background-color: #ff5252; /* vermelho */
+}
+
+.disciplinas-list .btn-del:hover {
+  background-color: #e04848;
 }
 
 /* Modal de Confirmação */
@@ -482,4 +514,69 @@ input {
 #confirmarSim { background: #1e87a3; }
 #confirmarNao { background: #aaa; }
 #confirmarSim:hover { background: #166b82; }
-#confirmarNao:hover { background: #888; }                                                                       
+#confirmarNao:hover { background: #888; }         
+.curso-card {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  width: 260px;
+  overflow: hidden;
+  transition: 0.3s;
+}
+
+.curso-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+}
+
+.card-top {
+  background-color: #2bd1c1;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  font-size: 16px;
+  padding: 10px 0;
+}
+
+.card-info {
+  padding: 15px;
+  font-size: 12px;
+  color: #333;
+}
+
+.card-info p {
+  margin: 6px 0;
+}
+
+.card-botoes {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 0 15px;
+}
+
+.card-botoes button {
+  border: none;
+  border-radius: 20px;
+  padding: 5px 12px;
+  font-size: 11px;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.card-botoes button:hover {
+  opacity: 0.85;
+}
+
+.btn-alunos {
+  background: #00c896;
+}
+.btn-editar {
+  background: #ffc107;
+}
+.btn-excluir {
+  background: #ff5252;
+}
+                                                              
