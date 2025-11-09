@@ -88,10 +88,7 @@
         </div>
 
         <div class="card-turma">
-              <div class="botoes-card">
-                <button class="btn-card adicionar">Adicionar</button>
-                <button class="btn-card editar">Editar</button>
-                <button class="btn-card excluir">Excluir</button>
+
             </div>
         </div>
 
@@ -104,9 +101,8 @@
             <div class="janela-modal">
 
                 <!-- Botão fechar -->
-                <span class="fechar">
-                    <img src="../images/icone_x.png" alt="Fechar" class="fechar-icon">
-                </span>
+                <span class="fechar" id="fecharModalTurma">&times;</span>
+
 
                 <h2>CADASTRAR ALUNO</h2>
 
@@ -120,17 +116,24 @@
                     <label>NOME COMPLETO</label>
                 </div>
 
-                <div class="grupo-input">
-                    <input id="cursoAluno" type="text" placeholder=" ">
-                    <label>CURSO</label>
-                </div>
-
-                <div class="grupo-input">
-                    <input id="discAluno" type="text" placeholder=" ">
-                    <label>DISCIPLINA</label>
-                </div>
-
                 <button id="confirmar-cadastro-aluno" class="btn-confirmar">CADASTRAR</button>
+
+                <!-- Aqui começa a lista de alunos cadastrados -->
+                <div class="lista-alunos-container" style="margin-top: 20px;">
+                <table class="lista-alunos">
+                    <thead>
+                    <tr>
+                        <th>RA</th>
+                        <th>NOME COMPLETO</th>
+                        <th>AÇÕES</th>
+                    </tr>
+                    </thead>
+                    <tbody id="corpo-lista-alunos">
+                    <!-- Linhas de alunos serão adicionadas aqui pelo JS -->
+                    </tbody>
+                </table>
+                </div>
+
 
             </div>
         </div>
@@ -140,58 +143,54 @@
         <!------------------JANELA MODAL PARA CADASTRO TURMA------------->
 
     <div id="modal-turma" class="modal">
-        <div class="janela-modal">
+  <div class="janela-modal">
 
-                <!-- Botão fechar -->
-                <span class="fechar">
-                    <img src="../images/icone_x.png" alt="Fechar" class="fechar-icon">
-                </span>
-
-                <h2>CADASTRAR TURMA</h2>
-
-                <div class="grupo-input">
-                    <input id="codTurma" type="text" placeholder="EX: T11" required>
-                    <label>CÓDIGO</label>
-                </div>
-
-                <div class="grupo-input">
-                    <input id="nomeTurma" type="text" placeholder="EX: TURMA 11" required>
-                    <label>NOME DA TURMA</label>
-                </div>
-
-                <div class="grupo-input">
-                    <input id="periodTurma" type="text" placeholder="EX: 1º SEMESTRE">
-                    <label>PERÍODO DO CURSO</label>
-                </div>
-
-                <div class="grupo-select">
-                    <label for="cursoTurma">CURSO</label>
-                    <select id="cursoTurma" required>
-                        <option value="">SELECIONE UM CURSO</option>
-                        <option value="Engenharia">Engenharia</option>
-                        <option value="Direito">Direito</option>
-                        <option value="Medicina">Medicina</option>
-                    </select>
-
-                </div>
-
-                <div class="grupo-disciplinas">
-                    <label for="discTurma">DISCIPLINA</label>
-                    <div class="lista-disciplinas">
-                        <label><input type="checkbox"><span>Banco de Dados</span></label>
-                        <label><input type="checkbox"><span>Tecnologias WEB</span></label>
-                        <label><input type="checkbox"><span>Tecnologias TI</span></label>
-                        <label><input type="checkbox"><span>Engenharia de Elicitações e Requisitos</span></label>
-                        <label><input type="checkbox"><span>Métodos de Engenharia de Software</span></label>
-                        <!-- repita conforme necessário -->
-                    </div>
-                </div>
-
-                <button id="confirmar-cadastro-turma" class="btn-confirmar">CADASTRAR</button>
-
-        </div>
-
+    <div class="modal-header">
+      <h2>CADASTRAR TURMA</h2>
+      <span class="fechar" id="fecharModalTurma">&times;</span>
     </div>
+
+    <div class="grupo-input">
+      <input id="codTurma" type="text" placeholder="EX: T11" required>
+      <label>CÓDIGO</label>
+    </div>
+
+    <div class="grupo-input">
+      <input id="nomeTurma" type="text" placeholder="EX: TURMA 11" required>
+      <label>NOME DA TURMA</label>
+    </div>
+
+    <div class="grupo-input">
+      <input id="periodTurma" type="text" placeholder="EX: 1º SEMESTRE">
+      <label>PERÍODO DO CURSO</label>
+    </div>
+
+    <div class="grupo-select">
+      <label for="cursoTurma">CURSO</label>
+      <select id="cursoTurma" required>
+        <option value="">SELECIONE UM CURSO</option>
+        <option value="Engenharia">Engenharia</option>
+        <option value="Direito">Direito</option>
+        <option value="Medicina">Medicina</option>
+      </select>
+    </div>
+
+    <div class="grupo-disciplinas">
+      <label for="discTurma">DISCIPLINA</label>
+      <div class="lista-disciplinas">
+        <label><input type="checkbox"><span>Banco de Dados</span></label>
+        <label><input type="checkbox"><span>Tecnologias WEB</span></label>
+        <label><input type="checkbox"><span>Tecnologias TI</span></label>
+        <label><input type="checkbox"><span>Engenharia de Elicitações e Requisitos</span></label>
+        <label><input type="checkbox"><span>Métodos de Engenharia de Software</span></label>
+      </div>
+    </div>
+
+    <button id="confirmar-cadastro-turma" class="btn-confirmar">CADASTRAR</button>
+
+  </div>
+</div>
+
 
     <script src="turma.js"></script>
 </body>

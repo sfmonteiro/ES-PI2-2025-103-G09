@@ -304,7 +304,7 @@ button:hover {
     font-weight: bold;
 }
 
-/*--------------JANELA MODAL ALUNOS-------------------*/
+/*--------------JANELA MODAL-------------------*/
 
 /* Fundo escurecido */
 .modal {
@@ -337,17 +337,21 @@ button:hover {
   to { transform: scale(1); opacity: 1; }
 }
 
-/* Botão fechar */
 .fechar {
+  all: unset; /* remove qualquer estilo herdado */
   position: absolute;
-  top: 20px;
+  top: 15px;
   right: 20px;
+  font-size: 24px;
+  color: #999;
   cursor: pointer;
+  line-height: 1;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  user-select: none;
 }
 
-.fechar-icon {
-  width: 18px;
-}
+
 
 /* Título */
 .janela-modal h2 {
@@ -573,6 +577,7 @@ label[for="discTurma"]:hover {
 /*======================CARD TURMAS===============================================================================*/
 
 .card-turma {
+  position: relative;
   background: white;
   border-radius: 20px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
@@ -598,11 +603,17 @@ label[for="discTurma"]:hover {
   display: none;
 }
 
+
 /* Container dos botões */
 .botoes-card {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  right: 10px;
   display: flex;
   justify-content: space-between;
-  margin-top: auto;
+  /* remove margin-bottom porque agora está fixado */
+  margin-bottom: 0;
 }
 
 /* Estilo base dos botões */
@@ -628,6 +639,7 @@ label[for="discTurma"]:hover {
   background-color: #1eb7a8;
 }
 
+
 .btn-card.editar {
   background-color: #ffb347; /* Laranja */
 }
@@ -641,3 +653,113 @@ label[for="discTurma"]:hover {
 .btn-card.excluir:hover {
   background-color: #d9534f;
 }
+
+
+/*=========MODAL ALUNOS====================================================*/
+
+.lista-alunos-container {
+  max-height: 200px; /* altura máxima com scroll vertical */
+  overflow-y: auto;
+  overflow-x: hidden; /* proibir scroll horizontal */
+  border: 2px solid rgb(165, 165, 165);
+  border-radius: 20px;
+  background-color: white;
+  padding: 5px;
+  font-family: 'Comfortaa', sans-serif;
+  font-size: 10px;
+  width: 100%; /* para container ocupar largura do pai */
+  box-sizing: border-box;
+
+
+}
+
+
+
+
+.lista-alunos {
+  width: 100%; /* ocupa 100% do container */
+  border-collapse: collapse;
+  table-layout: fixed; /* fixa larguras das colunas */
+  text-align: center;
+  white-space: nowrap; /* evita quebra dentro das células */
+}
+
+.lista-alunos th,
+.lista-alunos td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #ddd;
+  overflow: hidden; /* esconde overflow */
+  text-overflow: ellipsis; /* mostra "..." se texto muito longo */
+}
+
+.lista-alunos th {
+  background-color: #419cb6;
+  color: white;
+  font-weight: bold;
+  position: sticky;
+  top: 0;
+}
+
+/* Define larguras das colunas */
+.lista-alunos th:first-child, 
+.lista-alunos td:first-child {
+  width: 15%; /* RA */
+}
+
+.lista-alunos th:nth-child(2),
+.lista-alunos td:nth-child(2) {
+  width: 50%; /* Nome completo */
+}
+
+.lista-alunos th:last-child,
+.lista-alunos td:last-child {
+  width: 10%; /* Ações */
+}
+
+.lista-alunos th:first-child {
+  border-top-left-radius: 10px;
+}
+
+.lista-alunos th:last-child {
+  border-top-right-radius: 10px;
+}
+
+.lista-alunos tr:hover {
+  background-color: #f0f8f9;
+}
+
+.lista-alunos button {
+  padding: 4px 10px;
+  margin-right: 5px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: bold;
+  max-width: 60px;
+  white-space: nowrap;
+  transition: background-color 0.3s ease;
+}
+
+.lista-alunos button:hover {
+  opacity: 0.8;
+}
+
+.lista-alunos button.editar {
+  background-color: #ffb347;
+  color: white;
+}
+
+.lista-alunos button.excluir {
+  background-color: #ff6b6b;
+  color: white;
+}
+
+.botoes-acoes {
+  display: flex;
+  flex-direction: column; /* empilha verticalmente */
+  gap: 5px; /* espaço entre os botões */
+  align-items: center;
+}
+
+
