@@ -1,7 +1,4 @@
-// ======== cursos.js (completo e corrigido) ========
-
-// ======== HELPERS / STORAGE ========
-const STORAGE_KEY = "minhaApp_cursos_v1";
+// Bruno Lobo de Jesus RA:25019830
 
 function carregarCursos() {
   try {
@@ -26,7 +23,7 @@ function gerarId() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
 }
 
-// ======== ELEMENTS ========
+// ======== ELEMENTOS ========
 const userMenu = document.querySelector('.user-menu');
 const userBtn = document.querySelector('#user-btn');
 
@@ -40,8 +37,6 @@ const btnCloseModalDisciplina = document.getElementById("closeModalDisciplina");
 
 const inputCodigoCurso = document.getElementById("codigoCurso");
 const inputNomeCurso = document.getElementById("nomeCurso");
-const inputQtdTurmas = document.getElementById("qtdTurmas");
-const inputQtdAlunos = document.getElementById("qtdAlunos");
 const btnSalvarCurso = document.getElementById("salvarCurso");
 
 const btnDisciplina = document.getElementById("btnDisciplina");
@@ -55,12 +50,12 @@ const listaDisciplinasEl = document.getElementById("listaDisciplinas");
 const btnConfirmSim = document.getElementById("confirmarSim");
 const btnConfirmNao = document.getElementById("confirmarNao");
 
-if (!listaCursosEl) console.warn("Elemento #lista-cursos não encontrado no DOM.");
-
-// ======== APP STATE ========
-let cursos = carregarCursos(); // array de cursos
-let cursoAtual = null;         // curso selecionado na modal disciplina
-let indexParaExcluir = null;   // usado para confirmar exclusão
+// ======== ESTADO ========
+let cursos = carregarCursos();
+let cursoAtual = null;
+let indexParaExcluir = null;
+let isEditing = false;
+let editingCourseId = null;
 
 // ======== MENU DO USUÁRIO ========
 if (userBtn && userMenu) {
@@ -73,15 +68,6 @@ if (userBtn && userMenu) {
 }
 
 // ======== MODAIS (abrir/fechar) ========
-if (btnCadastroCurso) btnCadastroCurso.onclick = () => {
-  // limpar campos e abrir modal de curso
-  if (inputCodigoCurso) inputCodigoCurso.value = "";
-  if (inputNomeCurso) inputNomeCurso.value = "";
-  if (inputQtdTurmas) inputQtdTurmas.value = "";
-  if (inputQtdAlunos) inputQtdAlunos.value = "";
-  modalCurso.style.display = "flex";
-};
-
 if (btnCloseModalCurso) btnCloseModalCurso.onclick = () => modalCurso.style.display = "none";
 if (btnCloseModalDisciplina) btnCloseModalDisciplina.onclick = () => modalDisciplina.style.display = "none";
 
@@ -91,15 +77,14 @@ window.addEventListener("click", e => {
   if (e.target === modalConfirmacao) modalConfirmacao.style.display = "none";
 });
 
-// ======== REDIRECIONAMENTO (seguro) ========
+// ======== REDIRECIONAMENTO ========
 function redirecionar(botaoId, destino) {
   const botao = document.getElementById(botaoId);
   if (botao) botao.addEventListener("click", () => window.location.href = destino);
 }
 
-// ======== RENDER INICIAL ========
+// ======== RENDERIZAÇÃO ========
 function limparListaCursosDOM() {
-  if (!listaCursosEl) return;
   listaCursosEl.innerHTML = "";
 }
 
@@ -107,13 +92,39 @@ function criarCardDOM(curso) {
   const card = document.createElement("div");
   card.className = "curso-card";
   card.dataset.id = curso.id;
+
+  const disciplinasText = (curso.disciplinas && curso.disciplinas.length > 0)
+    ? curso.disciplinas.map(d => d.nome).join(", ")
+    : "Nenhuma disciplina cadastrada";
+
   card.innerHTML = `
-    <h3>${curso.nome.toUpperCase()}</h3>
-    <p><b>Código:</b> ${curso.codigo}</p>
-    <p>📘 Disciplinas: <span class="count-disciplinas">${(curso.disciplinas || []).length}</span></p>
+    <div class="card-top">${curso.nome.toUpperCase()}</div>
+    <div class="card-info">
+      <p><b>Código:</b> ${curso.codigo}</p>
+      <p><b>Disciplinas:</b> ${disciplinasText}</p>
+    </div>
+    <div class="card-botoes">
+      <button class="btn-alunos">Disciplinas</button>
+      <button class="btn-editar">Editar</button>
+      <button class="btn-excluir">Excluir</button>
+    </div>
   `;
-  // abrir modal de disciplinas ao clicar no card
-  card.addEventListener("click", () => abrirModalDisciplina(curso.id));
+
+  card.querySelector(".btn-alunos").addEventListener("click", (e) => {
+    e.stopPropagation();
+    abrirModalDisciplina(curso.id);
+  });
+
+  card.querySelector(".btn-editar").addEventListener("click", (e) => {
+    e.stopPropagation();
+    editarCurso(curso.id);
+  });
+
+  card.querySelector(".btn-excluir").addEventListener("click", (e) => {
+    e.stopPropagation();
+    confirmarExclusaoCurso(curso.id);
+  });
+
   listaCursosEl.appendChild(card);
 }
 
@@ -122,56 +133,80 @@ function renderCursos() {
   cursos.forEach(cr => criarCardDOM(cr));
 }
 
-// ======== CARREGAR/GRAVAR CURSO ========
+// ======== CADASTRAR / EDITAR CURSO ========
+if (btnCadastroCurso) {
+  btnCadastroCurso.addEventListener("click", () => {
+    isEditing = false;
+    editingCourseId = null;
+    cursoAtual = null;
+    inputCodigoCurso.value = "";
+    inputNomeCurso.value = "";
+    modalCurso.style.display = "flex";
+  });
+}
+
+function editarCurso(id) {
+  const curso = cursos.find(c => c.id === id);
+  if (!curso) return alert("Curso não encontrado!");
+
+  isEditing = true;
+  editingCourseId = id;
+  cursoAtual = curso;
+  inputCodigoCurso.value = curso.codigo;
+  inputNomeCurso.value = curso.nome;
+  modalCurso.style.display = "flex";
+}
+
 if (btnSalvarCurso) {
-  btnSalvarCurso.onclick = () => {
-    const codigo = inputCodigoCurso ? inputCodigoCurso.value.trim() : "";
-    const nome = inputNomeCurso ? inputNomeCurso.value.trim() : "";
-    const turmas = inputQtdTurmas ? inputQtdTurmas.value.trim() : "";
-    const alunos = inputQtdAlunos ? inputQtdAlunos.value.trim() : "";
+  btnSalvarCurso.addEventListener("click", () => {
+    const codigo = inputCodigoCurso.value.trim();
+    const nome = inputNomeCurso.value.trim();
 
     if (!codigo || !nome) {
-      return alert("Preencha código e nome do curso!");
+      alert("Preencha código e nome do curso!");
+      return;
     }
 
-    // criar objeto curso com id único
-    const curso = {
+    if (isEditing && editingCourseId) {
+      const idx = cursos.findIndex(c => c.id === editingCourseId);
+      if (idx !== -1) {
+        cursos[idx].codigo = codigo;
+        cursos[idx].nome = nome;
+        salvarCursos(cursos);
+        renderCursos();
+      }
+      modalCurso.style.display = "none";
+      isEditing = false;
+      editingCourseId = null;
+      cursoAtual = null;
+      return;
+    }
+
+    const novoCurso = {
       id: gerarId(),
       codigo,
       nome,
-      turmas: turmas || "0",
-      alunos: alunos || "0",
-      disciplinas: []
+      disciplinas: [],
     };
 
-    cursos.push(curso);
+    cursos.push(novoCurso);
     salvarCursos(cursos);
-    criarCardDOM(curso);
-
-    // fechar modal e limpar campos
+    renderCursos();
     modalCurso.style.display = "none";
-    if (inputCodigoCurso) inputCodigoCurso.value = "";
-    if (inputNomeCurso) inputNomeCurso.value = "";
-    if (inputQtdTurmas) inputQtdTurmas.value = "";
-    if (inputQtdAlunos) inputQtdAlunos.value = "";
-  };
+  });
 }
 
-// ======== ABRIR MODAL DISCIPLINA (por id) ========
+// ======== ABRIR MODAL DISCIPLINA ========
 function abrirModalDisciplina(cursoId) {
   const curso = cursos.find(c => c.id === cursoId);
-  if (!curso) {
-    alert("Curso não encontrado.");
-    return;
-  }
+  if (!curso) return alert("Curso não encontrado.");
   cursoAtual = curso;
   atualizarListaDisciplinas();
   modalDisciplina.style.display = "flex";
 }
 
-// ======== ATUALIZAR LISTA DE DISCIPLINAS NA MODAL ========
+// ======== ATUALIZAR LISTA DE DISCIPLINAS ========
 function atualizarListaDisciplinas() {
-  if (!listaDisciplinasEl) return;
   listaDisciplinasEl.innerHTML = "";
 
   if (!cursoAtual) {
@@ -182,7 +217,6 @@ function atualizarListaDisciplinas() {
   const arr = cursoAtual.disciplinas || [];
   if (arr.length === 0) {
     listaDisciplinasEl.innerHTML = "<div class='sem-disciplinas'>Nenhuma disciplina adicionada</div>";
-    atualizarContadorNoCard(cursoAtual.id);
     return;
   }
 
@@ -196,7 +230,6 @@ function atualizarListaDisciplinas() {
         <button class="btn-del" data-idx="${idx}">Excluir</button>
       </div>
     `;
-    // listeners
     item.querySelector(".btn-edit").addEventListener("click", (e) => {
       e.stopPropagation();
       editarDisciplina(idx);
@@ -205,33 +238,7 @@ function atualizarListaDisciplinas() {
       e.stopPropagation();
       confirmarExclusao(idx);
     });
-
     listaDisciplinasEl.appendChild(item);
-  });
-
-  atualizarContadorNoCard(cursoAtual.id);
-}
-
-// atualiza o contador de disciplinas no card do curso
-function atualizarContadorNoCard(cursoId) {
-  const card = listaCursosEl.querySelector(`.curso-card[data-id="${cursoId}"]`);
-  if (!card) return;
-  const span = card.querySelector(".count-disciplinas");
-  if (!span) return;
-  const curso = cursos.find(c => c.id === cursoId);
-  span.textContent = (curso && curso.disciplinas) ? curso.disciplinas.length : 0;
-}
-
-// ======== BOTÃO "DISCIPLINA" DENTRO DO MODAL CURSO ========
-if (btnDisciplina) {
-  btnDisciplina.addEventListener("click", () => {
-    // se cursoAtual não estiver setado, pedimos para salvar o curso primeiro
-    if (!cursoAtual) {
-      alert("Para adicionar disciplinas, selecione um curso existente (clique no card) ou salve o curso antes.");
-      return;
-    }
-    modalDisciplina.style.display = "flex";
-    atualizarListaDisciplinas();
   });
 }
 
@@ -239,15 +246,14 @@ if (btnDisciplina) {
 if (btnAdicionarDisciplina) {
   btnAdicionarDisciplina.addEventListener("click", () => {
     if (!cursoAtual) return alert("Nenhum curso selecionado para adicionar disciplina.");
-    const nome = inputNomeDisciplina ? inputNomeDisciplina.value.trim() : "";
-    const codigo = inputCodigoDisciplina ? inputCodigoDisciplina.value.trim() : "";
+    const nome = inputNomeDisciplina.value.trim();
+    const codigo = inputCodigoDisciplina.value.trim();
 
     if (!nome || !codigo) return alert("Preencha nome e código da disciplina!");
 
     if (!Array.isArray(cursoAtual.disciplinas)) cursoAtual.disciplinas = [];
 
     cursoAtual.disciplinas.push({ nome, codigo });
-    // salvar no storage (importante)
     const idx = cursos.findIndex(c => c.id === cursoAtual.id);
     if (idx !== -1) {
       cursos[idx] = cursoAtual;
@@ -255,8 +261,9 @@ if (btnAdicionarDisciplina) {
     }
 
     atualizarListaDisciplinas();
-    if (inputNomeDisciplina) inputNomeDisciplina.value = "";
-    if (inputCodigoDisciplina) inputCodigoDisciplina.value = "";
+    renderCursos();
+    inputNomeDisciplina.value = "";
+    inputCodigoDisciplina.value = "";
   });
 }
 
@@ -265,20 +272,21 @@ function editarDisciplina(index) {
   if (!cursoAtual) return;
   const disc = cursoAtual.disciplinas[index];
   if (!disc) return;
-  // preenche inputs para edição e remove item antigo (workflow simples)
-  if (inputNomeDisciplina) inputNomeDisciplina.value = disc.nome;
-  if (inputCodigoDisciplina) inputCodigoDisciplina.value = disc.codigo;
+
+  inputNomeDisciplina.value = disc.nome;
+  inputCodigoDisciplina.value = disc.codigo;
   cursoAtual.disciplinas.splice(index, 1);
-  // salva mudança e atualiza UI
+
   const idx = cursos.findIndex(c => c.id === cursoAtual.id);
   if (idx !== -1) {
     cursos[idx] = cursoAtual;
     salvarCursos(cursos);
   }
   atualizarListaDisciplinas();
+  renderCursos();
 }
 
-// ======== EXCLUIR DISCIPLINA (com modal de confirmação) ========
+// ======== EXCLUIR DISCIPLINA ========
 function confirmarExclusao(index) {
   indexParaExcluir = index;
   modalConfirmacao.style.display = "flex";
@@ -294,11 +302,13 @@ if (btnConfirmSim) {
         salvarCursos(cursos);
       }
       atualizarListaDisciplinas();
+      renderCursos();
     }
     modalConfirmacao.style.display = "none";
     indexParaExcluir = null;
   });
 }
+
 if (btnConfirmNao) {
   btnConfirmNao.addEventListener("click", () => {
     modalConfirmacao.style.display = "none";
@@ -306,7 +316,20 @@ if (btnConfirmNao) {
   });
 }
 
-// ======== EXCLUIR CURSO (opcional) - exemplo de utilidade futura ========
+// ======== EXCLUIR CURSO ========
+function confirmarExclusaoCurso(id) {
+  cursoAtual = cursos.find(c => c.id === id);
+  if (!cursoAtual) return;
+  modalConfirmacao.style.display = "flex";
+  btnConfirmSim.onclick = () => {
+    excluirCursoPorId(id);
+    modalConfirmacao.style.display = "none";
+  };
+  btnConfirmNao.onclick = () => {
+    modalConfirmacao.style.display = "none";
+  };
+}
+
 function excluirCursoPorId(id) {
   cursos = cursos.filter(c => c.id !== id);
   salvarCursos(cursos);
@@ -320,7 +343,8 @@ if (botaoAtivo) botaoAtivo.classList.add("active");
 
 // ======== INICIALIZAÇÃO ========
 renderCursos();
-// ======== REDIRECIONAMENTO  ========
+
+// ======== REDIRECIONAMENTO ========
 redirecionar("inicio", "../Pagina_Inicial/inicio.html");
 redirecionar("instituicao", "../Instituiçao_editar/instituicao2.html");
 redirecionar("cursos", "../cursos/cursos.html");
