@@ -30,6 +30,7 @@ function redirecionar(id, destino) {
 
 redirecionar("inicio", "../Pagina_Inicial/inicio.html");
 redirecionar("instituicao", "../Instituiçao_editar/instituicao2.html");
+redirecionar("turmas", "../pagina_turmas/turma.html");
 redirecionar("cursos", "../cursos/cursos.html");
 redirecionar("alunos", "../Pagina_alunos/alunos.html");
 redirecionar("atividades", "../Pagina_atividades/atividades.html");
