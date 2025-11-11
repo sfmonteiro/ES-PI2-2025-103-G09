@@ -1,42 +1,39 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Instituição</title>
-
-  <link rel="icon" type="image/png" href="../images/icone_NotaDez.png">
-  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="instituicao2.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Instituições</title>
+  <link rel="icon" type="image/png" href="../images/icone_NotaDez.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="instituicao2.css" />
 </head>
-<body>
 
-  <!-- BARRA LATERAL -->
+<body>
+  <!-- ===== SIDEBAR ===== -->
   <aside class="sidebar">
     <ul>
-      <li><a id="inicio" href="#">INÍCIO</a></li>
-      <li><a id="instituicao" href="#" class="active">INSTITUIÇÃO</a></li>
-      <li><a id="cursos" href="#">CURSOS</a></li>
-      <li><a id="turmas" href="#">TURMAS</a></li>
-      <li><a id="atividades" href="#">ATIVIDADES</a></li>
+      <li><a href="#" id="inicio">INÍCIO</a></li>
+      <li><a href="#" id="instituicao" class="active">INSTITUIÇÃO</a></li>
+      <li><a href="#" id="cursos">CURSOS</a></li>
+      <li><a href="#" id="turmas">TURMAS</a></li>
+      <li><a href="#" id="atividades">ATIVIDADES</a></li>
     </ul>
   </aside>
 
-  <!-- BARRA SUPERIOR -->
+  <!-- ===== TOPBAR ===== -->
   <header class="topbar">
-    <div class="logo-area">
-      <img src="../images/logo_NotaDez.png" alt="Logo" class="logo">
-    </div>
+    <img src="../images/logo_NotaDez.png" alt="Logo" class="logo" />
 
     <div class="faculdade-area">
       <span class="texto-local">Você está em:</span>
       <div class="faculdade-box">
-        <img src="../images/icone_instituicao_verde.png" alt="Logo Instituição" class="instituicao-icon">
-        ***PUC-CAMPINAS***
+        <img src="../images/icone_instituicao_verde.png" alt="Ícone" class="instituicao-icon" />
+        PUC-CAMPINAS
       </div>
     </div>
 
-        <div class="user-menu">
+   <div class="user-menu">
             <img src="../images/icone_pessoa.png" alt="Ícone Pessoa" class="pessoa-icon">
             <span id="user-btn" class="user-btn">Olá, *PRIMEIRO NOME*!   ▼</span>
 
@@ -64,28 +61,38 @@
         </div>
   </header>
 
-  <!-- CONTEÚDO PRINCIPAL -->
-  <div class="pagina-atual">
-    <a href="#" class="pagina-ref">instituição</a>
+  <!-- ===== CONTEÚDO ===== -->
+  <main class="pagina-atual">
+    <h1 class="pagina-ref">Instituições</h1>
 
     <div class="botoes">
-      <button type="button" id="cadastro-instituicao">CADASTRAR INSTITUIÇÃO</button>
+      <button id="abrirModalInstituicao">Cadastrar Instituição</button>
     </div>
 
-    <div class="container-instituicao">
-      <table id="tabela-instituicao">
-        <tr>
-          <th>NOME DA INSTITUIÇÃO</th>
-          <th>AÇÕES</th>
-        </tr>
-        <tr>
-          <td>PUC-CAMPINAS</td>
-          <td class="acoes">
-            <img src="../images/icone_lapis.png" class="btn-acao" alt="Editar">
-            <img src="../images/icone_lixeira.png" class="btn-acao" alt="Excluir">
-          </td>
-        </tr>
-      </table>
+    <div id="lista-instituicoes" class="container-cursos">
+      <!-- Lista gerada via JS -->
+    </div>
+  </main>
+
+  <!-- ===== MODAL ===== -->
+  <div id="modalInstituicao" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="tituloModal">Cadastrar Instituição</h2>
+        <span class="close" id="fecharModal">&times;</span>
+      </div>
+
+      <div class="form-group">
+        <label for="nomeInstituicao">Nome da Instituição</label>
+        <input id="nomeInstituicao" type="text" placeholder="Digite o nome da instituição" />
+      </div>
+
+      <div class="form-group">
+        <label for="siglaInstituicao">Sigla</label>
+        <input id="siglaInstituicao" type="text" placeholder="Digite a sigla" />
+      </div>
+
+      <button id="salvarInstituicao" class="btn-save">Salvar</button>
     </div>
   </div>
 
