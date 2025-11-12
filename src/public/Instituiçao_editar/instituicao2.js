@@ -119,10 +119,10 @@ function redirecionar(id, destino) {
 }
 
 redirecionar("inicio", "../Pagina_Inicial/inicio.html");
-redirecionar("instituicao", "../Instituicao/instituicao.html");
+redirecionar("instituicao", "../Instituiçao_editar/instituicao2.html");
 redirecionar("cursos", "../cursos/cursos.html");
 redirecionar("turmas", "../pagina_turmas/turma.html");
 redirecionar("atividades", "../Pagina_atividades/atividades.html");
 redirecionar("conta", "../Minha_Conta/minha_conta.html");
 redirecionar("sair", "../Login/login.html");
-redirecionar("trocar-inst", "../Instituiçao_editar/instituicao2.html");
+redirecionar("trocar-inst", "../Instituição_cadastro/instituição.html");
