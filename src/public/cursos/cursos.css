@@ -304,12 +304,12 @@ button:hover { background-color: #1d6f86; }
 }
 
 .modal-content {
-  background: white;
-  border-radius: 50px;
-  padding: 40px 50px;
+  background: #fff;
+  padding: 30px;
+  border-radius: 30px;
   width: 420px;
-  font-family: "Comfortaa", sans-serif;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  max-height: 450px;
+  position: relative;
 }
 
 .modal-header {
@@ -323,6 +323,8 @@ button:hover { background-color: #1d6f86; }
   color: #1e87a3;
   font-weight: 700;
   letter-spacing: 1px;
+  text-align: center;
+
 }
 
 .close {
@@ -333,28 +335,65 @@ button:hover { background-color: #1d6f86; }
 
 /* ---------- FORMULÁRIOS ---------- */
 .form-group {
-  margin-top: 10px;
-  display: flex;
-  flex-direction: column;
+  position: relative;
+  margin-bottom: 20px;
+  width: 95%;
+  text-align: left;
+  font-family: Comfortaa;
 }
 
+/* Label padrão */
 .form-group label {
-  display: block;
-  margin-bottom: 6px;
-  font-weight: 600;
-  color: #333;
-  font-size: 12px;
+  position: absolute;
+  left: 18px;
+  top: -4px;
+  font-size: 10px;
+  background-color: #fff;
+  color: #a5a5a5;
+  font-weight: bold;
+  padding: 0 4px;
+  pointer-events: none;
+  z-index: 10;
+  transition: 0.3s ease all;
 }
 
+/* Input padrão */
 .form-group input {
-  width: 100%;
-  border: 2px solid #aaa;
-  border-radius: 10px;
-  padding: 8px 12px;
-  font-family: "Comfortaa", sans-serif;
-  font-size: 12px;
+  width: 95%;
+  padding: 10px 20px;
+  border-radius: 50px;
+  border: 2px solid rgb(165, 165, 165);
+  font-family: Comfortaa;
+  font-size: 10px;
+  font-weight: bold;
+  color: black;
+  background-color: white;
+  transition: 0.3s ease all;
+}
+
+/* 🔹 Quando o input está focado */
+.form-group input:focus {
+  border-color: #25e4d1;
   outline: none;
 }
+
+/* 🔹 Label azul quando o input está focado */
+.form-group:has(input:focus) label {
+  color: #25e4d1;
+}
+
+/* 🔹 Quando o campo tem valor (não está vazio) */
+.form-group:has(input:not(:placeholder-shown)) input {
+  border-color: #25e4d1;
+}
+
+/* 🔹 E também deixa a label azul quando o campo tem valor */
+.form-group:has(input:not(:placeholder-shown)) label {
+  color: #25e4d1;
+}
+
+
+
 
 /* ---------- BOTÕES ---------- */
 .btn-save, .btn-add, #btnDisciplina {
@@ -404,6 +443,10 @@ button:hover { background-color: #1d6f86; }
 
 .disciplinas-list .btn-edit {
   background-color: #ffc107;
+  width: 75px;
+  height: 25px;
+  font-size: 11px;
+
 }
 
 .disciplinas-list .btn-edit:hover {
@@ -412,6 +455,9 @@ button:hover { background-color: #1d6f86; }
 
 .disciplinas-list .btn-del {
   background-color: #ff5252;
+  width: 75px;
+  height: 25px;
+  font-size: 11px;
 }
 
 .disciplinas-list .btn-del:hover {

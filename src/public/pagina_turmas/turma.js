@@ -57,80 +57,113 @@ configurarModal("cadastro-turma", "modal-turma");
 
 //========================modal cadastro - disciplinas===================
 
-const checkboxes = document.querySelectorAll('.lista-disciplinas input[type="checkbox"]');
-const labelDisciplina = document.querySelector('label[for="discTurma"]');
-const listaDisciplinas = document.querySelector('.lista-disciplinas');
-
-function atualizarEstilos() {
-  const algumMarcado = Array.from(checkboxes).some(chk => chk.checked);
-  if (algumMarcado) {
-    labelDisciplina.style.color = '#25e4d1'; // azul Tiffany
-    listaDisciplinas.style.borderColor = '#25e4d1'; // borda azul Tiffany
-  } else {
-    labelDisciplina.style.color = ''; // volta ao padrão
-    listaDisciplinas.style.borderColor = ''; // volta ao padrão
-  }
-}
-
-checkboxes.forEach(chk => {
-  chk.addEventListener('change', atualizarEstilos);
-});
-
-atualizarEstilos();
+// ==================== ELEMENTOS PRINCIPAIS =====================
 
 const containerTurmas = document.querySelector('.container-turmas');
 const modalTurma = document.getElementById('modal-turma');
 const btnConfirmarCadastroTurma = modalTurma.querySelector('#confirmar-cadastro-turma');
 
-// CARREGAR TURMAS DO LOCALSTORAGE
+// selects
+const selectCurso = document.getElementById("cursoTurma");
+const selectDisciplina = document.getElementById("disciplinaTurma");
+
+// disciplinas começam bloqueadas
+selectDisciplina.disabled = true;
+selectDisciplina.innerHTML = '<option value="">SELECIONE UM CURSO PRIMEIRO</option>';
+
+
+// ==================== LOCALSTORAGE =====================
+
 let turmas = JSON.parse(localStorage.getItem('turmas')) || [];
-let turmaEditando = null; // vai guardar a turma que está sendo editada
+let turmaEditando = null;
 
 function salvarTurmasLocalStorage() {
   localStorage.setItem('turmas', JSON.stringify(turmas));
 }
 
+
+// ==================== FUNÇÃO PARA CARREGAR DISCIPLINAS POR CURSO =====================
+
+function carregarDisciplinasDoCurso(cursoNome) {
+  const disciplinas = JSON.parse(localStorage.getItem("disciplinas")) || [];
+
+  const filtradas = disciplinas.filter(d => d.curso === cursoNome);
+
+  if (filtradas.length === 0) {
+    selectDisciplina.disabled = true;
+    selectDisciplina.innerHTML = '<option value="">NENHUMA DISCIPLINA CADASTRADA</option>';
+    return;
+  }
+
+  selectDisciplina.disabled = false;
+  selectDisciplina.innerHTML = '<option value="">SELECIONE UMA DISCIPLINA</option>';
+
+  filtradas.forEach(d => {
+    const option = document.createElement("option");
+    option.value = d.nome;
+    option.textContent = `${d.nome} (${d.sigla})`;
+    selectDisciplina.appendChild(option);
+  });
+}
+
+
+
+
+// ==================== EVENTO AO ESCOLHER CURSO =====================
+
+selectCurso.addEventListener("change", () => {
+  const cursoSelecionado = selectCurso.value;
+
+  if (!cursoSelecionado) {
+    selectDisciplina.disabled = true;
+    selectDisciplina.innerHTML = '<option value="">SELECIONE UM CURSO PRIMEIRO</option>';
+    return;
+  }
+
+  carregarDisciplinasDoCurso(cursoSelecionado);
+});
+
+
+// ==================== CRIAR CARD =====================
+
 function criarCardTurma(turma) {
   const card = document.createElement('div');
   card.classList.add('card-turma');
   card.innerHTML = `
-  <h3>${turma.nome}</h3>
-  <p><strong>Código:</strong> ${turma.codigo}</p>
-  <p><strong>Período:</strong> ${turma.periodo}</p>
-  <p><strong>Curso:</strong> ${turma.curso}</p>
-  <div><strong>Disciplinas:</strong></div>
-  <div>
-    ${turma.disciplinas.map(d => `<div>• ${d}</div>`).join('')}
-  </div>
+    <h3>${turma.nome}</h3>
+    <p><strong>Código:</strong> ${turma.codigo}</p>
+    <p><strong>Período:</strong> ${turma.periodo}</p>
+    <p><strong>Curso:</strong> ${turma.curso}</p>
+    <p><strong>Disciplina:</strong> ${turma.disciplina}</p>
 
-  <div class="botoes-card">
-    <button class="btn-card adicionar">Alunos</button>
-    <button class="btn-card editar">Editar</button>
-    <button class="btn-card excluir">Excluir</button>
-  </div>
-`;
+    <div class="botoes-card">
+      <button class="btn-card adicionar">Alunos</button>
+      <button class="btn-card editar">Editar</button>
+      <button class="btn-card excluir">Excluir</button>
+    </div>
+  `;
 
+  // abrir alunos
   const btnAdicionar = card.querySelector('.adicionar');
-
-  // ### ADICIONADO: variavel global para turma selecionada
   btnAdicionar.addEventListener('click', () => {
-    turmaSelecionada = turma; // guarda turma clicada na variável global
-    modalAluno.style.display = 'flex'; // abre o modal de alunos
-    atualizarListaAlunos(); // atualiza lista de alunos da turma selecionada
+    turmaSelecionada = turma;
+    modalAluno.style.display = 'flex';
+    atualizarListaAlunos();
   });
 
+  // editar
   const btnEditar = card.querySelector('.editar');
-  const btnExcluir = card.querySelector('.excluir');
-
   btnEditar.addEventListener('click', () => {
-    turmaEditando = turma; // marca a turma que está sendo editada
+    turmaEditando = turma;
     abrirModalEdicao(turma);
   });
 
+  // excluir
+  const btnExcluir = card.querySelector('.excluir');
   btnExcluir.addEventListener('click', () => {
     if (confirm(`Tem certeza que deseja excluir a turma "${turma.nome}"?`)) {
       turmas = turmas.filter(t => t.codigo !== turma.codigo);
-      salvarTurmasLocalStorage(); // salvar alterações no localStorage
+      salvarTurmasLocalStorage();
       atualizarListaTurmas();
     }
   });
@@ -138,92 +171,100 @@ function criarCardTurma(turma) {
   return card;
 }
 
+
+// ==================== ABRIR MODAL PARA EDITAR =====================
+
 function abrirModalEdicao(turma) {
-  // Preenche os campos da modal
   document.getElementById('codTurma').value = turma.codigo;
   document.getElementById('nomeTurma').value = turma.nome;
   document.getElementById('periodTurma').value = turma.periodo;
   document.getElementById('cursoTurma').value = turma.curso;
 
-  // marca as disciplinas que já estavam selecionadas
-  const checkboxes = document.querySelectorAll('.lista-disciplinas input[type="checkbox"]');
-  checkboxes.forEach(chk => {
-    chk.checked = turma.disciplinas.includes(chk.parentElement.textContent.trim());
-  });
+  // recarregar disciplinas do curso
+  carregarDisciplinasDoCurso(turma.curso);
 
-  // abre o modal
+  // selecionar a disciplina correta
+  selectDisciplina.disabled = false;
+  selectDisciplina.value = turma.disciplina;
+
   modalTurma.style.display = 'flex';
 }
 
+
+// ==================== LISTAR TURMAS =====================
+
 function atualizarListaTurmas() {
-  containerTurmas.innerHTML = ''; // limpa o conteúdo
+  containerTurmas.innerHTML = '';
 
   if (turmas.length === 0) {
     containerTurmas.innerHTML = `
       <div class="nada-cadastrado">
         <p>NENHUMA TURMA CADASTRADA AINDA...</p>
-        <img src="../images/imagem_alunos.png" alt="Nenhum lançamento realizado ainda." class="img-nada-cadastrado">
+        <img src="../images/imagem_alunos.png" class="img-nada-cadastrado">
       </div>
     `;
     return;
   }
 
   turmas.forEach(turma => {
-    const card = criarCardTurma(turma);
-    containerTurmas.appendChild(card);
+    containerTurmas.appendChild(criarCardTurma(turma));
   });
 }
+
+
+// ==================== SALVAR TURMA =====================
 
 btnConfirmarCadastroTurma.addEventListener('click', () => {
   const codigo = document.getElementById('codTurma').value.trim();
   const nome = document.getElementById('nomeTurma').value.trim();
   const periodo = document.getElementById('periodTurma').value.trim();
   const curso = document.getElementById('cursoTurma').value;
+  const disciplinaSelecionada = document.getElementById("disciplinaTurma").value;
 
-  const checkboxElements = document.querySelectorAll('.lista-disciplinas input[type="checkbox"]:checked');
-  const disciplinas = Array.from(checkboxElements).map(chk => chk.parentElement.textContent.trim());
-
-  if (!codigo || !nome || !curso) {
-    alert('Preencha os campos obrigatórios: Código, Nome e Curso.');
+  if (!codigo || !nome || !curso || !disciplinaSelecionada) {
+    alert('Preencha todos os campos obrigatórios.');
     return;
   }
 
   if (turmaEditando) {
-    // 🟡 modo edição
     turmaEditando.codigo = codigo;
     turmaEditando.nome = nome;
     turmaEditando.periodo = periodo;
     turmaEditando.curso = curso;
-    turmaEditando.disciplinas = disciplinas;
+    turmaEditando.disciplina = disciplinaSelecionada;
     turmaEditando = null;
   } else {
-    // 🟢 novo cadastro
-    const novaTurma = { codigo, nome, periodo, curso, disciplinas, alunos: [] }; // alunos inicia vazio
+    const novaTurma = {
+      codigo,
+      nome,
+      periodo,
+      curso,
+      disciplina: disciplinaSelecionada,
+      alunos: []
+    };
+
     turmas.push(novaTurma);
   }
 
-  salvarTurmasLocalStorage(); // salva localStorage
+  salvarTurmasLocalStorage();
   atualizarListaTurmas();
   modalTurma.style.display = 'none';
 
-  // limpar formulário
+  // limpar campos
   document.getElementById('codTurma').value = '';
   document.getElementById('nomeTurma').value = '';
   document.getElementById('periodTurma').value = '';
   document.getElementById('cursoTurma').value = '';
-  document.querySelectorAll('.lista-disciplinas input[type="checkbox"]').forEach(chk => chk.checked = false);
+
+  selectDisciplina.disabled = true;
+  selectDisciplina.innerHTML = '<option value="">SELECIONE UM CURSO PRIMEIRO</option>';
 });
 
-// Chama atualização da lista ao carregar a página
+
+// ==================== INICIAR LISTA =====================
+
 atualizarListaTurmas();
 
-// Esconde cards vazios
-const cards = document.querySelectorAll('.card-turma');
-cards.forEach(card => {
-  if (card.textContent.trim() === '') {
-    card.style.display = 'none';
-  }
-});
 
 
 // ########################## LISTAGEM E CADASTRO DE ALUNOS ########################

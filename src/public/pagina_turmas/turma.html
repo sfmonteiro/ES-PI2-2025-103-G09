@@ -87,11 +87,6 @@
 
     <div class="container-turmas">
 
-        <div class="nada-cadastrado">
-            <p>NENHUMA TURMA CADASTRADA AINDA...</p>
-            <img src="../images/imagem_alunos.png" alt="Nenhum lançamento realizado ainda." class="img-nada-cadastrado">
-        </div>
-
         <div class="card-turma">
 
             </div>
@@ -165,9 +160,23 @@
       <label>NOME DA TURMA</label>
     </div>
 
-    <div class="grupo-input">
-      <input id="periodTurma" type="text" placeholder="EX: 1º SEMESTRE">
-      <label>PERÍODO DO CURSO</label>
+    <div class="grupo-select">
+        <label for="periodTurma">PERÍODO DO CURSO</label>
+        <select id="periodTurma" required>
+        <option value="">SELECIONE UM PERÍODO</option>
+            <option value="1º SEMESTRE">1º SEMESTRE</option>
+            <option value="2º SEMESTRE">2º SEMESTRE</option>
+            <option value="3º SEMESTRE">3º SEMESTRE</option>
+            <option value="4º SEMESTRE">4º SEMESTRE</option>
+            <option value="5º SEMESTRE">5º SEMESTRE</option>
+            <option value="6º SEMESTRE">6º SEMESTRE</option>
+            <option value="8º SEMESTRE">7º SEMESTRE</option>
+            <option value="8º SEMESTRE">8º SEMESTRE</option>
+            <option value="9º SEMESTRE">9º SEMESTRE</option>
+            <option value="10º SEMESTRE">10º SEMESTRE</option>
+                    
+        </select>
+
     </div>
 
     <div class="grupo-select">
@@ -180,15 +189,12 @@
       </select>
     </div>
 
-    <div class="grupo-disciplinas">
-      <label for="discTurma">DISCIPLINA</label>
-      <div class="lista-disciplinas">
-        <label><input type="checkbox"><span>Banco de Dados</span></label>
-        <label><input type="checkbox"><span>Tecnologias WEB</span></label>
-        <label><input type="checkbox"><span>Tecnologias TI</span></label>
-        <label><input type="checkbox"><span>Engenharia de Elicitações e Requisitos</span></label>
-        <label><input type="checkbox"><span>Métodos de Engenharia de Software</span></label>
-      </div>
+    
+    <div class="grupo-select">
+        <label for="disciplina">DISCIPLINA</label>
+        <select id="disciplinaTurma" required>
+            <option value="">SELECIONE UMA DISCIPLINA</option>
+        </select>
     </div>
 
     <button id="confirmar-cadastro-turma" class="btn-confirmar">CADASTRAR</button>
