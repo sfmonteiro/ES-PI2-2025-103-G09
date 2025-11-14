@@ -367,3 +367,4 @@ redirecionar("alunos", "../Pagina_alunos/alunos.html");
 redirecionar("atividades", "../Pagina_atividades/atividades.html");
 redirecionar("conta", "../Minha_Conta/minha_conta.html");
 redirecionar("sair", "../Login/login.html");
+redirecionar("trocar-inst", "../Instituição_cadastro/instituição.html");
