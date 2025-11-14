@@ -1,5 +1,7 @@
 // Bruno Lobo de Jesus RA:25019830
 
+const STORAGE_KEY = "cursos";
+
 function carregarCursos() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);

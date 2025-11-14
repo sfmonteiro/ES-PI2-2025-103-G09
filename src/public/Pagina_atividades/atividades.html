@@ -66,51 +66,71 @@
 
     </header>
 
-  <div class="container">
-    <div class="header">
-      <h2>Atividades</h2>
-      <div>
-        <button class="btn btn-criar">Criar Atividade</button>
-        <button class="btn btn-exportar">Exportar Notas</button>
-      </div>
+    
+    <div class="pagina-atual">
+        <a href="#" class="pagina-ref">atividades</a>
+
+        <div class="botoes">
+            <button type="button" id="cadastro-comp">CADASTRAR COMPONENTE DE NOTA</button>
+
+        </div>
+
+<!--DIV PARA RECEBER OS CARDS GERADO NO JS-->
+        <div class="container-atividades">
+
+            <div class="card-comp">
+
+            </div>
+        </div>
+
+        <div id="modal-comp" class="modal">
+            <div class="janela-modal">
+
+                <div class="modal-header">
+                    <h2>CADASTRAR COMPONENTE</h2>
+                    <span class="fechar" id="fecharModalTurma">&times;</span>
+                </div>
+                
+                <div class="grupo-select">
+                    <label for="curso">CURSO</label>
+                    <select id="cursoComp" required>
+                        <option value="">SELECIONE UM CURSO</option>
+                        <option value="">ENGENHARIA DE SOFTWARE</option>
+                    </select>
+                </div>
+
+                <div class="grupo-select">
+                    <label for="disciplina">DISCIPLINA</label>
+                    <select id="cursoDisc" required>
+                        <option value="">SELECIONE UMA DISCIPLINA</option>
+                        <option value="">TECNOLIGIAS WEB</option>
+
+                    </select>
+                </div>
+
+                <div class="grupo-input">
+                    <input id="nomeComp" type="text" placeholder="EX: PROVA 1" required>
+                    <label>NOME DA ATIVIDADE</label>
+                </div>
+
+                <div class="grupo-input">
+                    <input id="siglaComp" type="text" placeholder="EX: P1" required>
+                    <label>SIGLA PARA FÓRMULA</label>
+                </div>
+
+                <div class="grupo-input">
+                    <input id="descricaoComp" type="text" placeholder="EX: PROVA TEÓRICA SOBRE O CONTEÚDO DO PRIMEIRO MÓDULO" required>
+                    <label>DESCRIÇÃO DA ATIVIDADE</label>
+                </div>
+
+                <button id="confirmar-cadastro-comp" class="btn-confirmar">CADASTRAR</button>
+
+            </div>
+        </div>
+
     </div>
 
-    <table>
-      <tr>
-        <th>RA</th>
-        <th>Nome Completo</th>
-        <th>P1</th>
-        <th>P2</th>
-        <th>REP1</th>
-        <th>Notas Finais</th>
-      </tr>
-      <tr>
-        <td>1234567</td>
-        <td>Sara Fernandes Monteiro</td>
-        <td></td><td></td><td></td><td></td>
-      </tr>
-      <tr>
-        <td>12345678</td>
-        <td>Bruno Lobo de Jesus</td>
-        <td></td><td></td><td></td><td></td>
-      </tr>
-      <tr>
-        <td>126546458</td>
-        <td>Gabriel Figueira Albasini</td>
-        <td></td><td></td><td></td><td></td>
-      </tr>
-      <tr>
-        <td>5635269</td>
-        <td>Guilherme Mascarenhas Plácido Corrêa</td>
-        <td></td><td></td><td></td><td></td>
-      </tr>
-      <tr>
-        <td>96801456</td>
-        <td>Marialvo Corrêa de Freitas Júnior</td>
-        <td></td><td></td><td></td><td></td>
-      </tr>
-    </table>
-  </div>
+
   <script src = "atividades.js"></script>
 </body>
 </html>

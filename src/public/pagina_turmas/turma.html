@@ -78,10 +78,12 @@
     </header>
 
     <div class="pagina-atual">
-        <a href="cursos.html" class="pagina-ref">turmas</a>
+        <a href="#" class="pagina-ref">turmas</a>
 
     <div class="botoes">
         <button type="button" id="cadastro-turma">CADASTRAR TURMA</button>
+        <button type="button" id="import-aluno">IMPORTAR ALUNO</button>
+
 
     </div>
 
@@ -143,64 +145,79 @@
         <!------------------JANELA MODAL PARA CADASTRO TURMA------------->
 
     <div id="modal-turma" class="modal">
-  <div class="janela-modal">
+        <div class="janela-modal">
 
-    <div class="modal-header">
-      <h2>CADASTRAR TURMA</h2>
-      <span class="fechar" id="fecharModalTurma">&times;</span>
+            <div class="modal-header">
+            <h2>CADASTRAR TURMA</h2>
+            <span class="fechar" id="fecharModalTurma">&times;</span>
+            </div>
+
+            <div class="grupo-input">
+            <input id="codTurma" type="text" placeholder="EX: T11" required>
+            <label>CÓDIGO</label>
+            </div>
+
+            <div class="grupo-input">
+            <input id="nomeTurma" type="text" placeholder="EX: TURMA 11" required>
+            <label>NOME DA TURMA</label>
+            </div>
+
+            <div class="grupo-select">
+                <label for="periodTurma">PERÍODO DO CURSO</label>
+                <select id="periodTurma" required>
+                <option value="">SELECIONE UM PERÍODO</option>
+                    <option value="1º SEMESTRE">1º SEMESTRE</option>
+                    <option value="2º SEMESTRE">2º SEMESTRE</option>
+                    <option value="3º SEMESTRE">3º SEMESTRE</option>
+                    <option value="4º SEMESTRE">4º SEMESTRE</option>
+                    <option value="5º SEMESTRE">5º SEMESTRE</option>
+                    <option value="6º SEMESTRE">6º SEMESTRE</option>
+                    <option value="8º SEMESTRE">7º SEMESTRE</option>
+                    <option value="8º SEMESTRE">8º SEMESTRE</option>
+                    <option value="9º SEMESTRE">9º SEMESTRE</option>
+                    <option value="10º SEMESTRE">10º SEMESTRE</option>
+                            
+                </select>
+
+            </div>
+
+            <div class="grupo-select">
+            <label for="cursoTurma">CURSO</label>
+            <select id="cursoTurma" required>
+                <option value="">SELECIONE UM CURSO</option>
+                <option value="Engenharia">Engenharia</option>
+                <option value="Direito">Direito</option>
+                <option value="Medicina">Medicina</option>
+            </select>
+            </div>
+
+            
+            <div class="grupo-select">
+                <label for="disciplina">DISCIPLINA</label>
+                <select id="disciplinaTurma" required>
+                    <option value="">SELECIONE UMA DISCIPLINA</option>
+                </select>
+            </div>
+
+            <button id="confirmar-cadastro-turma" class="btn-confirmar">CADASTRAR</button>
+
+        </div>
     </div>
 
-    <div class="grupo-input">
-      <input id="codTurma" type="text" placeholder="EX: T11" required>
-      <label>CÓDIGO</label>
+        <!-- MODAL NOTAS -->
+    <div id="modal-notas" class="modal">
+        <div class="janela-modal">
+
+            <div class="modal-header">
+            <h2>COMPONENTES DE NOTAS</h2>
+            <span class="fechar" id="fecharModalNotas">&times;</span>
+            </div>
+
+            <div id="conteudoNotas"></div>
+
+        </div>
     </div>
 
-    <div class="grupo-input">
-      <input id="nomeTurma" type="text" placeholder="EX: TURMA 11" required>
-      <label>NOME DA TURMA</label>
-    </div>
-
-    <div class="grupo-select">
-        <label for="periodTurma">PERÍODO DO CURSO</label>
-        <select id="periodTurma" required>
-        <option value="">SELECIONE UM PERÍODO</option>
-            <option value="1º SEMESTRE">1º SEMESTRE</option>
-            <option value="2º SEMESTRE">2º SEMESTRE</option>
-            <option value="3º SEMESTRE">3º SEMESTRE</option>
-            <option value="4º SEMESTRE">4º SEMESTRE</option>
-            <option value="5º SEMESTRE">5º SEMESTRE</option>
-            <option value="6º SEMESTRE">6º SEMESTRE</option>
-            <option value="8º SEMESTRE">7º SEMESTRE</option>
-            <option value="8º SEMESTRE">8º SEMESTRE</option>
-            <option value="9º SEMESTRE">9º SEMESTRE</option>
-            <option value="10º SEMESTRE">10º SEMESTRE</option>
-                    
-        </select>
-
-    </div>
-
-    <div class="grupo-select">
-      <label for="cursoTurma">CURSO</label>
-      <select id="cursoTurma" required>
-        <option value="">SELECIONE UM CURSO</option>
-        <option value="Engenharia">Engenharia</option>
-        <option value="Direito">Direito</option>
-        <option value="Medicina">Medicina</option>
-      </select>
-    </div>
-
-    
-    <div class="grupo-select">
-        <label for="disciplina">DISCIPLINA</label>
-        <select id="disciplinaTurma" required>
-            <option value="">SELECIONE UMA DISCIPLINA</option>
-        </select>
-    </div>
-
-    <button id="confirmar-cadastro-turma" class="btn-confirmar">CADASTRAR</button>
-
-  </div>
-</div>
 
 
     <script src="turma.js"></script>

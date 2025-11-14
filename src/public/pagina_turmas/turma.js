@@ -22,181 +22,317 @@ function redirecionar(id, destino) {
     }
 }
 
-////////////////////////////////////////////////JANELA MODAL /////////////////////////////////////////////
+// ===============================
+// TURMAS - VERSÃO REFORÇADA (coloque no lugar do código antigo)
+// ===============================
 
+// configuração modal (mantive sua função original para compatibilidade)
 function configurarModal(botaoId, modalId) {
   const modal = document.getElementById(modalId);
   const btnAbrir = document.getElementById(botaoId);
+  // proteções
+  if (!modal || !btnAbrir) return;
   const btnFechar = modal.querySelector(".fechar");
 
-  // Abrir modal
-  btnAbrir.onclick = () => {
-    modal.style.display = "flex";
-  };
+  btnAbrir.onclick = () => modal.style.display = "flex";
+  if (btnFechar) btnFechar.onclick = () => modal.style.display = "none";
 
-  // Fechar modal (clicando no X)
-  btnFechar.onclick = () => {
-    modal.style.display = "none";
-  };
-
-  // Fechar clicando fora
   window.addEventListener("click", (e) => {
-    if (e.target === modal) {
-      modal.style.display = "none";
-    }
+    if (e.target === modal) modal.style.display = "none";
   });
 }
 
-// ======== CONFIGURAR AS DUAS MODAIS ========
+// chamar (verifique que os ids existem no HTML)
 configurarModal("cadastro-turma", "modal-turma");
-configurarModal("cadastro-turma", "modal-turma");
 
+// ===============================
+// ELEMENTOS PRINCIPAIS (safe-get)
+// ===============================
+const containerTurmas = document.querySelector(".container-turmas");
+const modalTurma = document.getElementById("modal-turma");
+const btnSalvarTurma = document.getElementById("confirmar-cadastro-turma");
 
-
-
-
-//========================modal cadastro - disciplinas===================
-
-// ==================== ELEMENTOS PRINCIPAIS =====================
-
-const containerTurmas = document.querySelector('.container-turmas');
-const modalTurma = document.getElementById('modal-turma');
-const btnConfirmarCadastroTurma = modalTurma.querySelector('#confirmar-cadastro-turma');
-
-// selects
 const selectCurso = document.getElementById("cursoTurma");
 const selectDisciplina = document.getElementById("disciplinaTurma");
 
-// disciplinas começam bloqueadas
-selectDisciplina.disabled = true;
-selectDisciplina.innerHTML = '<option value="">SELECIONE UM CURSO PRIMEIRO</option>';
+const inputCodigo = document.getElementById("codTurma");
+const inputNome = document.getElementById("nomeTurma");
+const inputPeriodo = document.getElementById("periodTurma");
 
+// segurança: se algo não existe, evita crash e loga
+if (!containerTurmas) console.warn("container-turmas não encontrado");
+if (!modalTurma) console.warn("modal-turma não encontrado");
+if (!btnSalvarTurma) console.warn("confirmar-cadastro-turma não encontrado");
+if (!selectCurso) console.warn("cursoTurma (select) não encontrado");
+if (!selectDisciplina) console.warn("disciplinaTurma (select) não encontrado");
 
-// ==================== LOCALSTORAGE =====================
-
-let turmas = JSON.parse(localStorage.getItem('turmas')) || [];
-let turmaEditando = null;
-
-function salvarTurmasLocalStorage() {
-  localStorage.setItem('turmas', JSON.stringify(turmas));
+// ===============================
+// DADOS (leitura atual do storage sempre que necessário)
+// ===============================
+function lerCursosStorage() {
+  try {
+    return JSON.parse(localStorage.getItem("cursos")) || [];
+  } catch (e) {
+    console.error("Erro lendo cursos do storage:", e);
+    return [];
+  }
 }
 
+function lerTurmasStorage() {
+  try {
+    return JSON.parse(localStorage.getItem("turmas")) || [];
+  } catch (e) {
+    console.error("Erro lendo turmas do storage:", e);
+    return [];
+  }
+}
 
-// ==================== FUNÇÃO PARA CARREGAR DISCIPLINAS POR CURSO =====================
+function salvarTurmasLS(turmasArray) {
+  try {
+    localStorage.setItem("turmas", JSON.stringify(turmasArray));
+  } catch (e) {
+    console.error("Erro salvando turmas:", e);
+  }
+}
 
-function carregarDisciplinasDoCurso(cursoNome) {
-  const disciplinas = JSON.parse(localStorage.getItem("disciplinas")) || [];
+// inicializa arrays
+let cursos = lerCursosStorage();
+let turmas = lerTurmasStorage();
+let turmaEditando = null;
 
-  const filtradas = disciplinas.filter(d => d.curso === cursoNome);
+// ===============================
+// HELPERS: recarregar cursos (sempre chamar antes de usar selectCurso)
+// ===============================
+function carregarCursosNoSelect() {
+  cursos = lerCursosStorage(); // garante versão mais recente
+  if (!selectCurso) return;
 
-  if (filtradas.length === 0) {
-    selectDisciplina.disabled = true;
-    selectDisciplina.innerHTML = '<option value="">NENHUMA DISCIPLINA CADASTRADA</option>';
+  // default
+  selectCurso.innerHTML = `<option value="">SELECIONE UM CURSO</option>`;
+
+  if (!Array.isArray(cursos) || cursos.length === 0) {
+    // mantem apenas opção padrão
     return;
   }
 
-  selectDisciplina.disabled = false;
-  selectDisciplina.innerHTML = '<option value="">SELECIONE UMA DISCIPLINA</option>';
-
-  filtradas.forEach(d => {
-    const option = document.createElement("option");
-    option.value = d.nome;
-    option.textContent = `${d.nome} (${d.sigla})`;
-    selectDisciplina.appendChild(option);
+  cursos.forEach(curso => {
+    // proteja caso curso.id ou curso.nome não existam
+    const opt = document.createElement("option");
+    opt.value = curso.id !== undefined ? String(curso.id) : String(curso.nome || "");
+    opt.textContent = curso.nome || curso.id || "Curso sem nome";
+    selectCurso.appendChild(opt);
   });
 }
 
+// disciplina começa bloqueada
+function resetDisciplinaSelect() {
+  if (!selectDisciplina) return;
+  selectDisciplina.disabled = true;
+  selectDisciplina.innerHTML = `<option value="">SELECIONE UM CURSO PRIMEIRO</option>`;
+}
+resetDisciplinaSelect();
 
+// ===============================
+// carregar disciplinas de um curso (usa o objeto curso)
+// ===============================
+function carregarDisciplinasDoCursoObj(cursoObj) {
+  if (!selectDisciplina) return;
+  selectDisciplina.innerHTML = `<option value="">SELECIONE UMA DISCIPLINA</option>`;
 
-
-// ==================== EVENTO AO ESCOLHER CURSO =====================
-
-selectCurso.addEventListener("change", () => {
-  const cursoSelecionado = selectCurso.value;
-
-  if (!cursoSelecionado) {
+  if (!cursoObj || !Array.isArray(cursoObj.disciplinas) || cursoObj.disciplinas.length === 0) {
     selectDisciplina.disabled = true;
-    selectDisciplina.innerHTML = '<option value="">SELECIONE UM CURSO PRIMEIRO</option>';
+    selectDisciplina.innerHTML = `<option value="">NENHUMA DISCIPLINA CADASTRADA</option>`;
     return;
   }
 
-  carregarDisciplinasDoCurso(cursoSelecionado);
-});
+  cursoObj.disciplinas.forEach(d => {
+    const opt = document.createElement("option");
+    // usamos codigo como value quando disponível (mais estável)
+    opt.value = d.codigo !== undefined ? String(d.codigo) : String(d.nome);
+    opt.textContent = d.nome ? `${d.nome} (${d.codigo || ""})` : d.codigo || "Disciplina";
+    selectDisciplina.appendChild(opt);
+  });
 
+  selectDisciplina.disabled = false;
+}
 
-// ==================== CRIAR CARD =====================
+// evento ao mudar curso
+if (selectCurso) {
+  selectCurso.addEventListener("change", () => {
+    // garantimos dados atualizados
+    cursos = lerCursosStorage();
 
+    const cursoId = selectCurso.value;
+    if (!cursoId) {
+      resetDisciplinaSelect();
+      return;
+    }
+
+    // procurar curso comparando como string (evita problema number vs string)
+    const cursoObj = cursos.find(c => String(c.id) === String(cursoId));
+    if (!cursoObj) {
+      resetDisciplinaSelect();
+      return;
+    }
+
+    carregarDisciplinasDoCursoObj(cursoObj);
+  });
+}
+
+// ===============================
+// criar card (inclui botão Alunos igual antes)
+// ===============================
 function criarCardTurma(turma) {
-  const card = document.createElement('div');
-  card.classList.add('card-turma');
+  const card = document.createElement("div");
+  card.classList.add("card-turma");
+
   card.innerHTML = `
     <h3>${turma.nome}</h3>
     <p><strong>Código:</strong> ${turma.codigo}</p>
     <p><strong>Período:</strong> ${turma.periodo}</p>
-    <p><strong>Curso:</strong> ${turma.curso}</p>
-    <p><strong>Disciplina:</strong> ${turma.disciplina}</p>
+    <p><strong>Curso:</strong> ${turma.cursoNome || turma.curso || ''}</p>
+    <p><strong>Disciplina:</strong><br>• ${turma.disciplinaNome || turma.disciplina || ''}</p>
 
     <div class="botoes-card">
-      <button class="btn-card adicionar">Alunos</button>
       <button class="btn-card editar">Editar</button>
       <button class="btn-card excluir">Excluir</button>
+      <button class="btn-card adicionar">Alunos</button>
+      <button class="btn-card notas">Notas</button>
+
     </div>
   `;
 
-  // abrir alunos
-  const btnAdicionar = card.querySelector('.adicionar');
-  btnAdicionar.addEventListener('click', () => {
-    turmaSelecionada = turma;
-    modalAluno.style.display = 'flex';
-    atualizarListaAlunos();
-  });
+  // BOTÃO ALUNOS — abre o modal de alunos para a turma correta (usa id)
+  const btnAlunos = card.querySelector(".adicionar");
+  if (btnAlunos) {
+    btnAlunos.addEventListener("click", (e) => {
+      e.stopPropagation();
+      // chama a função robusta que sugeri antes
+      if (typeof abrirModalAlunos === "function") {
+        abrirModalAlunos(turma.id);
+      } else {
+        // fallback antigo (se você ainda usa turmaSelecionada)
+        turmaSelecionada = turma;
+        if (typeof atualizarListaAlunos === "function") atualizarListaAlunos();
+        if (typeof modalAluno !== "undefined" && modalAluno) modalAluno.style.display = "flex";
+      }
+    });
+  }
 
-  // editar
-  const btnEditar = card.querySelector('.editar');
-  btnEditar.addEventListener('click', () => {
-    turmaEditando = turma;
-    abrirModalEdicao(turma);
-  });
+  // EDITAR
+  const btnEditar = card.querySelector(".editar");
+  if (btnEditar) {
+    btnEditar.addEventListener("click", (e) => {
+      e.stopPropagation();
+      // usa a função de editar (que no código reforçado se chama abrirModalEdicaoTurma)
+      if (typeof abrirModalEdicaoTurma === "function") {
+        abrirModalEdicaoTurma(turma);
+      } else if (typeof editarTurma === "function") {
+        editarTurma(turma);
+      }
+    });
+  }
 
-  // excluir
-  const btnExcluir = card.querySelector('.excluir');
-  btnExcluir.addEventListener('click', () => {
-    if (confirm(`Tem certeza que deseja excluir a turma "${turma.nome}"?`)) {
-      turmas = turmas.filter(t => t.codigo !== turma.codigo);
-      salvarTurmasLocalStorage();
-      atualizarListaTurmas();
+  // EXCLUIR
+  const btnExcluir = card.querySelector(".excluir");
+  if (btnExcluir) {
+    btnExcluir.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (confirm(`Deseja excluir a turma "${turma.nome}"?`)) {
+        // remover por id (mais seguro)
+        if (Array.isArray(turmas)) {
+          turmas = turmas.filter(t => String(t.id) !== String(turma.id));
+          // salvar usando sua função se existir
+          if (typeof salvarTurmasLS === "function") {
+            salvarTurmasLS();
+          } else if (typeof salvarTurmasLocalStorage === "function") {
+            salvarTurmasLocalStorage();
+          } else {
+            localStorage.setItem("turmas", JSON.stringify(turmas));
+          }
+          if (typeof atualizarListaTurmas === "function") atualizarListaTurmas();
+        }
+      }
+    });
+  }
+
+  // dentro de criarCardTurma(turma)...
+
+// BOTÃO NOTAS — abre o modal de notas para a turma correta (usa id)
+const btnNotas = card.querySelector(".notas");
+if (btnNotas) {
+  btnNotas.addEventListener("click", (e) => {
+    e.stopPropagation();
+
+    if (typeof abrirModalNotas === "function") {
+      abrirModalNotas(turma.id);
+    } else {
+      // fallback, caso não tenha a função abrirModalNotas implementada
+      turmaSelecionada = turma;
+      if (typeof atualizarListaNotas === "function") {
+        atualizarListaNotas();
+      }
+      if (typeof modalNotas !== "undefined" && modalNotas) {
+        modalNotas.style.display = "flex";
+      }
     }
   });
+}
+
 
   return card;
 }
 
 
-// ==================== ABRIR MODAL PARA EDITAR =====================
+// ===============================
+// abrir modal em edição (preenche e abre)
+// ===============================
+function abrirModalEdicaoTurma(turma) {
+  turmaEditando = turma;
 
-function abrirModalEdicao(turma) {
-  document.getElementById('codTurma').value = turma.codigo;
-  document.getElementById('nomeTurma').value = turma.nome;
-  document.getElementById('periodTurma').value = turma.periodo;
-  document.getElementById('cursoTurma').value = turma.curso;
+  // garantir cursos atualizados no select
+  carregarCursosNoSelect();
 
-  // recarregar disciplinas do curso
-  carregarDisciplinasDoCurso(turma.curso);
+  // preencher campos básicos
+  if (inputCodigo) inputCodigo.value = turma.codigo || "";
+  if (inputNome) inputNome.value = turma.nome || "";
+  if (inputPeriodo) inputPeriodo.value = turma.periodo || "";
 
-  // selecionar a disciplina correta
-  selectDisciplina.disabled = false;
-  selectDisciplina.value = turma.disciplina;
+  // setar curso (cursoId) — comparar por string
+  if (selectCurso) selectCurso.value = turma.cursoId ? String(turma.cursoId) : "";
 
-  modalTurma.style.display = 'flex';
+  // carregar disciplinas do curso selecionado (procura curso atual)
+  cursos = lerCursosStorage();
+  const cursoObj = cursos.find(c => String(c.id) === String(turma.cursoId));
+  if (cursoObj) {
+    carregarDisciplinasDoCursoObj(cursoObj);
+
+    // selecionar disciplina (usamos disciplinaCodigo se existir, senão disciplinaNome)
+    const wanted = turma.disciplinaCodigo || turma.disciplinaNome || turma.disciplina;
+    if (wanted && selectDisciplina) {
+      // pode ser codigo ou nome: tentar casar ambos
+      const optionToSelect = Array.from(selectDisciplina.options).find(opt => String(opt.value) === String(wanted) || opt.textContent.includes(String(wanted)));
+      if (optionToSelect) selectDisciplina.value = optionToSelect.value;
+    }
+  } else {
+    resetDisciplinaSelect();
+  }
+
+  if (btnSalvarTurma) btnSalvarTurma.textContent = "SALVAR";
+  if (modalTurma) modalTurma.style.display = "flex";
 }
 
-
-// ==================== LISTAR TURMAS =====================
-
+// ===============================
+// listar turmas (renderizar)
+// ===============================
 function atualizarListaTurmas() {
-  containerTurmas.innerHTML = '';
+  if (!containerTurmas) return;
+  containerTurmas.innerHTML = "";
 
-  if (turmas.length === 0) {
+  // recarregar turmas do storage (sempre atual)
+  turmas = lerTurmasStorage();
+
+  if (!turmas || turmas.length === 0) {
     containerTurmas.innerHTML = `
       <div class="nada-cadastrado">
         <p>NENHUMA TURMA CADASTRADA AINDA...</p>
@@ -206,59 +342,87 @@ function atualizarListaTurmas() {
     return;
   }
 
-  turmas.forEach(turma => {
-    containerTurmas.appendChild(criarCardTurma(turma));
+  turmas.forEach(t => containerTurmas.appendChild(criarCardTurma(t)));
+}
+
+// inicial render
+carregarCursosNoSelect();
+atualizarListaTurmas();
+
+// ===============================
+// salvar (novo + edição)
+// ===============================
+if (btnSalvarTurma) {
+  btnSalvarTurma.addEventListener("click", () => {
+    // ler e validar campos
+    const codigo = inputCodigo ? inputCodigo.value.trim() : "";
+    const nome = inputNome ? inputNome.value.trim() : "";
+    const periodo = inputPeriodo ? inputPeriodo.value.trim() : "";
+    const cursoId = selectCurso ? selectCurso.value : "";
+    const disciplinaValue = selectDisciplina ? selectDisciplina.value : "";
+
+    if (!codigo || !nome || !periodo || !cursoId || !disciplinaValue) {
+      alert("Preencha todos os campos obrigatórios.");
+      return;
+    }
+
+    // garantir cursos atualizados
+    cursos = lerCursosStorage();
+    const cursoObj = cursos.find(c => String(c.id) === String(cursoId));
+    if (!cursoObj) {
+      alert("Curso inválido.");
+      return;
+    }
+
+    // tentar resolver disciplina nome/codigo
+    let disciplinaNome = disciplinaValue;
+    let disciplinaCodigo = disciplinaValue;
+    const discObj = (cursoObj.disciplinas || []).find(d => String(d.codigo) === String(disciplinaValue) || String(d.nome) === String(disciplinaValue));
+    if (discObj) {
+      disciplinaNome = discObj.nome;
+      disciplinaCodigo = discObj.codigo;
+    }
+
+    if (turmaEditando) {
+      // editar
+      turmaEditando.codigo = codigo;
+      turmaEditando.nome = nome;
+      turmaEditando.periodo = periodo;
+      turmaEditando.cursoId = String(cursoObj.id);
+      turmaEditando.cursoNome = cursoObj.nome;
+      turmaEditando.disciplinaNome = disciplinaNome;
+      turmaEditando.disciplinaCodigo = disciplinaCodigo;
+      turmaEditando = null;
+      if (btnSalvarTurma) btnSalvarTurma.textContent = "CADASTRAR";
+    } else {
+      // novo
+      const novo = {
+        id: Date.now(),
+        codigo,
+        nome,
+        periodo,
+        cursoId: String(cursoObj.id),
+        cursoNome: cursoObj.nome,
+        disciplinaNome,
+        disciplinaCodigo,
+        alunos: []
+      };
+      turmas.push(novo);
+    }
+
+    salvarTurmasLS(turmas);
+    atualizarListaTurmas();
+
+    // fechar modal e limpar
+    if (modalTurma) modalTurma.style.display = "none";
+    if (inputCodigo) inputCodigo.value = "";
+    if (inputNome) inputNome.value = "";
+    if (inputPeriodo) inputPeriodo.value = "";
+    if (selectCurso) selectCurso.value = "";
+    resetDisciplinaSelect();
   });
 }
 
-
-// ==================== SALVAR TURMA =====================
-
-btnConfirmarCadastroTurma.addEventListener('click', () => {
-  const codigo = document.getElementById('codTurma').value.trim();
-  const nome = document.getElementById('nomeTurma').value.trim();
-  const periodo = document.getElementById('periodTurma').value.trim();
-  const curso = document.getElementById('cursoTurma').value;
-  const disciplinaSelecionada = document.getElementById("disciplinaTurma").value;
-
-  if (!codigo || !nome || !curso || !disciplinaSelecionada) {
-    alert('Preencha todos os campos obrigatórios.');
-    return;
-  }
-
-  if (turmaEditando) {
-    turmaEditando.codigo = codigo;
-    turmaEditando.nome = nome;
-    turmaEditando.periodo = periodo;
-    turmaEditando.curso = curso;
-    turmaEditando.disciplina = disciplinaSelecionada;
-    turmaEditando = null;
-  } else {
-    const novaTurma = {
-      codigo,
-      nome,
-      periodo,
-      curso,
-      disciplina: disciplinaSelecionada,
-      alunos: []
-    };
-
-    turmas.push(novaTurma);
-  }
-
-  salvarTurmasLocalStorage();
-  atualizarListaTurmas();
-  modalTurma.style.display = 'none';
-
-  // limpar campos
-  document.getElementById('codTurma').value = '';
-  document.getElementById('nomeTurma').value = '';
-  document.getElementById('periodTurma').value = '';
-  document.getElementById('cursoTurma').value = '';
-
-  selectDisciplina.disabled = true;
-  selectDisciplina.innerHTML = '<option value="">SELECIONE UM CURSO PRIMEIRO</option>';
-});
 
 
 // ==================== INICIAR LISTA =====================
@@ -267,7 +431,10 @@ atualizarListaTurmas();
 
 
 
-// ########################## LISTAGEM E CADASTRO DE ALUNOS ########################
+// =========================
+// LISTAGEM E CADASTRO DE ALUNOS (VERSÃO REFORÇADA)
+// Substitua a sua seção antiga por esta
+// =========================
 
 // Elementos do formulário e tabela
 const modalAluno = document.getElementById('modal-aluno');
@@ -277,21 +444,55 @@ const raInput = document.getElementById('raAluno');
 const nomeInput = document.getElementById('nomeAluno');
 const tbodyAlunos = document.getElementById('corpo-lista-alunos');
 
-// ### ADICIONADO: variável global para turma selecionada (declaração no topo do arquivo, aqui só reforço)
-let turmaSelecionada = null;
-
+// Identificador da turma selecionada (mais robusto que guardar o objeto)
+let turmaSelecionadaId = null;
 let alunoEditandoIndex = null;
 
-// Atualiza a tabela de alunos (só da turma selecionada)
+// Helper: ler turmas atualizadas do storage
+function lerTurmasStorageSafe() {
+  try {
+    return JSON.parse(localStorage.getItem('turmas')) || [];
+  } catch (e) {
+    console.error('Erro lendo turmas do storage:', e);
+    return [];
+  }
+}
+
+// Helper: salvar turmas com fallback (salvarTurmasLS ou salvarTurmasLocalStorage)
+function salvarTurmasComFallback(turmasArray) {
+  try {
+    if (typeof salvarTurmasLS === 'function') {
+      salvarTurmasLS(turmasArray);
+    } else if (typeof salvarTurmasLocalStorage === 'function') {
+      // alguns códigos usam esse nome antigo
+      salvarTurmasLocalStorage(turmasArray);
+    } else {
+      // fallback direto
+      localStorage.setItem('turmas', JSON.stringify(turmasArray));
+    }
+  } catch (e) {
+    console.error('Erro ao salvar turmas:', e);
+  }
+}
+
+// Retorna a turma atual (objeto) buscada por id — sempre pega do storage para evitar referências obsoletas
+function obterTurmaAtual() {
+  const turmasAgora = lerTurmasStorageSafe();
+  if (!turmaSelecionadaId) return null;
+  return turmasAgora.find(t => String(t.id) === String(turmaSelecionadaId)) || null;
+}
+
+// Atualiza a tabela HTML de alunos a partir da turma atual
 function atualizarListaAlunos() {
   tbodyAlunos.innerHTML = '';
 
-  if (!turmaSelecionada || !turmaSelecionada.alunos || turmaSelecionada.alunos.length === 0) {
+  const turmaAtual = obterTurmaAtual();
+  if (!turmaAtual || !Array.isArray(turmaAtual.alunos) || turmaAtual.alunos.length === 0) {
     tbodyAlunos.innerHTML = `<tr><td colspan="3" style="text-align:center; font-style: italic;">Nenhum aluno cadastrado nesta turma.</td></tr>`;
     return;
   }
 
-  turmaSelecionada.alunos.forEach((aluno, index) => {
+  turmaAtual.alunos.forEach((aluno, index) => {
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td>${aluno.ra}</td>
@@ -306,106 +507,212 @@ function atualizarListaAlunos() {
     tbodyAlunos.appendChild(tr);
   });
 
-  // Eventos dos botões editar
+  // eventos (delegação simples)
   tbodyAlunos.querySelectorAll('button.editar').forEach(btn => {
     btn.addEventListener('click', e => {
-      const idx = e.target.getAttribute('data-index');
+      const idx = Number(e.target.getAttribute('data-index'));
       carregarAlunoParaEdicao(idx);
     });
   });
 
-  // Eventos dos botões excluir
   tbodyAlunos.querySelectorAll('button.excluir').forEach(btn => {
     btn.addEventListener('click', e => {
-      const idx = e.target.getAttribute('data-index');
+      const idx = Number(e.target.getAttribute('data-index'));
       excluirAluno(idx);
     });
   });
 }
 
-// Carrega os dados do aluno para edição no formulário
+// Abre modal de alunos para a turma que foi clicada — chamada pelo botão "Alunos" no card
+// Passe a id da turma quando abrir: abrirModalAlunos(turmaId)
+function abrirModalAlunos(turmaId) {
+  turmaSelecionadaId = String(turmaId);
+  alunoEditandoIndex = null;
+  btnConfirmarCadastroAluno.textContent = 'CADASTRAR';
+
+  // atualiza lista e abre modal
+  atualizarListaAlunos();
+  if (modalAluno) modalAluno.style.display = 'flex';
+}
+
+// Carrega aluno para edição
 function carregarAlunoParaEdicao(index) {
-  const aluno = turmaSelecionada.alunos[index];
-  raInput.value = aluno.ra;
-  nomeInput.value = aluno.nome;
+  const turmaAtual = obterTurmaAtual();
+  if (!turmaAtual || !Array.isArray(turmaAtual.alunos)) return;
+
+  const aluno = turmaAtual.alunos[index];
+  if (!aluno) return;
+
+  raInput.value = aluno.ra || '';
+  nomeInput.value = aluno.nome || '';
   alunoEditandoIndex = index;
   btnConfirmarCadastroAluno.textContent = 'SALVAR';
-  modalAluno.style.display = 'flex'; // abre modal para editar
+  if (modalAluno) modalAluno.style.display = 'flex';
 }
 
-// Excluir aluno
+// Excluir aluno por índice
 function excluirAluno(index) {
-  if (confirm('Deseja realmente excluir este aluno?')) {
-    turmaSelecionada.alunos.splice(index, 1);
-    salvarTurmasLocalStorage();  // salva alteração nas turmas
-    atualizarListaAlunos();
-    limparFormularioAluno();
-  }
+  const turmaAtual = obterTurmaAtual();
+  if (!turmaAtual || !Array.isArray(turmaAtual.alunos)) return;
+
+  if (!confirm('Deseja realmente excluir este aluno?')) return;
+
+  turmaAtual.alunos.splice(index, 1);
+
+  // salva no storage (pega turmas atuais e substitui a que tem o mesmo id)
+  let turmasAgora = lerTurmasStorageSafe();
+  turmasAgora = turmasAgora.map(t => String(t.id) === String(turmaSelecionadaId) ? turmaAtual : t);
+  salvarTurmasComFallback(turmasAgora);
+
+  // atualiza view e limpa form
+  atualizarListaAlunos();
+  limparFormularioAluno();
 }
 
-// Limpar formulário
+// Limpar form de aluno
 function limparFormularioAluno() {
-  raInput.value = '';
-  nomeInput.value = '';
+  if (raInput) raInput.value = '';
+  if (nomeInput) nomeInput.value = '';
   alunoEditandoIndex = null;
   btnConfirmarCadastroAluno.textContent = 'CADASTRAR';
 }
 
 // Evento do botão cadastrar/salvar aluno
-btnConfirmarCadastroAluno.addEventListener('click', () => {
-  const ra = raInput.value.trim();
-  const nome = nomeInput.value.trim();
+if (btnConfirmarCadastroAluno) {
+  btnConfirmarCadastroAluno.addEventListener('click', () => {
+    const ra = raInput ? raInput.value.trim() : '';
+    const nome = nomeInput ? nomeInput.value.trim() : '';
 
-  if (!ra || !nome) {
-    alert('Preencha RA e Nome Completo!');
-    return;
-  }
+    if (!ra || !nome) {
+      alert('Preencha RA e Nome Completo!');
+      return;
+    }
 
-  if (!turmaSelecionada.alunos) {
-    turmaSelecionada.alunos = [];
-  }
+    // pega turma atual do storage
+    const turmaAtual = obterTurmaAtual();
+    if (!turmaAtual) {
+      alert('Selecione uma turma antes de cadastrar alunos.');
+      return;
+    }
 
-  // Verifica duplicidade de RA no cadastro novo da turma selecionada
-  if (alunoEditandoIndex === null && turmaSelecionada.alunos.some(a => a.ra === ra)) {
-    alert('RA já cadastrado nesta turma!');
-    return;
-  }
+    if (!Array.isArray(turmaAtual.alunos)) turmaAtual.alunos = [];
 
-  if (alunoEditandoIndex !== null) {
-    turmaSelecionada.alunos[alunoEditandoIndex].ra = ra;
-    turmaSelecionada.alunos[alunoEditandoIndex].nome = nome;
-  } else {
-    turmaSelecionada.alunos.push({ ra, nome });
-  }
+    // Verifica duplicidade de RA no cadastro novo da turma selecionada
+    // (usa comparação como string e ignora caso seja edição do mesmo índice)
+    const raExiste = turmaAtual.alunos.some((a, idx) => {
+      if (alunoEditandoIndex !== null && Number(alunoEditandoIndex) === Number(idx)) return false; // mesmo aluno em edição
+      return String(a.ra) === String(ra);
+    });
 
-  salvarTurmasLocalStorage(); // salva localStorage geral das turmas
-  atualizarListaAlunos();
-  limparFormularioAluno();
+    if (raExiste) {
+      alert('RA já cadastrado nesta turma!');
+      return;
+    }
 
-  // NÃO fecha modal aqui para facilitar cadastros sequenciais
-  // modalAluno.style.display = 'none'; // removido para manter aberto
-});
+    if (alunoEditandoIndex !== null) {
+      // editar
+      turmaAtual.alunos[alunoEditandoIndex] = { ra, nome };
+    } else {
+      // novo
+      turmaAtual.alunos.push({ ra, nome });
+    }
 
-// Botão fechar modal alunos
-btnFecharAluno.addEventListener('click', () => {
-  modalAluno.style.display = 'none';
-  limparFormularioAluno();
-  turmaSelecionada = null; // limpa turma selecionada ao fechar modal
-});
+    // salva turmas atualizadas no storage
+    let turmasAgora = lerTurmasStorageSafe();
+    turmasAgora = turmasAgora.map(t => String(t.id) === String(turmaSelecionadaId) ? turmaAtual : t);
+    salvarTurmasComFallback(turmasAgora);
+
+    // atualiza UI e limpa form (não fecha modal)
+    atualizarListaAlunos();
+    limparFormularioAluno();
+  });
+}
+
+// fechar modal alunos
+if (btnFecharAluno) {
+  btnFecharAluno.addEventListener('click', () => {
+    if (modalAluno) modalAluno.style.display = 'none';
+    limparFormularioAluno();
+    turmaSelecionadaId = null;
+  });
+}
 
 // Fecha modal clicando fora
 window.addEventListener('click', (e) => {
   if (e.target === modalAluno) {
-    modalAluno.style.display = 'none';
+    if (modalAluno) modalAluno.style.display = 'none';
     limparFormularioAluno();
-    turmaSelecionada = null; // limpa turma selecionada ao fechar modal
+    turmaSelecionadaId = null;
   }
 });
 
-// ** REMOVIDO **
-// Não inicializar lista global de alunos, pois agora é por turma selecionada
-// atualizarListaAlunos(); 
 
+//================================================================================================
+//==================    MODAL NOTAS (TABELA DOS COMPONENTES DA TURMA)   ==========================
+//================================================================================================
+
+// ELEMENTOS DA MODAL DE NOTAS
+const modalNotas = document.getElementById("modal-notas");
+const fecharModalNotas = document.getElementById("fecharModalNotas");
+const conteudoNotas = document.getElementById("conteudoNotas");
+
+// FUNÇÃO QUE ABRE A MODAL DE NOTAS
+function abrirModalNotas(turma) {
+  modalNotas.style.display = "flex";
+
+  const componentes = JSON.parse(localStorage.getItem("componentes")) || [];
+
+  // NADA CADASTRADO
+  if (componentes.length === 0) {
+    conteudoNotas.innerHTML = `
+      <div class="nada-cadastrado">
+        <p>NENHUMA ATIVIDADE CADASTRADA AINDA...</p>
+        <img src="../images/imagem_alunos.png" class="img-nada-cadastrado">
+      </div>
+
+      <a href="#"   id = "atividades-modal">ACESSE A PÁGINA DE ATIVIDADES</a>
+    `;
+    return;
+  }
+
+  // SE TEM COMPONENTES → LISTA
+  conteudoNotas.innerHTML = `
+    <p style="font-weight: bold; margin-bottom: 10px;">
+      Selecione um componente para lançar notas:
+    </p>
+  `;
+
+  componentes.forEach(comp => {
+    const item = document.createElement("div");
+    item.classList.add("item-componente-nota");
+
+    item.innerHTML = `
+      <div class="comp-box">
+        <strong>${comp.nome}</strong>
+        <span>${comp.disciplinaNome}</span>
+      </div>
+    `;
+
+    // evento clicar no componente
+    item.addEventListener("click", () => {
+      alert("Depois vamos abrir a tela de lançar notas para: " + comp.nome);
+    });
+
+    conteudoNotas.appendChild(item);
+  });
+}
+
+// FECHAR MODAL (X)
+fecharModalNotas.addEventListener("click", () => {
+  modalNotas.style.display = "none";
+});
+
+// FECHAR MODAL CLICANDO FORA
+window.addEventListener("click", (e) => {
+  if (e.target === modalNotas) {
+    modalNotas.style.display = "none";
+  }
+});
 
 
 

@@ -537,56 +537,61 @@ select:disabled + label,
 }
 
 
-/* Container dos botões */
+/* Container dos botões - agora em duas linhas */
+/* Container dos botões (duas linhas perfeitas) */
 .botoes-card {
   position: absolute;
   bottom: 10px;
   left: 10px;
-  right: 10px;
-  display: flex;
-  justify-content: space-between;
-  /* remove margin-bottom porque agora está fixado */
-  margin-bottom: 0;
+  width: calc(100% - 20px); /* agora encaixa dentro do card perfeitamente */
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* duas colunas */
+  gap: 6px;
 }
 
-/* Estilo base dos botões */
+/* Botões */
 .btn-card {
-  flex: 1;
-  margin: 0 3px;
   padding: 6px 0;
   border: none;
-  border-radius: 50px;
+  border-radius: 40px;
   font-family: Comfortaa;
   font-size: 10px;
   font-weight: bold;
   color: white;
   cursor: pointer;
   transition: 0.3s ease all;
+  width: 100%;     /* AJUSTA o tamanho certinho */
+  box-sizing: border-box;
 }
 
-/* Cores individuais */
+/* Cores */
 .btn-card.adicionar {
-  background-color: #25e4d1; /* Azul */
+  background-color: #25e4d1;
 }
 .btn-card.adicionar:hover {
   background-color: #1eb7a8;
 }
 
-
 .btn-card.editar {
-  background-color: #ffb347; /* Laranja */
+  background-color: #ffb347;
 }
 .btn-card.editar:hover {
   background-color: #e29b30;
 }
 
 .btn-card.excluir {
-  background-color: #ff6b6b; /* Vermelho */
+  background-color: #ff6b6b;
 }
 .btn-card.excluir:hover {
   background-color: #d9534f;
 }
 
+.btn-card.notas {
+  background-color: #8b65ff;
+}
+.btn-card.notas:hover {
+  background-color: #6F46E6;
+}
 
 /*=========MODAL ALUNOS====================================================*/
 
@@ -685,6 +690,8 @@ select:disabled + label,
   color: white;
 }
 
+
+
 .botoes-acoes {
   display: flex;
   flex-direction: column; /* empilha verticalmente */
@@ -693,3 +700,26 @@ select:disabled + label,
 }
 
 
+/*=============MODAL NOTAS (COMPONENTES)==========================================*/
+
+#modal-notas .janela-modal {
+  width: 80%;
+  height: 80%;
+}
+
+#atividades-modal {
+  color: #1eb7a8;
+  font-weight: bold;
+  font-size: 15px;
+  transition: 0.3s ease all;
+
+}
+
+#atividades-modal:hover {
+  color:#1e87a3;
+
+}
+
+#modal-notas .nada-cadastrado {
+  padding: 50px;
+}
