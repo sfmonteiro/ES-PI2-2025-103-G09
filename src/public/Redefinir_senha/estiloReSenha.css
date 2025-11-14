@@ -99,3 +99,37 @@ button[type="submit"] {
     transition: background-color 0.25s ease;
     display:inline-block;
 }
+.overlay-sucesso {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease forwards;
+}
+
+.caixa-sucesso {
+  background-color: white;
+  padding: 40px 60px;
+  border-radius: 30px;
+  text-align: center;
+  box-shadow: 0 0 20px rgba(0,0,0,0.3);
+  animation: popIn 0.3s ease;
+}
+
+.icone-sucesso {
+  width: 100px;
+  height: 100px;
+  margin-bottom: 15px;
+}
+
+.caixa-sucesso p {
+  color: #1e87a3;
+  font-size: 20px;
+  font-weight: bold;
+}

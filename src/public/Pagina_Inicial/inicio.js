@@ -40,6 +40,7 @@ redirecionar("alunos", "../Pagina_alunos/alunos.html");
 redirecionar("atividades", "../Pagina_atividades/atividades.html");
 redirecionar("conta", "../Minha_Conta/minha_conta.html");
 redirecionar("sair", "../Login/login.html");
+<<<<<<< HEAD
 
 // ======================= Mostrar instituição e nome do usuário =======================
 
@@ -126,3 +127,6 @@ function populateHeader() {
 document.addEventListener('DOMContentLoaded', () => {
   populateHeader();
 });
+=======
+redirecionar("trocar-inst", "../Instituição_cadastro/instituição.html");
+>>>>>>> ae0d47b614c6c8aacf846075489a36500b18025b

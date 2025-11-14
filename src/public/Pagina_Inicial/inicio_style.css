@@ -147,7 +147,7 @@ body {
     display: flex;
     align-items: center;
     gap: 10px; /* espaço entre ícone e texto */
-    font-style: bold;
+    font-weight: bold;
 }
 
 /* ícone */

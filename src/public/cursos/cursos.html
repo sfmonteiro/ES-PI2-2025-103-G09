@@ -18,7 +18,6 @@
       <li><a id="instituicao" href="#">INSTITUIÇÃO</a></li>
       <li><a id="cursos" href="#" class="active">CURSOS</a></li>
       <li><a id="turmas" href="#">TURMAS</a></li>
-      <li><a id="alunos" href="#">ALUNOS</a></li>
       <li><a id="atividades" href="#">ATIVIDADES</a></li>
     </ul>
   </aside>
@@ -37,14 +36,32 @@
       </div>
     </div>
 
-    <div class="user-menu">
-      <img src="../images/icone_pessoa.png" alt="Ícone Pessoa" class="pessoa-icon">
-      <span id="user-btn" class="user-btn">Olá, *PRIMEIRO NOME*! ▼</span>
-      <ul class="dropdown">
-        <li><a id="conta" href="#"><img src="../images/icone_pessoa.png" class="minha-conta-icon">Minha Conta</a></li>
-        <li><a id="sair" href="#"><img src="../images/icone_sair.png" class="minha-conta-icon">Sair</a></li>
-      </ul>
-    </div>
+        <div class="user-menu">
+            <img src="../images/icone_pessoa.png" alt="Ícone Pessoa" class="pessoa-icon">
+            <span id="user-btn" class="user-btn">Olá, *PRIMEIRO NOME*!   ▼</span>
+
+            <ul class="dropdown">
+
+                <li><a href="#" id = "conta">
+                    <img src="../images/icone_pessoa.png" alt="Ícone Pessoa" class="minha-conta-icon">
+                    Minha Conta
+                    </a>
+                </li>
+                
+                <li><a href="#" id = "trocar-inst">
+                    <img src="../images/icone_instituicao_azul.png" alt="Ícone Instituição" class="minha-conta-icon">
+                    Trocar Instituição
+                    </a>
+                </li>
+
+                <li><a href="#" id = "sair">
+                    <img src="../images/icone_sair.png" alt="Ícone Pessoa" class="minha-conta-icon">
+                    Sair
+                    </a>
+                </li>
+
+            </ul>
+        </div>
   </header>
 
   <!-- CONTEÚDO PRINCIPAL -->
@@ -54,58 +71,62 @@
     <div class="botoes">
       <button type="button" id="cadastro-curso">Cadastrar Curso</button>
     </div>
-
     <div class="container-cursos" id="lista-cursos">
-      <!-- Cards de cursos aparecem aqui -->
     </div>
   </div>
 
-  <!-- MODAL CADASTRAR CURSO -->
-  <div class="modal" id="modalCurso">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2>Cadastrar Curso</h2>
-        <span class="close" id="closeModalCurso">&times;</span>
-      </div>
-      <div class="form-group">
-        <label>Código do Curso:</label>
-        <input type="text" id="codigoCurso">
-      </div>
-      <div class="form-group">
-        <label>Nome do Curso:</label>
-        <input type="text" id="nomeCurso">
-      </div>
-      <div class="form-group">
-        <label>Quantidade de Turmas:</label>
-        <input type="number" id="qtdTurmas">
-      </div>
-      <div class="form-group">
-        <label>Quantidade de Alunos:</label>
-        <input type="number" id="qtdAlunos">
-      </div>
-      <button class="btn-save" id="salvarCurso">Salvar</button>
+ <!-- MODAL CADASTRAR CURSO -->
+<div class="modal" id="modalCurso">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>CADASTRAR CURSO</h2>
+      <span class="close" id="closeModalCurso">&times;</span>
     </div>
+    <div class="form-group">
+      <label>CÓDIGO DO CURSO:</label>
+      <input type="text" id="codigoCurso" placeholder="" required>
+    </div>
+    <div class="form-group">
+      <label>CÓDIGO DA DISCIPLINA</label>
+      <input type="text" id="nomeCurso" placeholder="" required>
+    </div>
+    <button class="btn-save" id="salvarCurso">SALVAR</button>
   </div>
+</div>
 
-  <!-- MODAL DISCIPLINA -->
-  <div class="modal" id="modalDisciplina">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2>Cadastrar Disciplina</h2>
-        <span class="close" id="closeModalDisciplina">&times;</span>
-      </div>
-      <div class="form-group">
-        <label>Nome da Disciplina:</label>
-        <input type="text" id="nomeDisciplina">
-      </div>
-      <div class="form-group">
-        <label>Código da Disciplina:</label>
-        <input type="text" id="codigoDisciplina">
-      </div>
-      <button class="btn-add" id="adicionarDisciplina">Adicionar</button>
-      <div class="disciplinas-list" id="listaDisciplinas"></div>
+<!-- MODAL DISCIPLINA -->
+<div class="modal" id="modalDisciplina">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>CADASTRAR DISCIPLINA</h2>
+      <span class="close" id="closeModalDisciplina">&times;</span>
+    </div>
+
+    <div class="form-group">
+      <label>NOME DA DISCIPLINA:</label>
+      <input type="text" id="nomeDisciplina" placeholder="" required>
+    </div>
+    <div class="form-group">
+      <label>CÓDIGO DA DISCIPLINA:</label>
+      <input type="text" id="codigoDisciplina" placeholder="" required>
+    </div>
+
+    <button class="btn-add" id="adicionarDisciplina">ADICIONAR</button>
+
+    <div class="disciplinas-list" id="listaDisciplinas"></div>
+  </div>
+</div>
+
+<!-- MODAL CONFIRMAR EXCLUSÃO -->
+<div class="modal" id="modalConfirmacao">
+  <div class="modal-content">
+    <p>Você tem certeza que deseja excluir?</p>
+    <div class="confirm-botoes">
+      <button id="confirmarSim">SIM</button>
+      <button id="confirmarNao">NÃO</button>
     </div>
   </div>
+</div>
 
   <script src="cursos.js"></script>
 </body>

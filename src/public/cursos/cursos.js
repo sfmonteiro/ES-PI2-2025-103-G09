@@ -1,114 +1,370 @@
-// ======== MENU DO USUÁRIO ========
+// Bruno Lobo de Jesus RA:25019830
+
+function carregarCursos() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return [];
+    return JSON.parse(raw);
+  } catch (e) {
+    console.error("Erro ao carregar cursos do storage:", e);
+    return [];
+  }
+}
+
+function salvarCursos(cursos) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(cursos));
+  } catch (e) {
+    console.error("Erro ao salvar cursos no storage:", e);
+  }
+}
+
+function gerarId() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+}
+
+// ======== ELEMENTOS ========
 const userMenu = document.querySelector('.user-menu');
 const userBtn = document.querySelector('#user-btn');
 
-userBtn.addEventListener('click', () => userMenu.classList.toggle('open'));
-document.addEventListener('click', e => {
-  if (!userMenu.contains(e.target) && e.target !== userBtn) {
-    userMenu.classList.remove('open');
-  }
-});
-
-// ======== MODAIS ========
 const modalCurso = document.getElementById("modalCurso");
 const modalDisciplina = document.getElementById("modalDisciplina");
+const modalConfirmacao = document.getElementById("modalConfirmacao");
 
-document.getElementById("cadastro-curso").onclick = () => modalCurso.style.display = "flex";
-document.getElementById("closeModalCurso").onclick = () => modalCurso.style.display = "none";
-document.getElementById("closeModalDisciplina").onclick = () => modalDisciplina.style.display = "none";
+const btnCadastroCurso = document.getElementById("cadastro-curso");
+const btnCloseModalCurso = document.getElementById("closeModalCurso");
+const btnCloseModalDisciplina = document.getElementById("closeModalDisciplina");
 
-window.onclick = e => {
-  if (e.target === modalCurso) modalCurso.style.display = "none";
-  if (e.target === modalDisciplina) modalDisciplina.style.display = "none";
-};
+const inputCodigoCurso = document.getElementById("codigoCurso");
+const inputNomeCurso = document.getElementById("nomeCurso");
+const btnSalvarCurso = document.getElementById("salvarCurso");
 
-// ======== LISTA DE CURSOS ========
-const listaCursos = document.getElementById("lista-cursos");
-let cursos = [];
+const btnDisciplina = document.getElementById("btnDisciplina");
+const inputNomeDisciplina = document.getElementById("nomeDisciplina");
+const inputCodigoDisciplina = document.getElementById("codigoDisciplina");
+const btnAdicionarDisciplina = document.getElementById("adicionarDisciplina");
 
-// ======== SALVAR CURSO ========
-document.getElementById("salvarCurso").onclick = () => {
-  const codigo = document.getElementById("codigoCurso").value.trim();
-  const nome = document.getElementById("nomeCurso").value.trim();
-  const turmas = document.getElementById("qtdTurmas").value.trim();
-  const alunos = document.getElementById("qtdAlunos").value.trim();
+const listaCursosEl = document.getElementById("lista-cursos");
+const listaDisciplinasEl = document.getElementById("listaDisciplinas");
 
-  if (!codigo || !nome) return alert("Preencha código e nome do curso!");
+const btnConfirmSim = document.getElementById("confirmarSim");
+const btnConfirmNao = document.getElementById("confirmarNao");
 
-  const curso = { codigo, nome, turmas, alunos, disciplinas: [] };
-  cursos.push(curso);
-  criarCard(curso);
-  modalCurso.style.display = "none";
-  document.querySelectorAll("#modalCurso input").forEach(i => i.value = "");
-};
-
-// ======== CRIAR CARD DE CURSO ========
-function criarCard(curso) {
-  const card = document.createElement("div");
-  card.classList.add("curso-card");
-  card.innerHTML = `
-    <h3>${curso.nome.toUpperCase()}</h3>
-    <p><b>Código:</b> ${curso.codigo}</p>
-    <p>👥 Turmas: ${curso.turmas || "0"}</p>
-    <p>🎓 Alunos: ${curso.alunos || "0"}</p>
-    <p>📘 Disciplinas: ${curso.disciplinas.length}</p>
-  `;
-  listaCursos.appendChild(card);
-
-  // Abrir modal de disciplinas ao clicar no card
-  card.onclick = () => abrirModalDisciplina(curso);
-}
-
-// ======== MODAL DISCIPLINA ========
-const listaDisciplinas = document.getElementById("listaDisciplinas");
+// ======== ESTADO ========
+let cursos = carregarCursos();
 let cursoAtual = null;
+let indexParaExcluir = null;
+let isEditing = false;
+let editingCourseId = null;
 
-function abrirModalDisciplina(curso) {
-  cursoAtual = curso;
-  modalDisciplina.style.display = "flex";
-  atualizarListaDisciplinas();
-}
-
-function atualizarListaDisciplinas() {
-  listaDisciplinas.innerHTML = "";
-  cursoAtual.disciplinas.forEach(d => {
-    const div = document.createElement("div");
-    div.textContent = `${d.codigo} - ${d.nome}`;
-    listaDisciplinas.appendChild(div);
+// ======== MENU DO USUÁRIO ========
+if (userBtn && userMenu) {
+  userBtn.addEventListener('click', () => userMenu.classList.toggle('open'));
+  document.addEventListener('click', e => {
+    if (!userMenu.contains(e.target) && e.target !== userBtn) {
+      userMenu.classList.remove('open');
+    }
   });
 }
 
-document.getElementById("adicionarDisciplina").onclick = () => {
-  const nome = document.getElementById("nomeDisciplina").value.trim();
-  const codigo = document.getElementById("codigoDisciplina").value.trim();
-  if (!nome || !codigo) return alert("Preencha nome e código!");
-  cursoAtual.disciplinas.push({ nome, codigo });
-  atualizarListaDisciplinas();
-  document.getElementById("nomeDisciplina").value = "";
-  document.getElementById("codigoDisciplina").value = "";
-};
+// ======== MODAIS (abrir/fechar) ========
+if (btnCloseModalCurso) btnCloseModalCurso.onclick = () => modalCurso.style.display = "none";
+if (btnCloseModalDisciplina) btnCloseModalDisciplina.onclick = () => modalDisciplina.style.display = "none";
 
-// ======== REDIRECIONAMENTO DO MENU ========
+window.addEventListener("click", e => {
+  if (e.target === modalCurso) modalCurso.style.display = "none";
+  if (e.target === modalDisciplina) modalDisciplina.style.display = "none";
+  if (e.target === modalConfirmacao) modalConfirmacao.style.display = "none";
+});
+
+// ======== REDIRECIONAMENTO ========
 function redirecionar(botaoId, destino) {
   const botao = document.getElementById(botaoId);
-  if (botao) {
-    botao.addEventListener("click", () => {
-      window.location.href = destino;
-    });
-  }
+  if (botao) botao.addEventListener("click", () => window.location.href = destino);
 }
 
-// Mapeamento das páginas
-redirecionar("inicio", "../Pagina_Inicial/inicio.html");
-redirecionar("instituicao", "../Instituiçao_editar/instituicao2.html");
-redirecionar("cursos", "../cursos/cursos.html");
-redirecionar("turmas",);
-redirecionar("alunos", "../Pagina_alunos/alunos.html");
-redirecionar("atividades", "../Pagina_atividades/atividades.html");
-redirecionar("conta", "../Minha_Conta/minha_conta.html");
-redirecionar("sair", "../Login/login.html");
+// ======== RENDERIZAÇÃO ========
+function limparListaCursosDOM() {
+  listaCursosEl.innerHTML = "";
+}
+
+function criarCardDOM(curso) {
+  const card = document.createElement("div");
+  card.className = "curso-card";
+  card.dataset.id = curso.id;
+
+  const disciplinasText = (curso.disciplinas && curso.disciplinas.length > 0)
+    ? curso.disciplinas.map(d => d.nome).join(", ")
+    : "Nenhuma disciplina cadastrada";
+
+  card.innerHTML = `
+    <div class="card-top">${curso.nome.toUpperCase()}</div>
+    <div class="card-info">
+      <p><b>Código:</b> ${curso.codigo}</p>
+      <p><b>Disciplinas:</b> ${disciplinasText}</p>
+    </div>
+    <div class="card-botoes">
+      <button class="btn-alunos">Disciplinas</button>
+      <button class="btn-editar">Editar</button>
+      <button class="btn-excluir">Excluir</button>
+    </div>
+  `;
+
+  card.querySelector(".btn-alunos").addEventListener("click", (e) => {
+    e.stopPropagation();
+    abrirModalDisciplina(curso.id);
+  });
+
+  card.querySelector(".btn-editar").addEventListener("click", (e) => {
+    e.stopPropagation();
+    editarCurso(curso.id);
+  });
+
+  card.querySelector(".btn-excluir").addEventListener("click", (e) => {
+    e.stopPropagation();
+    confirmarExclusaoCurso(curso.id);
+  });
+
+  listaCursosEl.appendChild(card);
+}
+
+function renderCursos() {
+  limparListaCursosDOM();
+
+  if (cursos.length === 0) {
+    listaCursosEl.innerHTML = `
+      <div class="nada-cadastrado">
+        <p>NENHUM CURSO CADASTRADO AINDA...</p>
+        <img src="../images/imagem_alunos.png" 
+             alt="Nenhum curso cadastrado ainda." 
+             class="img-nada-cadastrado">
+      </div>
+    `;
+    return;
+  }
+
+  cursos.forEach(cr => criarCardDOM(cr));
+}
+
+// ======== CADASTRAR / EDITAR CURSO ========
+if (btnCadastroCurso) {
+  btnCadastroCurso.addEventListener("click", () => {
+    isEditing = false;
+    editingCourseId = null;
+    cursoAtual = null;
+    inputCodigoCurso.value = "";
+    inputNomeCurso.value = "";
+    modalCurso.style.display = "flex";
+  });
+}
+
+function editarCurso(id) {
+  const curso = cursos.find(c => c.id === id);
+  if (!curso) return alert("Curso não encontrado!");
+
+  isEditing = true;
+  editingCourseId = id;
+  cursoAtual = curso;
+  inputCodigoCurso.value = curso.codigo;
+  inputNomeCurso.value = curso.nome;
+  modalCurso.style.display = "flex";
+}
+
+if (btnSalvarCurso) {
+  btnSalvarCurso.addEventListener("click", () => {
+    const codigo = inputCodigoCurso.value.trim();
+    const nome = inputNomeCurso.value.trim();
+    
+
+    if (!codigo || !nome) {
+      alert("Preencha código e nome do curso!");
+      return;
+    }
+
+    if (isEditing && editingCourseId) {
+      const idx = cursos.findIndex(c => c.id === editingCourseId);
+      if (idx !== -1) {
+        cursos[idx].codigo = codigo;
+        cursos[idx].nome = nome;
+        salvarCursos(cursos);
+        renderCursos();
+      }
+      modalCurso.style.display = "none";
+      isEditing = false;
+      editingCourseId = null;
+      cursoAtual = null;
+      return;
+    }
+
+    const novoCurso = {
+      id: gerarId(),
+      codigo,
+      nome,
+      disciplinas: [],
+    };
+
+    cursos.push(novoCurso);
+    salvarCursos(cursos);
+    renderCursos();
+    modalCurso.style.display = "none";
+  });
+}
+
+// ======== ABRIR MODAL DISCIPLINA ========
+function abrirModalDisciplina(cursoId) {
+  const curso = cursos.find(c => c.id === cursoId);
+  if (!curso) return alert("Curso não encontrado.");
+  cursoAtual = curso;
+  atualizarListaDisciplinas();
+  modalDisciplina.style.display = "flex";
+}
+
+// ======== ATUALIZAR LISTA DE DISCIPLINAS ========
+function atualizarListaDisciplinas() {
+  listaDisciplinasEl.innerHTML = "";
+
+  if (!cursoAtual) {
+    listaDisciplinasEl.innerHTML = "<div class='sem-disciplinas'>Nenhum curso selecionado</div>";
+    return;
+  }
+
+  const arr = cursoAtual.disciplinas || [];
+  if (arr.length === 0) {
+    listaDisciplinasEl.innerHTML = "<div class='sem-disciplinas'>Nenhuma disciplina adicionada</div>";
+    return;
+  }
+
+  arr.forEach((d, idx) => {
+    const item = document.createElement("div");
+    item.className = "disc-item";
+    item.innerHTML = `
+      <span>${d.codigo} - ${d.nome}</span>
+      <div class="disc-buttons">
+        <button class="btn-edit" data-idx="${idx}">Editar</button>
+        <button class="btn-del" data-idx="${idx}">Excluir</button>
+      </div>
+    `;
+    item.querySelector(".btn-edit").addEventListener("click", (e) => {
+      e.stopPropagation();
+      editarDisciplina(idx);
+    });
+    item.querySelector(".btn-del").addEventListener("click", (e) => {
+      e.stopPropagation();
+      confirmarExclusao(idx);
+    });
+    listaDisciplinasEl.appendChild(item);
+  });
+}
+
+// ======== ADICIONAR DISCIPLINA ========
+if (btnAdicionarDisciplina) {
+  btnAdicionarDisciplina.addEventListener("click", () => {
+    if (!cursoAtual) return alert("Nenhum curso selecionado para adicionar disciplina.");
+    const nome = inputNomeDisciplina.value.trim();
+    const codigo = inputCodigoDisciplina.value.trim();
+
+    if (!nome || !codigo) return alert("Preencha nome e código da disciplina!");
+
+    if (!Array.isArray(cursoAtual.disciplinas)) cursoAtual.disciplinas = [];
+
+    cursoAtual.disciplinas.push({ nome, codigo });
+    const idx = cursos.findIndex(c => c.id === cursoAtual.id);
+    if (idx !== -1) {
+      cursos[idx] = cursoAtual;
+      salvarCursos(cursos);
+    }
+
+    atualizarListaDisciplinas();
+    renderCursos();
+    inputNomeDisciplina.value = "";
+    inputCodigoDisciplina.value = "";
+  });
+}
+
+// ======== EDITAR DISCIPLINA ========
+function editarDisciplina(index) {
+  if (!cursoAtual) return;
+  const disc = cursoAtual.disciplinas[index];
+  if (!disc) return;
+
+  inputNomeDisciplina.value = disc.nome;
+  inputCodigoDisciplina.value = disc.codigo;
+  cursoAtual.disciplinas.splice(index, 1);
+
+  const idx = cursos.findIndex(c => c.id === cursoAtual.id);
+  if (idx !== -1) {
+    cursos[idx] = cursoAtual;
+    salvarCursos(cursos);
+  }
+  atualizarListaDisciplinas();
+  renderCursos();
+}
+
+// ======== EXCLUIR DISCIPLINA ========
+function confirmarExclusao(index) {
+  indexParaExcluir = index;
+  modalConfirmacao.style.display = "flex";
+}
+
+if (btnConfirmSim) {
+  btnConfirmSim.addEventListener("click", () => {
+    if (cursoAtual && typeof indexParaExcluir === "number") {
+      cursoAtual.disciplinas.splice(indexParaExcluir, 1);
+      const idx = cursos.findIndex(c => c.id === cursoAtual.id);
+      if (idx !== -1) {
+        cursos[idx] = cursoAtual;
+        salvarCursos(cursos);
+      }
+      atualizarListaDisciplinas();
+      renderCursos();
+    }
+    modalConfirmacao.style.display = "none";
+    indexParaExcluir = null;
+  });
+}
+
+if (btnConfirmNao) {
+  btnConfirmNao.addEventListener("click", () => {
+    modalConfirmacao.style.display = "none";
+    indexParaExcluir = null;
+  });
+}
+
+// ======== EXCLUIR CURSO ========
+function confirmarExclusaoCurso(id) {
+  cursoAtual = cursos.find(c => c.id === id);
+  if (!cursoAtual) return;
+  modalConfirmacao.style.display = "flex";
+  btnConfirmSim.onclick = () => {
+    excluirCursoPorId(id);
+    modalConfirmacao.style.display = "none";
+  };
+  btnConfirmNao.onclick = () => {
+    modalConfirmacao.style.display = "none";
+  };
+}
+
+function excluirCursoPorId(id) {
+  cursos = cursos.filter(c => c.id !== id);
+  salvarCursos(cursos);
+  renderCursos();
+}
 
 // ======== DESTACAR PÁGINA ATUAL ========
 const paginaAtual = "cursos";
 const botaoAtivo = document.getElementById(paginaAtual);
 if (botaoAtivo) botaoAtivo.classList.add("active");
+
+// ======== INICIALIZAÇÃO ========
+renderCursos();
+
+// ======== REDIRECIONAMENTO ========
+redirecionar("inicio", "../Pagina_Inicial/inicio.html");
+redirecionar("instituicao", "../Instituiçao_editar/instituicao2.html");
+redirecionar("cursos", "../cursos/cursos.html");
+redirecionar("turmas", "../pagina_turmas/turma.html");
+redirecionar("alunos", "../Pagina_alunos/alunos.html");
+redirecionar("atividades", "../Pagina_atividades/atividades.html");
+redirecionar("conta", "../Minha_Conta/minha_conta.html");
+redirecionar("sair", "../Login/login.html");
+redirecionar("trocar-inst", "../Instituição_cadastro/instituição.html");

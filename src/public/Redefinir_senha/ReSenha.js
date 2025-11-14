@@ -13,8 +13,8 @@ document.addEventListener('DOMContentLoaded', function(){
 function enviarEmail() {
   const email = document.getElementById("email").value;
 
-  // 🔹 Link fixo da página de redefinição
-  const resetLink = "https://seudominio.com/Redefinir_senha/ReSenha.html";
+  // Link fixo da página de redefinição
+  const resetLink = "http://localhost:3000/Redefinir_senha/Nova_senha.html";
 
   const templateParams = {
     user_name: email.split("@")[0],
@@ -24,10 +24,33 @@ function enviarEmail() {
 
   emailjs.send("service_pxhts6a", "template_5psqc3v", templateParams)
     .then(() => {
-      alert("E-mail de recuperação enviado com sucesso!");
+      mostrarSucesso();
     })
     .catch((error) => {
       console.error("Erro:", error);
-      alert("Erro ao enviar e-mail. Veja o console.");
+      mostrarErro();
     });
 }
+function mostrarSucesso() {
+        const overlay = document.createElement("div");
+        overlay.className = "overlay-sucesso";
+        overlay.style.transition = "opacity 1s";
+        overlay.innerHTML = `
+            <div class="caixa-sucesso">
+                <img src="icone_NotaDez.png" alt="Sucesso" class="icone-sucesso">
+                <p>Email enviado com sucesso!</p>
+            </div>
+        `;
+        document.body.appendChild(overlay);}
+
+function mostrarErro() {
+        const overlay = document.createElement("div");
+        overlay.className = "overlay-sucesso";
+        overlay.style.transition = "opacity 1s";
+        overlay.innerHTML = `
+            <div class="caixa-sucesso">
+                <img src="icone_NotaDez.png" alt="Sucesso" class="icone-sucesso">
+                <p>Erro ao enviar o email!</p>
+            </div>
+        `;
+        document.body.appendChild(overlay);}
