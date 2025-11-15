@@ -1,17 +1,22 @@
 /* ALUNO: SARA FERNANDES MONTEIRO || RA: 25024107 */
 
 @media (min-width: 1600px) {
-  html { zoom: 1.25; }
+  html {
+    zoom: 1.25;
+  }
 }
+
 @media (max-width: 1200px) {
-  html { zoom: 1.5; }
+  html {
+    zoom: 1.5;
+  }
 }
 
 
 body {
-    font-family: comfortaa;
-    font-size: 11px;
-    background-color: #f6f6f6;
+  font-family: comfortaa;
+  font-size: 11px;
+  background-color: #f6f6f6;
 }
 
 
@@ -19,266 +24,286 @@ body {
 /* ----------------BARRA LATERAL ---------------*/
 
 .sidebar {
-    position: fixed;                                 /*FIXAR NA LATERAL*/
-    top: 50px;
-    left: 0;
-    width: 130px;
-    height: 100vh;
-    background-color: white;
-    padding: 10px;
-    border-right: 1px solid #ccc;                  /* LINHA DE DIVISAO */
-    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);       /* sombra na borda direita */
+  position: fixed;
+  /*FIXAR NA LATERAL*/
+  top: 50px;
+  left: 0;
+  width: 130px;
+  height: 100vh;
+  background-color: white;
+  padding: 10px;
+  border-right: 1px solid #ccc;
+  /* LINHA DE DIVISAO */
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
+  /* sombra na borda direita */
 
 }
 
 .sidebar ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .sidebar li {
-    margin: 15px 0;
-    font-weight: bold;
+  margin: 15px 0;
+  font-weight: bold;
 
 }
 
 .sidebar a {
-    text-decoration: none;
-    color: #1e87a3;
-    display: block;
-    padding: 10px;
-    border-radius: 50px;
-    transition: background 0.3s;
-    font-size: 10px;
+  text-decoration: none;
+  color: #1e87a3;
+  display: block;
+  padding: 10px;
+  border-radius: 50px;
+  transition: background 0.3s;
+  font-size: 10px;
 
 }
 
 .sidebar a:hover {
-    background-color: #86d1e6;
-    color: white;
-    border-radius: 50px;
+  background-color: #86d1e6;
+  color: white;
+  border-radius: 50px;
 }
 
 .sidebar a.active {
-    background-color: #1e87a3;
-    color: white;
+  background-color: #1e87a3;
+  color: white;
 }
 
 
 /* ----------------BARRA SUPERIOR ---------------*/
 
 .topbar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 50px;
-    background-color: white;
-    border-bottom: 1px solid #ccc;
-    display: flex;                                     /*COLOCA OS ITENS LADO A LADO*/
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);       /* sombra na borda direita */
-    align-items: center;
-    z-index: 2000; /* Aqui o valor alto */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50px;
+  background-color: white;
+  border-bottom: 1px solid #ccc;
+  display: flex;
+  /*COLOCA OS ITENS LADO A LADO*/
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  /* sombra na borda direita */
+  align-items: center;
+  z-index: 2000;
+  /* Aqui o valor alto */
 
 
 }
 
 /* LOGO */
 .logo-area {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .logo {
-    height: 50px;
+  height: 50px;
 }
 
 /* INSTITUIÇÃO*/
 .faculdade-area {
-    position: absolute;
-    top: 50%;                                           /* ajuste pra centralizar na topbar se quiser */
-    left: 50%;
-    transform: translate(-50%, -50%);
-    display: flex;
-    align-items: center;
-    gap: 10px;                                          /* espaço entre texto e caixa */
+  position: absolute;
+  top: 50%;
+  /* ajuste pra centralizar na topbar se quiser */
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  /* espaço entre texto e caixa */
 }
 
 /* caixa arredondada no centro */
 .faculdade-box {
-    position: relative; /* permite posicionar o ícone dentro */
-    display: flex;                                                                                             
-    align-items: center;
-    justify-content: center; /* centraliza o texto */
-    background: white;
-    border-radius: 50px;
-    padding: 8px 40px; /* espaço maior pros lados */
-    border: 1px solid #25e4d1;
-    font-weight: bold;
-    font-size: 15px;
-    color: #00576f;
-    box-shadow: 0 0 3px #25e4d1;
-    width: 400px;
+  position: relative;
+  /* permite posicionar o ícone dentro */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* centraliza o texto */
+  background: white;
+  border-radius: 50px;
+  padding: 8px 40px;
+  /* espaço maior pros lados */
+  border: 1px solid #25e4d1;
+  font-weight: bold;
+  font-size: 15px;
+  color: #00576f;
+  box-shadow: 0 0 3px #25e4d1;
+  width: 400px;
 }
 
 .instituicao-icon {
-    position: absolute; 
-    left: 12px; /* deixa o ícone colado à esquerda */
-    top: 50%;
-    transform: translateY(-50%); /* centraliza verticalmente */
-    width: 18px;
-    height: 18px;
+  position: absolute;
+  left: 12px;
+  /* deixa o ícone colado à esquerda */
+  top: 50%;
+  transform: translateY(-50%);
+  /* centraliza verticalmente */
+  width: 18px;
+  height: 18px;
 }
 
 
 .texto-local {
-    font-weight: 500;
-    color: #000000;
-    font-size: 14px;
+  font-weight: 500;
+  color: #000000;
+  font-size: 14px;
 }
 
 /* MINHA CONTA */
 
 .user-menu {
-    position: absolute;
-    right: 25px;   /* distância da borda direita */
-    top: 50%;
-    transform: translateY(-50%);
-    display: flex;
-    align-items: center;
-    gap: 10px; /* espaço entre ícone e texto */
-    font-weight: bold;
+  position: absolute;
+  right: 25px;
+  /* distância da borda direita */
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  /* espaço entre ícone e texto */
+  font-weight: bold;
 }
 
 /* ícone */
 .pessoa-icon {
-    width: 18px;
-    height: 18px;
+  width: 18px;
+  height: 18px;
 }
 
 /* botão de clique/hover */
 .user-btn {
-    font-weight: 600;
-    cursor: pointer;
+  font-weight: 600;
+  cursor: pointer;
 }
 
 /* menu suspenso */
 
 .dropdown {
-    position: absolute;
-    top: 23px;
-    right: 0;
-    background: white;
-    border: 1px solid #cccccc;
-    border-radius: 0 0 10px 10px;
-    box-shadow: 0 0 6px rgba(0,0,0,.15);
-    list-style: none;
-    padding: 5px 10px;
-    width: 150px;
+  position: absolute;
+  top: 23px;
+  right: 0;
+  background: white;
+  border: 1px solid #cccccc;
+  border-radius: 0 0 10px 10px;
+  box-shadow: 0 0 6px rgba(0, 0, 0, .15);
+  list-style: none;
+  padding: 5px 10px;
+  width: 150px;
 
-    /* animação */
-    opacity: 0;
-    transform: translateY(-8px);
-    pointer-events: none;
-    transition: opacity 0.2s ease, transform 0.2s ease;
+  /* animação */
+  opacity: 0;
+  transform: translateY(-8px);
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
 /* itens */
 .dropdown li {
-    width: 100%;
+  width: 100%;
 }
 
 .dropdown a {
-    position: relative;      /* ✅ necessário p/ o ícone absolute */
-    text-decoration: none;
-    color: #000000;
-    display: block;
-    padding: 10px;
-    padding-left: 35px;      /* espaço para o ícone */
-    border-radius: 50px;
-    transition: background 0.3s;
-    font-size: 10px;
+  position: relative;
+  /* ✅ necessário p/ o ícone absolute */
+  text-decoration: none;
+  color: #000000;
+  display: block;
+  padding: 10px;
+  padding-left: 35px;
+  /* espaço para o ícone */
+  border-radius: 50px;
+  transition: background 0.3s;
+  font-size: 10px;
 }
 
 
 .dropdown a:hover {
-    color: #1e87a3;
-    border-radius: 50px;
+  color: #1e87a3;
+  border-radius: 50px;
 }
 
 /* MOSTRAR menu ao passar mouse */
 .user-menu.open .dropdown {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
 }
 
 .dropdown p {
-    font-size: 9px;
-    color: #414141;
+  font-size: 9px;
+  color: #414141;
 }
 
 
 .minha-conta-icon {
-    position: absolute; 
-    left: 12px;
-    top: 50%;                
-    transform: translateY(-50%);
-    width: 15px;
-    height: 15px;
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 15px;
+  height: 15px;
 }
 
 .pagina-atual {
-    margin-top: 75px;
-    margin-left: 175px;
-    margin-right: 50px;
-    margin-bottom: 30px;
+  margin-top: 75px;
+  margin-left: 175px;
+  margin-right: 50px;
+  margin-bottom: 30px;
 }
+
 .pagina-ref {
-    display: inline-block;
-    font-size: 30px;  
-    color:#1e87a3; 
-    text-decoration: none;
-    margin-bottom: 30px;
-    font-weight: bold;
+  display: inline-block;
+  font-size: 30px;
+  color: #1e87a3;
+  text-decoration: none;
+  margin-bottom: 30px;
+  font-weight: bold;
 }
 
 /*-------------------BOTOES----------------------*/
 
 .botoes {
-    gap: 10px;
-    display: flex;
+  gap: 10px;
+  display: flex;
 
 }
 
 button {
-    padding: 9px 14px;
-    border: none;
-    border-radius: 50px;
-    background-color:#1e87a3;
-    color:white;
-    cursor: pointer;
-    transition: background-color 0.25s ease;
-    display: inline-block;
-    font-weight: bold;
-    width: 200px;
-    font-family: comfortaa;
+  padding: 9px 14px;
+  border: none;
+  border-radius: 50px;
+  background-color: #1e87a3;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.25s ease;
+  display: inline-block;
+  font-weight: bold;
+  width: 200px;
+  font-family: comfortaa;
 }
 
 button:hover {
-    background-color:#1d6f86 ;
+  background-color: #1d6f86;
 }
 
 .container-turmas {
   width: 100%;
   margin-top: 40px;
   padding: 10px;
-  height: auto;          /* ou remova para crescer conforme conteúdo */
+  height: auto;
+  /* ou remova para crescer conforme conteúdo */
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;       /* <---- importante para quebrar linha */
+  flex-wrap: wrap;
+  /* <---- importante para quebrar linha */
   justify-content: flex-start;
   align-items: flex-start;
   gap: 20px;
@@ -302,9 +327,9 @@ button:hover {
 }
 
 .nada-cadastrado p {
-    margin-top: 0;
-    font-size: 20px;
-    font-weight: bold;
+  margin-top: 0;
+  font-size: 20px;
+  font-weight: bold;
 }
 
 /*--------------JANELA MODAL-------------------*/
@@ -317,7 +342,7 @@ button:hover {
   inset: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.4);
+  background: rgba(0, 0, 0, 0.4);
   align-items: center;
   justify-content: center;
   font-weight: bold;
@@ -335,7 +360,8 @@ button:hover {
 }
 
 .fechar {
-  all: unset; /* remove qualquer estilo herdado */
+  all: unset;
+  /* remove qualquer estilo herdado */
   position: absolute;
   top: 15px;
   right: 20px;
@@ -351,7 +377,7 @@ button:hover {
 
 /* Título */
 .janela-modal h2 {
-  color:#1e87a3;
+  color: #1e87a3;
   margin-bottom: 25px;
   font-size: 18px;
 }
@@ -412,7 +438,7 @@ button:hover {
 }
 
 /* 🔹 E também colore a label quando o campo tem valor */
-.grupo-input input:not(:placeholder-shown) + label {
+.grupo-input input:not(:placeholder-shown)+label {
   color: #25e4d1;
 }
 
@@ -428,7 +454,8 @@ button:hover {
 .grupo-select label {
   position: absolute;
   left: 18px;
-  top: -4px; /* bem rente à borda */
+  top: -4px;
+  /* bem rente à borda */
   font-size: 10px;
   background-color: #fff;
   color: #a5a5a5;
@@ -438,7 +465,8 @@ button:hover {
   pointer-events: none;
   transition: 0.3s ease all;
 
-  z-index: 10; /* 🔧 NOVO → garante que a label fica acima do select */
+  z-index: 10;
+  /* 🔧 NOVO → garante que a label fica acima do select */
 }
 
 /* Select estilizado */
@@ -455,10 +483,12 @@ button:hover {
   appearance: none;
   transition: 0.3s ease all;
 
-  position: relative; /* 🔧 NOVO → necessário pro z-index funcionar */
-  z-index: 1;          /* 🔧 NOVO → faz o select ficar abaixo da label */
+  position: relative;
+  /* 🔧 NOVO → necessário pro z-index funcionar */
+  z-index: 1;
+  /* 🔧 NOVO → faz o select ficar abaixo da label */
 
-    /* seta personalizada */
+  /* seta personalizada */
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3E%3Cpath fill='%231e87a3' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 18px center;
@@ -474,20 +504,23 @@ select:disabled {
 }
 
 /* deixa a LABEL cinza quando o select estiver desabilitado */
-select:disabled + label,
+select:disabled+label,
 .grupo-select label.desabilitada {
   color: #999 !important;
 }
 
 .grupo-select select:focus {
-  outline: none !important; /* tira o contorno preto */
-  box-shadow: 0 0 0 0 transparent !important; /* garante */
+  outline: none !important;
+  /* tira o contorno preto */
+  box-shadow: 0 0 0 0 transparent !important;
+  /* garante */
 }
 
 /* Quando QUALQUER opção que não seja a primeira estiver selecionada */
 .grupo-select:has(select option:checked:not(:first-child)) select {
   border-color: #25e4d1 !important;
-  color: black !important; /* 🔥 texto continua preto */
+  color: black !important;
+  /* 🔥 texto continua preto */
 }
 
 
@@ -506,7 +539,7 @@ select:disabled + label,
   position: relative;
   background: white;
   border-radius: 20px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 15px;
   margin-bottom: 15px;
   width: 170px;
@@ -516,20 +549,23 @@ select:disabled + label,
 }
 
 .card-turma h3 {
-  background-color: #25e4d1; /* 💙 faixa azul */
+  background-color: #25e4d1;
+  /* 💙 faixa azul */
   color: white;
   font-family: Comfortaa;
   font-size: 15px;
   font-weight: bold;
   text-align: center;
   padding: 15px 0;
-  border-radius: 12px 12px 0 0; /* arredonda só em cima */
-  margin: -15px -15px 10px -15px; /* expande até as bordas do card */
+  border-radius: 12px 12px 0 0;
+  /* arredonda só em cima */
+  margin: -15px -15px 10px -15px;
+  /* expande até as bordas do card */
 }
 
 .card-turma:hover {
   transform: translateY(-3px);
-  box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
 }
 
 .card-turma:empty {
@@ -543,9 +579,11 @@ select:disabled + label,
   position: absolute;
   bottom: 10px;
   left: 10px;
-  width: calc(100% - 20px); /* agora encaixa dentro do card perfeitamente */
+  width: calc(100% - 20px);
+  /* agora encaixa dentro do card perfeitamente */
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* duas colunas */
+  grid-template-columns: repeat(2, 1fr);
+  /* duas colunas */
   gap: 6px;
 }
 
@@ -560,7 +598,8 @@ select:disabled + label,
   color: white;
   cursor: pointer;
   transition: 0.3s ease all;
-  width: 100%;     /* AJUSTA o tamanho certinho */
+  width: 100%;
+  /* AJUSTA o tamanho certinho */
   box-sizing: border-box;
 }
 
@@ -568,6 +607,7 @@ select:disabled + label,
 .btn-card.adicionar {
   background-color: #25e4d1;
 }
+
 .btn-card.adicionar:hover {
   background-color: #1eb7a8;
 }
@@ -575,6 +615,7 @@ select:disabled + label,
 .btn-card.editar {
   background-color: #ffb347;
 }
+
 .btn-card.editar:hover {
   background-color: #e29b30;
 }
@@ -582,6 +623,7 @@ select:disabled + label,
 .btn-card.excluir {
   background-color: #ff6b6b;
 }
+
 .btn-card.excluir:hover {
   background-color: #d9534f;
 }
@@ -589,6 +631,7 @@ select:disabled + label,
 .btn-card.notas {
   background-color: #8b65ff;
 }
+
 .btn-card.notas:hover {
   background-color: #6F46E6;
 }
@@ -596,32 +639,39 @@ select:disabled + label,
 /*===============================================MODAL ALUNOS / TABELA ALUNOS ====================================================*/
 
 .lista-alunos-container {
-  max-height: 200px; /* altura máxima com scroll vertical */
+  max-height: 200px;
+  /* altura máxima com scroll vertical */
   overflow-y: auto;
   background-color: white;
   padding: 0;
   font-family: 'Comfortaa', sans-serif;
   font-size: 10px;
-  width: 100%; /* para container ocupar largura do pai */
+  width: 100%;
+  /* para container ocupar largura do pai */
   box-sizing: border-box;
 
 
 }
 
 .lista-alunos {
-  width: 100%; /* ocupa 100% do container */
+  width: 100%;
+  /* ocupa 100% do container */
   border-collapse: collapse;
-  table-layout: fixed; /* fixa larguras das colunas */
+  table-layout: fixed;
+  /* fixa larguras das colunas */
   text-align: center;
-  white-space: nowrap; /* evita quebra dentro das células */
+  white-space: nowrap;
+  /* evita quebra dentro das células */
 }
 
 .lista-alunos th,
 .lista-alunos td {
   padding: 8px 10px;
   border-bottom: 1px solid #ddd;
-  overflow: hidden; /* esconde overflow */
-  text-overflow: ellipsis; /* mostra "..." se texto muito longo */
+  overflow: hidden;
+  /* esconde overflow */
+  text-overflow: ellipsis;
+  /* mostra "..." se texto muito longo */
 }
 
 .lista-alunos th {
@@ -633,19 +683,22 @@ select:disabled + label,
 }
 
 /* Define larguras das colunas */
-.lista-alunos th:first-child, 
+.lista-alunos th:first-child,
 .lista-alunos td:first-child {
-  width: 15%; /* RA */
+  width: 15%;
+  /* RA */
 }
 
 .lista-alunos th:nth-child(2),
 .lista-alunos td:nth-child(2) {
-  width: 50%; /* Nome completo */
+  width: 50%;
+  /* Nome completo */
 }
 
 .lista-alunos th:last-child,
 .lista-alunos td:last-child {
-  width: 10%; /* Ações */
+  width: 10%;
+  /* Ações */
 }
 
 .lista-alunos th:first-child {
@@ -691,8 +744,10 @@ select:disabled + label,
 
 .botoes-acoes {
   display: flex;
-  flex-direction: column; /* empilha verticalmente */
-  gap: 5px; /* espaço entre os botões */
+  flex-direction: column;
+  /* empilha verticalmente */
+  gap: 5px;
+  /* espaço entre os botões */
   align-items: center;
 }
 
@@ -701,15 +756,17 @@ select:disabled + label,
 /*=============================================================================================================*/
 
 #modal-notas {
-  display: none; /* escondido por padrão */
+  display: none;
+  /* escondido por padrão */
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.4);
+  background: rgba(0, 0, 0, 0.4);
   z-index: 1000;
   justify-content: center;
   align-items: center;
-  padding-top: 50px;
-  overflow: hidden; /* evita scroll na página */
+  padding-top: 30px;
+  overflow: hidden;
+  /* evita scroll na página */
 }
 
 
@@ -720,14 +777,18 @@ select:disabled + label,
 
   width: 80%;
   max-width: 800px;
-  max-height: calc(100vh - 80px); /* margem superior/inferior */
+  max-height: calc(100vh - 80px);
+  /* margem superior/inferior */
 
   position: relative;
   text-align: center;
 
-  overflow-y: auto; /* scroll interno só aqui */
-  margin-bottom: 40px; /* margem embaixo dentro do modal */
+  overflow-y: auto;
+  /* scroll interno */
+  box-sizing: border-box;
+  /* ESSENCIAL para o padding não estourar a altura */
 }
+
 
 
 #atividades-modal {
@@ -739,7 +800,7 @@ select:disabled + label,
 }
 
 #atividades-modal:hover {
-  color:#1e87a3;
+  color: #1e87a3;
 
 }
 
@@ -751,7 +812,7 @@ select:disabled + label,
 /* ===================== TABELA DE NOTAS ====================== */
 
 .tabela-notas-container {
-  max-height: 350px;          
+  max-height: 250px;
   overflow-y: auto;
   background-color: white;
   padding: 0;
@@ -790,6 +851,7 @@ select:disabled + label,
 .tabela-notas th:first-child {
   border-top-left-radius: 15px;
 }
+
 .tabela-notas th:last-child {
   border-top-right-radius: 15px;
 }
@@ -828,11 +890,12 @@ select:disabled + label,
 /* hover na linha */
 .tabela-notas tr:hover {
   background-color: #f0f8f9;
-  
+
 }
 
 .col-nota {
-  width: 50px;          /* por exemplo */
+  width: 50px;
+  /* por exemplo */
   max-width: 50px;
   padding: 2px 5px;
   text-align: center;
@@ -851,7 +914,8 @@ select:disabled + label,
   border: 1px solid #ccc;
   background-color: #f9f9f9;
   border-radius: 3px;
-  pointer-events: none; /* readonly visual */
+  pointer-events: none;
+  /* readonly visual */
 }
 
 
@@ -866,6 +930,173 @@ select:disabled + label,
 
 /* Penúltima coluna .col-nota no cabeçalho: borda direita branca grossa e borda arredondada topo direito */
 .tabela-notas th.col-nota:nth-last-of-type(2) {
-  border-top-right-radius: 15px;      /* canto arredondado topo direito */
+  border-top-right-radius: 15px;
+  /* canto arredondado topo direito */
 }
 
+/* =============================================
+   SISTEMA DE CÁLCULO DE NOTAS - COMPACTO
+   ============================================= */
+
+.sistema-calculo {
+  margin: 10px 0 15px 0;
+  padding: 8px 12px;
+  background-color: #f5f5f5;
+  border-radius: 10px;
+  width: 320px;
+  /* AGORA FICA PEQUENO */
+  text-align: left;
+}
+
+/* Select do tipo de média */
+.grupo-select-calculo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.grupo-select-calculo label {
+  font-family: Comfortaa;
+  font-size: 10px;
+  font-weight: bold;
+  color: #00576f;
+}
+
+.grupo-select-calculo select {
+  padding: 6px 10px;
+  border-radius: 10px;
+  border: 1px solid #419cb6;
+  font-family: Comfortaa;
+  font-size: 10px;
+  color: #00576f;
+  background-color: white;
+  appearance: none;
+  background-image: none;
+}
+
+/* Container dos pesos (bem menor agora) */
+.container-pesos {
+  margin-top: 10px;
+  padding: 12px;
+  background-color: white;
+  border-radius: 10px;
+  border: 1px solid #25e4d1;
+  width: 300px;
+}
+
+.container-pesos h3 {
+  font-size: 11px;
+  font-weight: bold;
+  color: #419cb6;
+  margin-bottom: 10px;
+}
+
+/* Wrapper com scroll */
+.tabela-pesos-wrapper {
+  max-height: 150px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+/* Lista de pesos */
+.lista-pesos {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Item individual (bem menor) */
+.item-peso {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #eef7f8;
+  padding: 6px 10px;
+  border-radius: 10px;
+}
+
+.item-peso label {
+  font-family: Comfortaa;
+  font-size: 10px;
+  font-weight: bold;
+  color: #00576f;
+}
+
+/* Input menor */
+.input-peso {
+  width: 45px !important;
+  height: 26px;
+  font-size: 12px;
+  border: 1px solid #419cb6;
+  border-radius: 8px;
+  text-align: center;
+}
+
+/* Botões pequenos */
+.btn-pequeno {
+  padding: 4px 10px;
+  border-radius: 50px;
+  font-size: 9px;
+  font-family: Comfortaa;
+  color: white;
+  cursor: pointer;
+  width: 150px;
+  /* menor */
+  margin-top: 6px;
+  margin-left: 0;
+  text-align: center;
+}
+
+
+.btn-salvar {
+  background-color: #25e4d1;
+}
+
+.btn-editar {
+  background-color: #ffb347;
+}
+
+.btn-salvar:hover {
+  background-color: #04b09f;
+}
+
+.btn-editar:hover {
+  background-color: #c97f17;
+}
+
+.oculto {
+  display: none;
+}
+
+
+/* Linha que organiza sistema de cálculo + botão exportar lado a lado */
+.acoes-notas {
+  display: flex;
+  align-items: flex-start;
+  gap: 150px;
+  /* espaço entre eles */
+  margin-bottom: 10px;
+}
+
+#btn-exportar-notas {
+  font-family: Comfortaa;
+  font-size: 10px;
+  padding: 6px 12px;
+  cursor: pointer;
+  margin-top: 5px;
+}
+
+/*==============IMPORAR ALUNOS VIA CSV.================================================*/
+
+#modal-importar-alunos {
+  display: none; /* escondido por padrão */
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+  padding-top: 50px;
+  overflow: hidden; /* evita scroll na página */
+}

@@ -2,24 +2,24 @@ const userMenu = document.querySelector('.user-menu');
 const userBtn = document.querySelector('#user-btn');
 
 userBtn.addEventListener('click', () => {
-    userMenu.classList.toggle('open');
+  userMenu.classList.toggle('open');
 });
 
 // FECHAR SE CLICAR FORA
 document.addEventListener('click', (e) => {
-    if (!userMenu.contains(e.target)) {
-        userMenu.classList.remove('open');
-    }
+  if (!userMenu.contains(e.target)) {
+    userMenu.classList.remove('open');
+  }
 });
 
 function redirecionar(id, destino) {
-    const elemento = document.getElementById(id);
-    if (elemento) {
-        elemento.addEventListener('click', (e) => {
-            e.preventDefault(); // impede recarregar a página com o #
-            window.location.href = destino;
-        });
-    }
+  const elemento = document.getElementById(id);
+  if (elemento) {
+    elemento.addEventListener('click', (e) => {
+      e.preventDefault(); // impede recarregar a página com o #
+      window.location.href = destino;
+    });
+  }
 }
 
 // ===============================
@@ -44,6 +44,8 @@ function configurarModal(botaoId, modalId) {
 
 // chamar (verifique que os ids existem no HTML)
 configurarModal("cadastro-turma", "modal-turma");
+configurarModal("import-aluno", "modal-importar-alunos");
+
 
 // ===============================
 // ELEMENTOS PRINCIPAIS (safe-get)
@@ -258,26 +260,26 @@ function criarCardTurma(turma) {
 
   // dentro de criarCardTurma(turma)...
 
-// BOTÃO NOTAS — abre o modal de notas para a turma correta (usa id)
-const btnNotas = card.querySelector(".notas");
-if (btnNotas) {
-  btnNotas.addEventListener("click", (e) => {
-    e.stopPropagation();
+  // BOTÃO NOTAS — abre o modal de notas para a turma correta (usa id)
+  const btnNotas = card.querySelector(".notas");
+  if (btnNotas) {
+    btnNotas.addEventListener("click", (e) => {
+      e.stopPropagation();
 
-    if (typeof abrirModalNotas === "function") {
-      abrirModalNotas(turma.id);
-    } else {
-      // fallback, caso não tenha a função abrirModalNotas implementada
-      turmaSelecionada = turma;
-      if (typeof atualizarListaNotas === "function") {
-        atualizarListaNotas();
+      if (typeof abrirModalNotas === "function") {
+        abrirModalNotas(turma.id);
+      } else {
+        // fallback, caso não tenha a função abrirModalNotas implementada
+        turmaSelecionada = turma;
+        if (typeof atualizarListaNotas === "function") {
+          atualizarListaNotas();
+        }
+        if (typeof modalNotas !== "undefined" && modalNotas) {
+          modalNotas.style.display = "flex";
+        }
       }
-      if (typeof modalNotas !== "undefined" && modalNotas) {
-        modalNotas.style.display = "flex";
-      }
-    }
-  });
-}
+    });
+  }
 
 
   return card;
@@ -660,7 +662,7 @@ window.addEventListener('click', (e) => {
 
 // elementos da modal (certifique-se que IDs existam no HTML)
 const modalNotas = document.getElementById("modal-notas");
-  if (modalNotas) modalNotas.style.display = "none";
+if (modalNotas) modalNotas.style.display = "none";
 const fecharModalNotas = document.getElementById("fecharModalNotas");
 const conteudoNotas = document.getElementById("conteudoNotas");
 
@@ -675,7 +677,10 @@ function _norm(v) {
 }
 
 // Abre modal de notas para a turmaId (id interno da turma)
+let turmaAtualNotasId = null; // coloque no topo
+
 function abrirModalNotas(turmaId) {
+  turmaAtualNotasId = turmaId;
   // abrir modal mesmo que conteúdo mostre aviso (visual)
   if (modalNotas) modalNotas.style.display = "flex";
 
@@ -722,7 +727,7 @@ function abrirModalNotas(turmaId) {
     const cDiscCode = _norm(c.disciplinaCodigo || "");
     // corresponde por nome ou por código (robusto)
     return (cDisc && (cDisc === discNomeTurma || cDisc === discCodigoTurma))
-        || (cDiscCode && (cDiscCode === discCodigoTurma || cDiscCode === discNomeTurma));
+      || (cDiscCode && (cDiscCode === discCodigoTurma || cDiscCode === discNomeTurma));
   });
 
   // se não há componentes para essa disciplina -> mensagem e link
@@ -752,8 +757,10 @@ function abrirModalNotas(turmaId) {
   `;
 
   componentesDaDisciplina.forEach(comp => {
-    const titulo = comp.sigla ? comp.sigla : (comp.nome ? comp.nome.slice(0,6) : "ATV");
+    const titulo = comp.sigla ? comp.sigla : (comp.nome ? comp.nome.slice(0, 6) : "ATV");
+    carregarPesosParaTurma(turma, componentesDaDisciplina);
     html += `<th class="col-nota" title="${comp.nome || ''}">${titulo}</th>`;
+
   });
 
 
@@ -776,7 +783,7 @@ function abrirModalNotas(turmaId) {
           Nenhum aluno cadastrado nesta turma.
         </td>
       </tr>`;
-  } 
+  }
   else {
     alunos.forEach(aluno => {
       const ra = aluno.ra || "";
@@ -790,7 +797,7 @@ function abrirModalNotas(turmaId) {
         const notaSalva =
           turma.notas?.[ra]?.[comp.sigla] ?? "";
 
-      html += `
+        html += `
         <td class="col-nota">
           <input class="nota-input" type="text" value="${notaSalva}" readonly>
         </td>
@@ -840,184 +847,179 @@ window.addEventListener("click", (e) => {
 
 
 
-/////////////////////////////////////PESOS//////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// Variável global para armazenar a turma atual do modal de notas
-let turmaAtualNotasId = null;
+// =====================================================================
+//       SISTEMA DE PESOS — VERSÃO FINAL E FUNCIONAL
+// =====================================================================
 
-// Elementos do sistema de pesos
-const selectTipoMedia = document.getElementById('tipo-media');
-const containerPesos = document.getElementById('container-pesos');
-const listaPesos = document.getElementById('lista-pesos');
-const btnSalvarPesos = document.getElementById('btn-salvar-pesos');
-const btnMostrarPesos = document.getElementById('btn-mostrar-pesos');
+// elementos da interface
+const tipoMedia = document.getElementById("tipo-media");
+const containerPesos = document.getElementById("container-pesos");
+const listaPesos = document.getElementById("lista-pesos");
+const btnSalvarPesos = document.getElementById("btn-salvar-pesos");
+const btnMostrarPesos = document.getElementById("btn-mostrar-pesos");
 
-// Listener para mudança no tipo de média
-if (selectTipoMedia) {
-  selectTipoMedia.addEventListener('change', (e) => {
-    const tipoSelecionado = e.target.value;
-    
-    if (tipoSelecionado === 'ponderada') {
-      // Mostrar container de pesos
-      carregarPesosParaEdicao();
-      containerPesos.classList.remove('oculto');
-      btnMostrarPesos.classList.add('oculto');
-    } else if (tipoSelecionado === 'simples') {
-      // Esconder tudo relacionado a pesos
-      containerPesos.classList.add('oculto');
-      btnMostrarPesos.classList.add('oculto');
-      
-      // Salvar tipo de média como simples
-      salvarTipoMedia('simples');
-    }
+let turmaPesosAtiva = null;
+
+
+// =====================================================================
+// CARREGAR A LISTA DE PESOS COM OS COMPONENTES EXISTENTES
+// =====================================================================
+function carregarPesosParaTurma(turma, componentes) {
+  turmaPesosAtiva = turma;
+
+  listaPesos.innerHTML = "";
+
+  componentes.forEach(comp => {
+    const pesoAtual = turma.pesos?.[comp.sigla] ?? 1;
+
+    const linha = document.createElement("div");
+    linha.classList.add("linha-peso");
+
+    linha.innerHTML = `
+        <span class="sigla-peso">${comp.sigla}</span>
+        <input type="number" 
+              min="1" max="10" 
+              value="${pesoAtual}" 
+              class="input-peso"
+              data-componente="${comp.sigla}">
+    `;
+
+
+    listaPesos.appendChild(linha);
   });
 }
 
-// Carregar os componentes da turma para edição de pesos
-function carregarPesosParaEdicao() {
+
+
+
+// =====================================================================
+// MOSTRAR / ESCONDER CONTAINER AO MUDAR O SELECT
+// =====================================================================
+tipoMedia.addEventListener("change", () => {
+  if (tipoMedia.value === "ponderada") {
+    containerPesos.classList.remove("oculto");
+    btnMostrarPesos.classList.add("oculto");
+  } else {
+    containerPesos.classList.add("oculto");
+    btnMostrarPesos.classList.add("oculto");
+  }
+});
+
+
+// =====================================================================
+// BOTÃO **SALVAR PESOS**
+// =====================================================================
+btnSalvarPesos.addEventListener('click', () => {
+
   if (!turmaAtualNotasId) return;
-  
+
   const turmasAgora = lerTurmasStorageSafe();
   const turma = turmasAgora.find(t => String(t.id) === String(turmaAtualNotasId));
-  
   if (!turma) return;
-  
-  // Pegar componentes da disciplina da turma
-  const discNomeTurma = _norm(turma.disciplinaNome || turma.disciplina || "");
-  const discCodigoTurma = _norm(turma.disciplinaCodigo || "");
-  
-  const componentesAll = JSON.parse(localStorage.getItem("componentes")) || [];
-  const componentesDaDisciplina = componentesAll.filter(c => {
-    const cDisc = _norm(c.disciplinaNome || c.disciplina || "");
-    const cDiscCode = _norm(c.disciplinaCodigo || "");
-    return (cDisc && (cDisc === discNomeTurma || cDisc === discCodigoTurma))
-        || (cDiscCode && (cDiscCode === discCodigoTurma || cDiscCode === discNomeTurma));
+
+  // coleta dos pesos
+  const inputs = listaPesos.querySelectorAll('.input-peso');
+  const pesos = {};
+
+  inputs.forEach(input => {
+    const componente = input.getAttribute("data-componente");
+    pesos[componente] = Number(input.value) || 1;
   });
-  
-  if (componentesDaDisciplina.length === 0) {
-    listaPesos.innerHTML = '<p style="text-align:center; color:#999;">Nenhum componente encontrado.</p>';
+
+  // salva na turma
+  turma.pesos = pesos;
+  turma.tipoMedia = "ponderada";
+
+  // atualiza storage
+  let todas = lerTurmasStorageSafe();
+  todas = todas.map(t => String(t.id) === String(turmaAtualNotasId) ? turma : t);
+  salvarTurmasComFallback(todas);
+
+  // 💥 após salvar → esconder tabela e mostrar botão
+  containerPesos.classList.add("oculto");
+  btnMostrarPesos.classList.remove("oculto");
+
+  alert("Pesos salvos com sucesso!");
+});
+
+
+// =====================================================================
+// BOTÃO **MOSTRAR COMPONENTES**
+// =====================================================================
+btnMostrarPesos.addEventListener("click", () => {
+  containerPesos.classList.remove("oculto");
+  btnMostrarPesos.classList.add("oculto");
+});
+
+
+
+
+// =====================IMPORTAR ALUNOS VIA CSV.===============================================
+// Modal e select
+const modalImportar = document.getElementById('modal-importar-alunos');
+const btnAbrirImportar = document.getElementById('import-aluno'); // id do botão certo
+const btnImportar = document.getElementById('importar-alunos');
+const selectTurmas = document.getElementById('select-turmas');
+
+if (btnAbrirImportar) {
+  btnAbrirImportar.addEventListener('click', () => {
+    preencherSelectTurmas();
+    if (modalImportar) modalImportar.style.display = 'flex';
+  });
+}
+
+
+// Função para preencher select
+function preencherSelectTurmas() {
+  const turmas = JSON.parse(localStorage.getItem('turmas')) || [];
+  selectTurmas.innerHTML = '<option value="">SELECIONE UMA TURMA</option>';
+
+  if (turmas.length === 0) {
+    const option = document.createElement('option');
+    option.value = '';
+    option.textContent = 'Nenhuma turma cadastrada';
+    selectTurmas.appendChild(option);
     return;
   }
-  
-  // Carregar pesos salvos anteriormente (se existirem)
-  const pesosSalvos = turma.pesos || {};
-  
-  // Criar interface de seleção de pesos
-  listaPesos.innerHTML = '';
-  componentesDaDisciplina.forEach(comp => {
-    const itemDiv = document.createElement('div');
-    itemDiv.className = 'item-peso';
-    
-    const pesoAtual = pesosSalvos[comp.sigla] || 1;
-    
-    itemDiv.innerHTML = `
-      <label>${comp.nome || comp.sigla}</label>
-      <select data-componente="${comp.sigla}">
-        ${[1,2,3,4,5,6,7,8,9,10].map(p => 
-          `<option value="${p}" ${p === pesoAtual ? 'selected' : ''}>${p}</option>`
-        ).join('')}
-      </select>
-    `;
-    
-    listaPesos.appendChild(itemDiv);
+
+  turmas.forEach(t => {
+    const option = document.createElement('option');
+    option.value = t.id;
+    option.textContent = t.nome;
+    selectTurmas.appendChild(option);
   });
 }
 
-// Salvar os pesos configurados
-if (btnSalvarPesos) {
-  btnSalvarPesos.addEventListener('click', () => {
-    if (!turmaAtualNotasId) return;
-    
-    const turmasAgora = lerTurmasStorageSafe();
-    const turma = turmasAgora.find(t => String(t.id) === String(turmaAtualNotasId));
-    
-    if (!turma) return;
-    
-    // Coletar pesos dos selects
-    const selects = listaPesos.querySelectorAll('select[data-componente]');
-    const pesos = {};
-    
-    selects.forEach(select => {
-      const componente = select.getAttribute('data-componente');
-      const peso = parseInt(select.value);
-      pesos[componente] = peso;
-    });
-    
-    // Salvar na turma
-    turma.pesos = pesos;
-    turma.tipoMedia = 'ponderada';
-    
-    // Atualizar no storage
-    let todasTurmas = lerTurmasStorageSafe();
-    todasTurmas = todasTurmas.map(t => String(t.id) === String(turmaAtualNotasId) ? turma : t);
-    salvarTurmasComFallback(todasTurmas);
-    
-    // Esconder container de pesos e mostrar botão
-    containerPesos.classList.add('oculto');
-    btnMostrarPesos.classList.remove('oculto');
-    
-    alert('Pesos salvos com sucesso!');
+// Abrir modal
+if (btnAbrirImportar) {
+  btnAbrirImportar.addEventListener('click', () => {
+    preencherSelectTurmas();
+    if (modalImportar) modalImportar.style.display = 'flex';
   });
 }
 
-// Mostrar pesos novamente para edição
-if (btnMostrarPesos) {
-  btnMostrarPesos.addEventListener('click', () => {
-    carregarPesosParaEdicao();
-    containerPesos.classList.remove('oculto');
-    btnMostrarPesos.classList.add('oculto');
+// Fechar clicando fora
+if (modalImportar) {
+  modalImportar.addEventListener('click', (e) => {
+    if (e.target === modalImportar) modalImportar.style.display = 'none';
   });
 }
 
-// Função para salvar tipo de média simples
-function salvarTipoMedia(tipo) {
-  if (!turmaAtualNotasId) return;
-  
-  const turmasAgora = lerTurmasStorageSafe();
-  const turma = turmasAgora.find(t => String(t.id) === String(turmaAtualNotasId));
-  
-  if (!turma) return;
-  
-  turma.tipoMedia = tipo;
-  if (tipo === 'simples') {
-    delete turma.pesos; // Remove pesos se for média simples
-  }
-  
-  let todasTurmas = lerTurmasStorageSafe();
-  todasTurmas = todasTurmas.map(t => String(t.id) === String(turmaAtualNotasId) ? turma : t);
-  salvarTurmasComFallback(todasTurmas);
-}
-
-// Atualizar a função abrirModalNotas para configurar o sistema de pesos
-function abrirModalNotasComPesos(turmaId) {
-  turmaAtualNotasId = String(turmaId);
-  
-  // Chamar a função original de abrir modal
-  abrirModalNotas(turmaId);
-  
-  // Configurar o select de tipo de média baseado no que está salvo
-  const turmasAgora = lerTurmasStorageSafe();
-  const turma = turmasAgora.find(t => String(t.id) === String(turmaId));
-  
-  if (turma && selectTipoMedia) {
-    // Resetar estado
-    containerPesos.classList.add('oculto');
-    btnMostrarPesos.classList.add('oculto');
-    
-    if (turma.tipoMedia === 'simples') {
-      selectTipoMedia.value = 'simples';
-    } else if (turma.tipoMedia === 'ponderada') {
-      selectTipoMedia.value = 'ponderada';
-      btnMostrarPesos.classList.remove('oculto');
-    } else {
-      selectTipoMedia.value = '';
+// Botão importar
+if (btnImportar) {
+  btnImportar.addEventListener('click', () => {
+    const turmaSelecionada = selectTurmas.value;
+    if (!turmaSelecionada) {
+      alert('Selecione uma turma!');
+      return;
     }
-  }
+
+    alert(`Alunos da turma "${selectTurmas.selectedOptions[0].text}" importados com sucesso!`);
+    modalImportar.style.display = 'none';
+  });
 }
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

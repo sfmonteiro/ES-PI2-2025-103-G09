@@ -3,13 +3,14 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Turmas</title>
 
     <!---Ícone (logo) no navegador: chamada "favicon"-->
-     <link rel="icon" type="image/png" href="../images/icone_NotaDez.png">
+    <link rel="icon" type="image/png" href="../images/icone_NotaDez.png">
 
     <!--importação da fonte Comfortaa pelo Google Fonts-->
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap" rel="stylesheet">
@@ -17,17 +18,18 @@
     <link rel="stylesheet" href="turma_style.css">
 
 </head>
+
 <body>
-    
-    
+
+
     <!--- BARRA LATERAL  -->
     <aside class="sidebar">
         <ul>
-            <li><a href="#" id = "inicio">INÍCIO</a></li>       <!---Class ACTIVE define a página atual-->
-            <li><a href="#" id = "instituicao">INSTITUIÇÃO</a></li>
-            <li><a href="curso.html" id = "cursos">CURSOS</a></li>
-            <li><a href="#"  class="active"  id = "turmas">TURMAS</a></li>
-            <li><a href="#" id = "atividades">ATIVIDADES</a></li>
+            <li><a href="#" id="inicio">INÍCIO</a></li> <!---Class ACTIVE define a página atual-->
+            <li><a href="#" id="instituicao">INSTITUIÇÃO</a></li>
+            <li><a href="curso.html" id="cursos">CURSOS</a></li>
+            <li><a href="#" class="active" id="turmas">TURMAS</a></li>
+            <li><a href="#" id="atividades">ATIVIDADES</a></li>
         </ul>
     </aside>
 
@@ -38,9 +40,9 @@
             <img src="../images/logo_NotaDez.png" alt="Logo" class="logo">
         </div>
 
-         <!-- caixa com nome da faculdade (apenas exibição) -->
+        <!-- caixa com nome da faculdade (apenas exibição) -->
         <div class="faculdade-area">
-                <span class="texto-local">Você está em:</span>
+            <span class="texto-local">Você está em:</span>
 
             <div class="faculdade-box">
                 <img src="../images/icone_instituicao_verde.png" alt="Logo Instituição" class="instituicao-icon">
@@ -50,25 +52,26 @@
 
         <div class="user-menu">
             <img src="../images/icone_pessoa.png" alt="Ícone Pessoa" class="pessoa-icon">
-            <span id="user-btn" class="user-btn">Olá, *PRIMEIRO NOME*!   ▼</span>
+            <span id="user-btn" class="user-btn">Olá, *PRIMEIRO NOME*! ▼</span>
 
             <ul class="dropdown">
 
-                <li><a href="#" id = "conta">
-                    <img src="../images/icone_pessoa.png" alt="Ícone Pessoa" class="minha-conta-icon">
-                    Minha Conta
-                    </a>
-                </li>
-                
-                <li><a href="#" id = "trocar-inst">
-                    <img src="../images/icone_instituicao_azul.png" alt="Ícone Instituição" class="minha-conta-icon">
-                    Trocar Instituição
+                <li><a href="#" id="conta">
+                        <img src="../images/icone_pessoa.png" alt="Ícone Pessoa" class="minha-conta-icon">
+                        Minha Conta
                     </a>
                 </li>
 
-                <li><a href="#" id = "sair">
-                    <img src="../images/icone_sair.png" alt="Ícone Pessoa" class="minha-conta-icon">
-                    Sair
+                <li><a href="#" id="trocar-inst">
+                        <img src="../images/icone_instituicao_azul.png" alt="Ícone Instituição"
+                            class="minha-conta-icon">
+                        Trocar Instituição
+                    </a>
+                </li>
+
+                <li><a href="#" id="sair">
+                        <img src="../images/icone_sair.png" alt="Ícone Pessoa" class="minha-conta-icon">
+                        Sair
                     </a>
                 </li>
 
@@ -80,16 +83,16 @@
     <div class="pagina-atual">
         <a href="#" class="pagina-ref">turmas</a>
 
-    <div class="botoes">
-        <button type="button" id="cadastro-turma">CADASTRAR TURMA</button>
-        <button type="button" id="import-aluno">IMPORTAR ALUNO</button>
+        <div class="botoes">
+            <button type="button" id="cadastro-turma">CADASTRAR TURMA</button>
+            <button type="button" id="import-aluno">IMPORTAR ALUNO</button>
 
 
-    </div>
+        </div>
 
-    <div class="container-turmas">
+        <div class="container-turmas">
 
-        <div class="card-turma">
+            <div class="card-turma">
 
             </div>
         </div>
@@ -100,72 +103,72 @@
     <!------------------JANELA MODAL PARA CADASTRO ALUNO------------->
 
     <div id="modal-aluno" class="modal">
-            <div class="janela-modal">
+        <div class="janela-modal">
 
-                <!-- Botão fechar -->
-                <span class="fechar" id="fecharModalAluno">&times;</span>
+            <!-- Botão fechar -->
+            <span class="fechar" id="fecharModalAluno">&times;</span>
 
 
-                <h2>CADASTRAR ALUNO</h2>
+            <h2>CADASTRAR ALUNO</h2>
 
-                <div class="grupo-input">
-                    <input id="raAluno" type="text" placeholder=" " required>
-                    <label>RA</label>
-                </div>
+            <div class="grupo-input">
+                <input id="raAluno" type="text" placeholder=" " required>
+                <label>RA</label>
+            </div>
 
-                <div class="grupo-input">
-                    <input id="nomeAluno" type="text" placeholder=" " required>
-                    <label>NOME COMPLETO</label>
-                </div>
+            <div class="grupo-input">
+                <input id="nomeAluno" type="text" placeholder=" " required>
+                <label>NOME COMPLETO</label>
+            </div>
 
-                <button id="confirmar-cadastro-aluno" class="btn-confirmar">CADASTRAR</button>
+            <button id="confirmar-cadastro-aluno" class="btn-confirmar">CADASTRAR</button>
 
-                <!-- Aqui começa a lista de alunos cadastrados -->
-                <div class="lista-alunos-container" style="margin-top: 20px;">
+            <!-- Aqui começa a lista de alunos cadastrados -->
+            <div class="lista-alunos-container" style="margin-top: 20px;">
                 <table class="lista-alunos">
                     <thead>
-                    <tr>
-                        <th>RA</th>
-                        <th>NOME COMPLETO</th>
-                        <th>AÇÕES</th>
-                    </tr>
+                        <tr>
+                            <th>RA</th>
+                            <th>NOME COMPLETO</th>
+                            <th>AÇÕES</th>
+                        </tr>
                     </thead>
                     <tbody id="corpo-lista-alunos">
-                    <!-- Linhas de alunos serão adicionadas aqui pelo JS -->
+                        <!-- Linhas de alunos serão adicionadas aqui pelo JS -->
                     </tbody>
                 </table>
-                </div>
-
-
             </div>
+
+
         </div>
+    </div>
 
     </div>
 
-        <!------------------JANELA MODAL PARA CADASTRO TURMA------------->
+    <!------------------JANELA MODAL PARA CADASTRO TURMA------------->
 
     <div id="modal-turma" class="modal">
         <div class="janela-modal">
 
             <div class="modal-header">
-            <h2>CADASTRAR TURMA</h2>
-            <span class="fechar" id="fecharModalTurma">&times;</span>
+                <h2>CADASTRAR TURMA</h2>
+                <span class="fechar" id="fecharModalTurma">&times;</span>
             </div>
 
             <div class="grupo-input">
-            <input id="codTurma" type="text" placeholder="EX: T11" required>
-            <label>CÓDIGO</label>
+                <input id="codTurma" type="text" placeholder="EX: T11" required>
+                <label>CÓDIGO</label>
             </div>
 
             <div class="grupo-input">
-            <input id="nomeTurma" type="text" placeholder="EX: TURMA 11" required>
-            <label>NOME DA TURMA</label>
+                <input id="nomeTurma" type="text" placeholder="EX: TURMA 11" required>
+                <label>NOME DA TURMA</label>
             </div>
 
             <div class="grupo-select">
                 <label for="periodTurma">PERÍODO DO CURSO</label>
                 <select id="periodTurma" required>
-                <option value="">SELECIONE UM PERÍODO</option>
+                    <option value="">SELECIONE UM PERÍODO</option>
                     <option value="1º SEMESTRE">1º SEMESTRE</option>
                     <option value="2º SEMESTRE">2º SEMESTRE</option>
                     <option value="3º SEMESTRE">3º SEMESTRE</option>
@@ -176,22 +179,22 @@
                     <option value="8º SEMESTRE">8º SEMESTRE</option>
                     <option value="9º SEMESTRE">9º SEMESTRE</option>
                     <option value="10º SEMESTRE">10º SEMESTRE</option>
-                            
+
                 </select>
 
             </div>
 
             <div class="grupo-select">
-            <label for="cursoTurma">CURSO</label>
-            <select id="cursoTurma" required>
-                <option value="">SELECIONE UM CURSO</option>
-                <option value="Engenharia">Engenharia</option>
-                <option value="Direito">Direito</option>
-                <option value="Medicina">Medicina</option>
-            </select>
+                <label for="cursoTurma">CURSO</label>
+                <select id="cursoTurma" required>
+                    <option value="">SELECIONE UM CURSO</option>
+                    <option value="Engenharia">Engenharia</option>
+                    <option value="Direito">Direito</option>
+                    <option value="Medicina">Medicina</option>
+                </select>
             </div>
 
-            
+
             <div class="grupo-select">
                 <label for="disciplina">DISCIPLINA</label>
                 <select id="disciplinaTurma" required>
@@ -204,31 +207,78 @@
         </div>
     </div>
 
-        <!-- MODAL NOTAS -->
+    <!-- MODAL NOTAS -->
     <div id="modal-notas" class="modal">
         <div class="janela-modal">
 
             <div class="modal-header">
-            <h2>COMPONENTES DE NOTAS</h2>
-            <span class="fechar" id="fecharModalNotas">&times;</span>
+                <h2>COMPONENTES DE NOTAS</h2>
+                <span class="fechar" id="fecharModalNotas">&times;</span>
             </div>
 
-            <div id="conteudoNotas"></div>
+            <!-- Adicione este código dentro do #modal-notas, logo após o .modal-header -->
+            <div class="acoes-notas">
+                <div class="sistema-calculo">
+                    <div class="grupo-select-calculo">
+                        <label for="tipo-media">TIPO DE CÁLCULO:</label>
+                        <select id="tipo-media">
+                            <option value="">SELECIONE UM TIPO</option>
+                            <option value="simples">MÉDIA SIMPLES</option>
+                            <option value="ponderada">MÉDIA PONDERADA</option>
+                        </select>
+                    </div>
+
+                    <!-- Container dos pesos (inicialmente oculto) -->
+                    <div id="container-pesos" class="container-pesos oculto">
+                        <h3>CONFIGURE OS PESOS DOS COMPONENTES</h3>
+                        <div class="tabela-pesos-wrapper">
+                            <div id="lista-pesos" class="lista-pesos">
+                                <!-- Será preenchido dinamicamente pelo JS -->
+                            </div>
+                        </div>
+                        <button id="btn-salvar-pesos" class="btn-pequeno btn-salvar">SALVAR PESOS</button>
+                    </div>
+
+                    <!-- Botão para mostrar pesos (aparece após salvar) -->
+                    <button id="btn-mostrar-pesos" class="btn-pequeno btn-editar oculto">MOSTRAR COMPONENTES</button>
+                </div>
+
+                <button id="btn-exportar-notas" class="btn-exportar">EXPORTAR NOTAS</button>
+
+            </div>
+            <!-- O resto do conteúdo do modal continua aqui -->
+            <div id="conteudoNotas">
+
+            </div>
+
 
         </div>
 
-
-        <div id="containerTipoCalculo">
-
-            <div class="tabela-notas-container" id="tabelaNotas">
-            <!-- tabela aqui -->
-            </div>
-
-        </div>
 
     </div>
+
+    <!-- Modal de Importar Alunos -->
+    <div id="modal-importar-alunos">
+        <div class="janela-modal">
+            <h2>IMPORTAR ALUNO VIA CSV.</h2>
+
+            <!-- Select de turmas -->
+        <div class="grupo-select">
+            <label for="select-turmas">TURMA</label>
+            <select id="select-turmas">
+                <option value="">SELECIONE A TURMA</option>
+                <!-- Aqui você vai preencher com as turmas cadastradas via JS ou backend -->
+            </select>
+        </div>
+
+            <!-- Botão Importar -->
+            <button id="btn-importar-alunos" class="btn-importar">IMPORTAR</button>
+        </div>
+    </div>
+
 
 
     <script src="turma.js"></script>
 </body>
+
 </html>
