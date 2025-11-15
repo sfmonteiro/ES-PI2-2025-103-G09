@@ -647,74 +647,376 @@ window.addEventListener('click', (e) => {
 });
 
 
+
 //================================================================================================
 //==================    MODAL NOTAS (TABELA DOS COMPONENTES DA TURMA)   ==========================
 //================================================================================================
 
-// ELEMENTOS DA MODAL DE NOTAS
+// ===========================================
+// MODAL DE NOTAS (gera tabela RA | Nome | P1 P2 ...)
+// - Não grava notas ainda (inputs readonly)
+// - Filtra componentes pela disciplina da turma
+// ===========================================
+
+// elementos da modal (certifique-se que IDs existam no HTML)
 const modalNotas = document.getElementById("modal-notas");
+  if (modalNotas) modalNotas.style.display = "none";
 const fecharModalNotas = document.getElementById("fecharModalNotas");
 const conteudoNotas = document.getElementById("conteudoNotas");
 
-// FUNÇÃO QUE ABRE A MODAL DE NOTAS
-function abrirModalNotas(turma) {
-  modalNotas.style.display = "flex";
+// safe-get (evita crash se não existir)
+if (!modalNotas) console.warn("modal-notas não encontrado no DOM");
+if (!fecharModalNotas) console.warn("fecharModalNotas não encontrado no DOM");
+if (!conteudoNotas) console.warn("conteudoNotas não encontrado no DOM");
 
-  const componentes = JSON.parse(localStorage.getItem("componentes")) || [];
+// helper para normalizar strings (comparação robusta)
+function _norm(v) {
+  return (v === undefined || v === null) ? "" : String(v).trim().toLowerCase();
+}
 
-  // NADA CADASTRADO
-  if (componentes.length === 0) {
-    conteudoNotas.innerHTML = `
-      <div class="nada-cadastrado">
-        <p>NENHUMA ATIVIDADE CADASTRADA AINDA...</p>
-        <img src="../images/imagem_alunos.png" class="img-nada-cadastrado">
-      </div>
+// Abre modal de notas para a turmaId (id interno da turma)
+function abrirModalNotas(turmaId) {
+  // abrir modal mesmo que conteúdo mostre aviso (visual)
+  if (modalNotas) modalNotas.style.display = "flex";
 
-      <a href="#"   id = "atividades-modal">ACESSE A PÁGINA DE ATIVIDADES</a>
-    `;
+  // pegar turma atual
+  const turmasAgora = lerTurmasStorageSafe();
+  const turma = turmasAgora.find(t => String(t.id) === String(turmaId));
+
+  if (!turma) {
+    if (conteudoNotas) {
+      conteudoNotas.innerHTML = `
+        <div class="nada-cadastrado">
+          <p>TURMA NÃO ENCONTRADA.</p>
+        </div>
+      `;
+    }
     return;
   }
 
-  // SE TEM COMPONENTES → LISTA
-  conteudoNotas.innerHTML = `
-    <p style="font-weight: bold; margin-bottom: 10px;">
-      Selecione um componente para lançar notas:
-    </p>
+  // assegurar que turma tenha lista de alunos
+  const alunos = Array.isArray(turma.alunos) ? turma.alunos : [];
+
+  // extrair identificação da disciplina da turma (será comparada)
+  const discNomeTurma = _norm(turma.disciplinaNome || turma.disciplina || "");
+  const discCodigoTurma = _norm(turma.disciplinaCodigo || "");
+
+  if (!discNomeTurma && !discCodigoTurma) {
+    if (conteudoNotas) {
+      conteudoNotas.innerHTML = `
+        <div class="nada-cadastrado">
+          <p>ESTA TURMA NÃO POSSUI DISCIPLINA DEFINIDA!</p>
+          <img src="../images/imagem_alunos.png" class="img-nada-cadastrado">
+        </div>
+      `;
+    }
+    return;
+  }
+
+  // carregar componentes do storage e filtrar apenas os da disciplina
+  const componentesAll = JSON.parse(localStorage.getItem("componentes")) || [];
+
+  const componentesDaDisciplina = componentesAll.filter(c => {
+    // c.disciplinaNome é o que você salvou ao criar componente
+    const cDisc = _norm(c.disciplinaNome || c.disciplina || "");
+    const cDiscCode = _norm(c.disciplinaCodigo || "");
+    // corresponde por nome ou por código (robusto)
+    return (cDisc && (cDisc === discNomeTurma || cDisc === discCodigoTurma))
+        || (cDiscCode && (cDiscCode === discCodigoTurma || cDiscCode === discNomeTurma));
+  });
+
+  // se não há componentes para essa disciplina -> mensagem e link
+  if (!componentesDaDisciplina || componentesDaDisciplina.length === 0) {
+    if (conteudoNotas) {
+      conteudoNotas.innerHTML = `
+        <div class="nada-cadastrado">
+          <p>VOCÊ AINDA NÃO CADASTROU NENHUMA ATIVIDADE PARA ESTA DISCIPLINA...</p>
+          <img src="../images/imagem_alunos.png" class="img-nada-cadastrado">
+        </div>
+        <div style="margin-top:10px">
+          <a href="../Pagina_atividades/atividades.html" id="atividades-modal">ACESSE A PÁGINA DE ATIVIDADES E CADASTRE!</a>
+        </div>
+      `;
+    }
+    return;
+  }
+
+  // montar a tabela: cabeçalho RA | Nome | siglas...
+  let html = `
+    <div class="tabela-notas-container">
+      <table class="tabela-notas">
+        <thead>
+          <tr>
+            <th>RA</th>
+            <th>NOME</th>
   `;
 
-  componentes.forEach(comp => {
-    const item = document.createElement("div");
-    item.classList.add("item-componente-nota");
+  componentesDaDisciplina.forEach(comp => {
+    const titulo = comp.sigla ? comp.sigla : (comp.nome ? comp.nome.slice(0,6) : "ATV");
+    html += `<th class="col-nota" title="${comp.nome || ''}">${titulo}</th>`;
+  });
 
-    item.innerHTML = `
-      <div class="comp-box">
-        <strong>${comp.nome}</strong>
-        <span>${comp.disciplinaNome}</span>
-      </div>
-    `;
 
-    // evento clicar no componente
-    item.addEventListener("click", () => {
-      alert("Depois vamos abrir a tela de lançar notas para: " + comp.nome);
+  // adiciona a coluna "Notas Finais" depois dos componentes
+  if (componentesDaDisciplina.length > 0) {
+    html += `<th class="col-nota-final">Notas Finais</th>`;
+  }
+
+
+  html += `
+          </tr>
+        </thead>
+        <tbody>
+  `;
+
+  if (alunos.length === 0) {
+    html += `
+      <tr>
+        <td colspan="${2 + componentesDaDisciplina.length}" class="nenhum-aluno">
+          Nenhum aluno cadastrado nesta turma.
+        </td>
+      </tr>`;
+  } 
+  else {
+    alunos.forEach(aluno => {
+      const ra = aluno.ra || "";
+      const nome = aluno.nome || "";
+
+      html += `<tr data-ra="${ra}">`;
+      html += `<td>${ra}</td>`;
+      html += `<td class="col-nome">${nome}</td>`;
+
+      componentesDaDisciplina.forEach(comp => {
+        const notaSalva =
+          turma.notas?.[ra]?.[comp.sigla] ?? "";
+
+      html += `
+        <td class="col-nota">
+          <input class="nota-input" type="text" value="${notaSalva}" readonly>
+        </td>
+      `;
+
+      });
+
+      // AQUI você coloca o código para a coluna "Notas Finais":
+      const notaFinal = turma.notas?.[ra]?.['FINAL'] ?? "";
+
+      html += `
+        <td class="col-nota-final">
+          <input class="nota-input nota-final" type="text" value="${notaFinal}" readonly>
+        </td>
+      `;
+
+      html += `</tr>`;
     });
+  }
 
-    conteudoNotas.appendChild(item);
+  html += `
+        </tbody>
+      </table>
+    </div>
+  `;
+
+
+  // inserir no DOM
+  if (conteudoNotas) conteudoNotas.innerHTML = html;
+
+  // (opcional) você pode adicionar listeners para futuras edições aqui
+}
+
+// fechar modal ao clicar no X
+if (fecharModalNotas) {
+  fecharModalNotas.addEventListener("click", () => {
+    if (modalNotas) modalNotas.style.display = "none";
   });
 }
 
-// FECHAR MODAL (X)
-fecharModalNotas.addEventListener("click", () => {
-  modalNotas.style.display = "none";
-});
-
-// FECHAR MODAL CLICANDO FORA
+// fechar clicando fora
 window.addEventListener("click", (e) => {
-  if (e.target === modalNotas) {
+  if (modalNotas && e.target === modalNotas) {
     modalNotas.style.display = "none";
   }
 });
 
 
+
+/////////////////////////////////////PESOS//////////////////////////////////////////////////////////
+
+// Variável global para armazenar a turma atual do modal de notas
+let turmaAtualNotasId = null;
+
+// Elementos do sistema de pesos
+const selectTipoMedia = document.getElementById('tipo-media');
+const containerPesos = document.getElementById('container-pesos');
+const listaPesos = document.getElementById('lista-pesos');
+const btnSalvarPesos = document.getElementById('btn-salvar-pesos');
+const btnMostrarPesos = document.getElementById('btn-mostrar-pesos');
+
+// Listener para mudança no tipo de média
+if (selectTipoMedia) {
+  selectTipoMedia.addEventListener('change', (e) => {
+    const tipoSelecionado = e.target.value;
+    
+    if (tipoSelecionado === 'ponderada') {
+      // Mostrar container de pesos
+      carregarPesosParaEdicao();
+      containerPesos.classList.remove('oculto');
+      btnMostrarPesos.classList.add('oculto');
+    } else if (tipoSelecionado === 'simples') {
+      // Esconder tudo relacionado a pesos
+      containerPesos.classList.add('oculto');
+      btnMostrarPesos.classList.add('oculto');
+      
+      // Salvar tipo de média como simples
+      salvarTipoMedia('simples');
+    }
+  });
+}
+
+// Carregar os componentes da turma para edição de pesos
+function carregarPesosParaEdicao() {
+  if (!turmaAtualNotasId) return;
+  
+  const turmasAgora = lerTurmasStorageSafe();
+  const turma = turmasAgora.find(t => String(t.id) === String(turmaAtualNotasId));
+  
+  if (!turma) return;
+  
+  // Pegar componentes da disciplina da turma
+  const discNomeTurma = _norm(turma.disciplinaNome || turma.disciplina || "");
+  const discCodigoTurma = _norm(turma.disciplinaCodigo || "");
+  
+  const componentesAll = JSON.parse(localStorage.getItem("componentes")) || [];
+  const componentesDaDisciplina = componentesAll.filter(c => {
+    const cDisc = _norm(c.disciplinaNome || c.disciplina || "");
+    const cDiscCode = _norm(c.disciplinaCodigo || "");
+    return (cDisc && (cDisc === discNomeTurma || cDisc === discCodigoTurma))
+        || (cDiscCode && (cDiscCode === discCodigoTurma || cDiscCode === discNomeTurma));
+  });
+  
+  if (componentesDaDisciplina.length === 0) {
+    listaPesos.innerHTML = '<p style="text-align:center; color:#999;">Nenhum componente encontrado.</p>';
+    return;
+  }
+  
+  // Carregar pesos salvos anteriormente (se existirem)
+  const pesosSalvos = turma.pesos || {};
+  
+  // Criar interface de seleção de pesos
+  listaPesos.innerHTML = '';
+  componentesDaDisciplina.forEach(comp => {
+    const itemDiv = document.createElement('div');
+    itemDiv.className = 'item-peso';
+    
+    const pesoAtual = pesosSalvos[comp.sigla] || 1;
+    
+    itemDiv.innerHTML = `
+      <label>${comp.nome || comp.sigla}</label>
+      <select data-componente="${comp.sigla}">
+        ${[1,2,3,4,5,6,7,8,9,10].map(p => 
+          `<option value="${p}" ${p === pesoAtual ? 'selected' : ''}>${p}</option>`
+        ).join('')}
+      </select>
+    `;
+    
+    listaPesos.appendChild(itemDiv);
+  });
+}
+
+// Salvar os pesos configurados
+if (btnSalvarPesos) {
+  btnSalvarPesos.addEventListener('click', () => {
+    if (!turmaAtualNotasId) return;
+    
+    const turmasAgora = lerTurmasStorageSafe();
+    const turma = turmasAgora.find(t => String(t.id) === String(turmaAtualNotasId));
+    
+    if (!turma) return;
+    
+    // Coletar pesos dos selects
+    const selects = listaPesos.querySelectorAll('select[data-componente]');
+    const pesos = {};
+    
+    selects.forEach(select => {
+      const componente = select.getAttribute('data-componente');
+      const peso = parseInt(select.value);
+      pesos[componente] = peso;
+    });
+    
+    // Salvar na turma
+    turma.pesos = pesos;
+    turma.tipoMedia = 'ponderada';
+    
+    // Atualizar no storage
+    let todasTurmas = lerTurmasStorageSafe();
+    todasTurmas = todasTurmas.map(t => String(t.id) === String(turmaAtualNotasId) ? turma : t);
+    salvarTurmasComFallback(todasTurmas);
+    
+    // Esconder container de pesos e mostrar botão
+    containerPesos.classList.add('oculto');
+    btnMostrarPesos.classList.remove('oculto');
+    
+    alert('Pesos salvos com sucesso!');
+  });
+}
+
+// Mostrar pesos novamente para edição
+if (btnMostrarPesos) {
+  btnMostrarPesos.addEventListener('click', () => {
+    carregarPesosParaEdicao();
+    containerPesos.classList.remove('oculto');
+    btnMostrarPesos.classList.add('oculto');
+  });
+}
+
+// Função para salvar tipo de média simples
+function salvarTipoMedia(tipo) {
+  if (!turmaAtualNotasId) return;
+  
+  const turmasAgora = lerTurmasStorageSafe();
+  const turma = turmasAgora.find(t => String(t.id) === String(turmaAtualNotasId));
+  
+  if (!turma) return;
+  
+  turma.tipoMedia = tipo;
+  if (tipo === 'simples') {
+    delete turma.pesos; // Remove pesos se for média simples
+  }
+  
+  let todasTurmas = lerTurmasStorageSafe();
+  todasTurmas = todasTurmas.map(t => String(t.id) === String(turmaAtualNotasId) ? turma : t);
+  salvarTurmasComFallback(todasTurmas);
+}
+
+// Atualizar a função abrirModalNotas para configurar o sistema de pesos
+function abrirModalNotasComPesos(turmaId) {
+  turmaAtualNotasId = String(turmaId);
+  
+  // Chamar a função original de abrir modal
+  abrirModalNotas(turmaId);
+  
+  // Configurar o select de tipo de média baseado no que está salvo
+  const turmasAgora = lerTurmasStorageSafe();
+  const turma = turmasAgora.find(t => String(t.id) === String(turmaId));
+  
+  if (turma && selectTipoMedia) {
+    // Resetar estado
+    containerPesos.classList.add('oculto');
+    btnMostrarPesos.classList.add('oculto');
+    
+    if (turma.tipoMedia === 'simples') {
+      selectTipoMedia.value = 'simples';
+    } else if (turma.tipoMedia === 'ponderada') {
+      selectTipoMedia.value = 'ponderada';
+      btnMostrarPesos.classList.remove('oculto');
+    } else {
+      selectTipoMedia.value = '';
+    }
+  }
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
