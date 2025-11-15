@@ -74,26 +74,22 @@
     <div class="container-cursos" id="lista-cursos">
     </div>
   </div>
-
- <!-- MODAL CADASTRAR CURSO -->
+<!-- MODAL CADASTRAR CURSO -->
 <div class="modal" id="modalCurso">
   <div class="modal-content">
     <div class="modal-header">
       <h2>CADASTRAR CURSO</h2>
       <span class="close" id="closeModalCurso">&times;</span>
     </div>
+
     <div class="form-group">
-      <label>CÓDIGO DO CURSO:</label>
-      <input type="text" id="codigoCurso" placeholder="" required>
-    </div>
-    <div class="form-group">
-      <label>CÓDIGO DA DISCIPLINA</label>
+      <label>NOME DO CURSO:</label>
       <input type="text" id="nomeCurso" placeholder="" required>
     </div>
+
     <button class="btn-save" id="salvarCurso">SALVAR</button>
   </div>
 </div>
-
 <!-- MODAL DISCIPLINA -->
 <div class="modal" id="modalDisciplina">
   <div class="modal-content">
@@ -103,12 +99,18 @@
     </div>
 
     <div class="form-group">
-      <label>NOME DA DISCIPLINA:</label>
-      <input type="text" id="nomeDisciplina" placeholder="" required>
-    </div>
-    <div class="form-group">
       <label>CÓDIGO DA DISCIPLINA:</label>
-      <input type="text" id="codigoDisciplina" placeholder="" required>
+      <input type="text" id="codigoDisciplina" required>
+    </div>
+
+    <div class="form-group">
+      <label>NOME DA DISCIPLINA:</label>
+      <input type="text" id="nomeDisciplina" required>
+    </div>
+
+    <div class="form-group">
+      <label>SIGLA DA DISCIPLINA:</label>
+      <input type="text" id="siglaDisciplina" required>
     </div>
 
     <button class="btn-add" id="adicionarDisciplina">ADICIONAR</button>

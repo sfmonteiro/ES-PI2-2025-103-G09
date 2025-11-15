@@ -37,13 +37,14 @@ const btnCadastroCurso = document.getElementById("cadastro-curso");
 const btnCloseModalCurso = document.getElementById("closeModalCurso");
 const btnCloseModalDisciplina = document.getElementById("closeModalDisciplina");
 
-const inputCodigoCurso = document.getElementById("codigoCurso");
 const inputNomeCurso = document.getElementById("nomeCurso");
 const btnSalvarCurso = document.getElementById("salvarCurso");
 
-const btnDisciplina = document.getElementById("btnDisciplina");
 const inputNomeDisciplina = document.getElementById("nomeDisciplina");
 const inputCodigoDisciplina = document.getElementById("codigoDisciplina");
+
+const inputSiglaDisciplina = document.getElementById("siglaDisciplina");
+
 const btnAdicionarDisciplina = document.getElementById("adicionarDisciplina");
 
 const listaCursosEl = document.getElementById("lista-cursos");
@@ -96,13 +97,12 @@ function criarCardDOM(curso) {
   card.dataset.id = curso.id;
 
   const disciplinasText = (curso.disciplinas && curso.disciplinas.length > 0)
-    ? curso.disciplinas.map(d => d.nome).join(", ")
+    ? curso.disciplinas.map(d => `${d.codigo} - ${d.sigla}`).join(", ")
     : "Nenhuma disciplina cadastrada";
 
   card.innerHTML = `
     <div class="card-top">${curso.nome.toUpperCase()}</div>
     <div class="card-info">
-      <p><b>Código:</b> ${curso.codigo}</p>
       <p><b>Disciplinas:</b> ${disciplinasText}</p>
     </div>
     <div class="card-botoes">
@@ -154,7 +154,6 @@ if (btnCadastroCurso) {
     isEditing = false;
     editingCourseId = null;
     cursoAtual = null;
-    inputCodigoCurso.value = "";
     inputNomeCurso.value = "";
     modalCurso.style.display = "flex";
   });
@@ -167,26 +166,22 @@ function editarCurso(id) {
   isEditing = true;
   editingCourseId = id;
   cursoAtual = curso;
-  inputCodigoCurso.value = curso.codigo;
   inputNomeCurso.value = curso.nome;
   modalCurso.style.display = "flex";
 }
 
 if (btnSalvarCurso) {
   btnSalvarCurso.addEventListener("click", () => {
-    const codigo = inputCodigoCurso.value.trim();
     const nome = inputNomeCurso.value.trim();
-    
 
-    if (!codigo || !nome) {
-      alert("Preencha código e nome do curso!");
+    if (!nome) {
+      alert("Preencha o nome do curso!");
       return;
     }
 
     if (isEditing && editingCourseId) {
       const idx = cursos.findIndex(c => c.id === editingCourseId);
       if (idx !== -1) {
-        cursos[idx].codigo = codigo;
         cursos[idx].nome = nome;
         salvarCursos(cursos);
         renderCursos();
@@ -200,7 +195,6 @@ if (btnSalvarCurso) {
 
     const novoCurso = {
       id: gerarId(),
-      codigo,
       nome,
       disciplinas: [],
     };
@@ -240,7 +234,7 @@ function atualizarListaDisciplinas() {
     const item = document.createElement("div");
     item.className = "disc-item";
     item.innerHTML = `
-      <span>${d.codigo} - ${d.nome}</span>
+      <span>${d.codigo} - ${d.nome} (${d.sigla})</span>
       <div class="disc-buttons">
         <button class="btn-edit" data-idx="${idx}">Editar</button>
         <button class="btn-del" data-idx="${idx}">Excluir</button>
@@ -262,14 +256,19 @@ function atualizarListaDisciplinas() {
 if (btnAdicionarDisciplina) {
   btnAdicionarDisciplina.addEventListener("click", () => {
     if (!cursoAtual) return alert("Nenhum curso selecionado para adicionar disciplina.");
-    const nome = inputNomeDisciplina.value.trim();
+
     const codigo = inputCodigoDisciplina.value.trim();
+    const nome = inputNomeDisciplina.value.trim();
+    const sigla = inputSiglaDisciplina.value.trim().toUpperCase();
 
-    if (!nome || !codigo) return alert("Preencha nome e código da disciplina!");
+    if (!codigo || !nome || !sigla)
+      return alert("Preencha CÓDIGO, NOME e SIGLA!");
 
-    if (!Array.isArray(cursoAtual.disciplinas)) cursoAtual.disciplinas = [];
+    if (!Array.isArray(cursoAtual.disciplinas))
+      cursoAtual.disciplinas = [];
 
-    cursoAtual.disciplinas.push({ nome, codigo });
+    cursoAtual.disciplinas.push({ codigo, nome, sigla });
+
     const idx = cursos.findIndex(c => c.id === cursoAtual.id);
     if (idx !== -1) {
       cursos[idx] = cursoAtual;
@@ -278,8 +277,10 @@ if (btnAdicionarDisciplina) {
 
     atualizarListaDisciplinas();
     renderCursos();
-    inputNomeDisciplina.value = "";
+
     inputCodigoDisciplina.value = "";
+    inputNomeDisciplina.value = "";
+    inputSiglaDisciplina.value = "";
   });
 }
 
@@ -289,8 +290,10 @@ function editarDisciplina(index) {
   const disc = cursoAtual.disciplinas[index];
   if (!disc) return;
 
-  inputNomeDisciplina.value = disc.nome;
   inputCodigoDisciplina.value = disc.codigo;
+  inputNomeDisciplina.value = disc.nome;
+  inputSiglaDisciplina.value = disc.sigla;
+
   cursoAtual.disciplinas.splice(index, 1);
 
   const idx = cursos.findIndex(c => c.id === cursoAtual.id);
@@ -298,6 +301,7 @@ function editarDisciplina(index) {
     cursos[idx] = cursoAtual;
     salvarCursos(cursos);
   }
+
   atualizarListaDisciplinas();
   renderCursos();
 }
