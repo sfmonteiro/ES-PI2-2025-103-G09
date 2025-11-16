@@ -99,13 +99,13 @@ function criarCardDOM(curso) {
       <p><b>Disciplinas:</b> ${disciplinasText}</p>
     </div>
     <div class="card-botoes">
-      <button class="btn-alunos">Disciplinas</button>
+      <button class="btn-disciplina">Disciplinas</button>
       <button class="btn-editar">Editar</button>
       <button class="btn-excluir">Excluir</button>
     </div>
   `;
 
-  card.querySelector(".btn-alunos").addEventListener("click", (e) => {
+  card.querySelector(".btn-disciplina").addEventListener("click", (e) => {
     e.stopPropagation();
     abrirModalDisciplina(curso.id);
   });
