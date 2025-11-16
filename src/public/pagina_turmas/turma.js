@@ -12,15 +12,6 @@ document.addEventListener('click', (e) => {
   }
 });
 
-function redirecionar(id, destino) {
-  const elemento = document.getElementById(id);
-  if (elemento) {
-    elemento.addEventListener('click', (e) => {
-      e.preventDefault(); // impede recarregar a página com o #
-      window.location.href = destino;
-    });
-  }
-}
 
 // ===============================
 // TURMAS - VERSÃO REFORÇADA (coloque no lugar do código antigo)
@@ -1023,13 +1014,3 @@ if (btnImportar) {
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-
-redirecionar("inicio", "../Pagina_Inicial/inicio.html");
-redirecionar("instituicao", "../Instituiçao_editar/instituicao2.html");
-redirecionar("cursos", "../cursos/cursos.html");
-redirecionar("turmas", "../pagina_turmas/turma.html");
-redirecionar("alunos", "../Pagina_alunos/alunos.html");
-redirecionar("atividades", "../Pagina_atividades/atividades.html");
-redirecionar("conta", "../Minha_Conta/minha_conta.html");
-redirecionar("sair", "../Login/login.html");
-redirecionar("trocar-inst", "../Instituição_cadastro/instituição.html");
