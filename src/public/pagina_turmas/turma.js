@@ -20,7 +20,6 @@ document.addEventListener('click', (e) => {
   }
 });
 
-<<<<<<< HEAD
 function redirecionar(id, destino) {
   const elemento = document.getElementById(id);
   if (elemento) {
@@ -30,8 +29,6 @@ function redirecionar(id, destino) {
     });
   }
 }
-=======
->>>>>>> da112bacaffdc5f0764b82e2d0d243638d4d49b3
 
 
 
@@ -662,7 +659,6 @@ window.addEventListener('click', (e) => {
 });
 
 
-
 //================================================================================================================
 //                       MODAL DE NOTAS (VISUALIZAÇÃO DA TABELA ALUNOS E COLUNAS DOS COMPONENTES)
 //================================================================================================================
@@ -673,14 +669,9 @@ if (modalNotas) modalNotas.style.display = "none";
 const fecharModalNotas = document.getElementById("fecharModalNotas");
 const conteudoNotas = document.getElementById("conteudoNotas");
 
-// Warn se algum elemento não existir
-//if (!modalNotas) console.warn("modal-notas não encontrado no DOM");
-//if (!fecharModalNotas) console.warn("fecharModalNotas não encontrado no DOM");
-//if (!conteudoNotas) console.warn("conteudoNotas não encontrado no DOM");
-
-// Variável global para turma atual no modal e índice da coluna em edição
+// Variável global para turma atual no modal e sigla da coluna em edição
 let turmaAtualNotasId = null;
-let colunaEditando = null; // índice da coluna que está em edição
+let colunaEditandoSigla = null; // sigla da coluna que está em edição
 
 // Helper para normalizar strings
 function _norm(v) {
@@ -801,7 +792,7 @@ function abrirModalNotas(turmaId) {
   if (alunos.length === 0) {
     html += `
       <tr>
-        <td colspan="${2 + componentesDaDisciplina.length}" class="nenhum-aluno">
+        <td colspan="${2 + componentesDaDisciplina.length + 1}" class="nenhum-aluno">
           Nenhum aluno cadastrado nesta turma.
         </td>
       </tr>`;
@@ -818,8 +809,16 @@ function abrirModalNotas(turmaId) {
         const notaSalva = turma.notas?.[ra]?.[comp.sigla] ?? "";
 
         html += `
-          <td class="col-nota">
-          <input class="nota-input" type="number" step="1" style="background-color:#eee;" readonly>
+          <td class="col-nota" data-sigla="${comp.sigla}">
+            <input 
+              class="nota-input" 
+              type="text" 
+              value="${notaSalva}" 
+              style="background-color:#eee; border: 2px solid #ccc; cursor: not-allowed; text-align: center;" 
+              data-sigla="${comp.sigla}"
+              placeholder="-"
+              disabled
+            >
           </td>
         `;
       });
@@ -828,7 +827,14 @@ function abrirModalNotas(turmaId) {
 
       html += `
         <td class="col-nota-final">
-          <input class="nota-input nota-final" type="number" value="${notaFinal}" style="background-color:#eee;">
+          <input 
+            class="nota-input nota-final" 
+            type="text"
+            value="${notaFinal}" 
+            style="background-color:#eee; border: 2px solid #ccc; cursor: not-allowed;"
+            placeholder="-"
+            disabled
+          >
         </td>
       `;
 
@@ -845,8 +851,60 @@ function abrirModalNotas(turmaId) {
   if (conteudoNotas) conteudoNotas.innerHTML = html;
 
   ativarEdicaoNotas();
+  aplicarValidacaoNotas();
 }
 
+// Aplicar validação nos inputs para garantir valores entre 0 e 10
+function aplicarValidacaoNotas() {
+  const inputs = document.querySelectorAll("#modal-notas input.nota-input");
+  
+  inputs.forEach(input => {
+    // Substitui vírgula por ponto ao digitar
+    input.addEventListener('keydown', function(e) {
+      if (e.key === ',') {
+        e.preventDefault();
+        const cursorPos = this.selectionStart;
+        const value = this.value;
+        
+        // Adiciona ponto se não existir um
+        if (!value.includes('.')) {
+          this.value = value.slice(0, cursorPos) + '.' + value.slice(cursorPos);
+          this.selectionStart = this.selectionEnd = cursorPos + 1;
+        }
+      }
+    });
+
+    input.addEventListener('input', function() {
+      let valor = parseFloat(this.value);
+      
+      // Se o valor for maior que 10, limita a 10
+      if (valor > 10) {
+        this.value = 10;
+      }
+      // Se o valor for menor que 0, limita a 0
+      else if (valor < 0) {
+        this.value = 0;
+      }
+    });
+
+    // Formata ao sair do campo - SEMPRE COM PONTO
+    input.addEventListener('blur', function() {
+      let valor = this.value.trim();
+      
+      // Substitui vírgula por ponto
+      valor = valor.replace(',', '.');
+      
+      if (valor && !isNaN(valor)) {
+        let num = parseFloat(valor);
+        num = Math.max(0, Math.min(10, num));
+        // Usa toFixed para garantir formato com ponto
+        this.value = num.toFixed(2);
+      } else if (valor !== '') {
+        this.value = '';
+      }
+    });
+  });
+}
 
 function ativarEdicaoNotas() {
   const botoesEditar = document.querySelectorAll("#modal-notas .btn-editar-coluna");
@@ -854,9 +912,13 @@ function ativarEdicaoNotas() {
   if (!tabela) return;
 
   botoesEditar.forEach(btn => {
-    btn.textContent = "✏️";
+    btn.textContent = "🔒";
+    btn.style.cursor = "pointer";
 
-    btn.onclick = () => {
+    btn.onclick = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      
       const sigla = btn.getAttribute("data-sigla");
 
       // Descobre índice da coluna
@@ -867,46 +929,39 @@ function ativarEdicaoNotas() {
           idxColuna = idx;
         }
       });
+      
       if (idxColuna === -1) return;
 
-      // Se já está editando essa coluna, salva e bloqueia ela
-      if (colunaEditando === idxColuna) {
+      // Se a coluna está desbloqueada (✅), bloqueia e salva
+      if (btn.textContent === "✅") {
         salvarNotasColuna(sigla, tabela);
         bloquearColuna(tabela, idxColuna);
-        btn.textContent = "✏️";
-        colunaEditando = null;
-        alert("Notas salvas!");
+        btn.textContent = "🔒";
+        colunaEditandoSigla = null;
+        alert("Notas salvas com sucesso!");
         return;
       }
 
-      // Se está editando outra coluna, pede para salvar antes
-      if (colunaEditando !== null) {
-        alert("Finalize a edição da outra coluna antes.");
+      // Se já tem outra coluna editando, avisa
+      if (colunaEditandoSigla !== null && colunaEditandoSigla !== sigla) {
+        alert("Salve a coluna atual antes de editar outra!");
         return;
       }
 
-      // Bloqueia todas as colunas primeiro (readonly=true e fundo cinza)
-      bloquearTodosInputs(tabela);
-
-      // Libera só a coluna clicada (readonly=false e fundo branco)
+      // Se está bloqueada (🔒), desbloqueia
       liberarColuna(tabela, idxColuna);
-
-      // Atualiza estado
-      colunaEditando = idxColuna;
-
-      // Atualiza botões
-      botoesEditar.forEach(b => b.textContent = "✏️");
       btn.textContent = "✅";
-
-      // Não muda o foco automaticamente (deixa o usuário decidir)
+      colunaEditandoSigla = sigla;
     };
   });
 }
 
 function bloquearTodosInputs(tabela) {
   tabela.querySelectorAll("tbody tr input.nota-input").forEach(input => {
-    input.readOnly = true;
+    input.disabled = true;
     input.style.backgroundColor = "#eee";
+    input.style.border = "1px solid #ccc";
+    input.style.cursor = "not-allowed";
   });
 }
 
@@ -916,8 +971,13 @@ function bloquearColuna(tabela, idxColuna) {
     if (!td) return;
     const input = td.querySelector("input.nota-input");
     if (!input) return;
-    input.readOnly = true;
+    
+    input.disabled = true;
+    input.setAttribute("disabled", "disabled");
     input.style.backgroundColor = "#eee";
+    input.style.border = "2px solid #ccc";
+    input.style.cursor = "not-allowed";
+    input.style.pointerEvents = "none";
   });
 }
 
@@ -927,9 +987,26 @@ function liberarColuna(tabela, idxColuna) {
     if (!td) return;
     const input = td.querySelector("input.nota-input");
     if (!input) return;
+    
+    // Remove disabled de todas as formas possíveis
+    input.disabled = false;
+    input.removeAttribute("disabled");
     input.readOnly = false;
+    input.removeAttribute("readonly");
+    
+    // Aplica estilos
     input.style.backgroundColor = "#fff";
+    input.style.cursor = "text";
+    input.style.border = "2px solid #1e87a3";
+    input.style.outline = "none";
+    input.style.pointerEvents = "auto";
+    
+    // Force focus capability
+    input.tabIndex = 0;
   });
+  
+  // Força um reflow
+  tabela.offsetHeight;
 }
 
 function salvarNotasColuna(sigla, tabela) {
@@ -953,7 +1030,18 @@ function salvarNotasColuna(sigla, tabela) {
     const input = td.querySelector("input.nota-input");
     if (!input) return;
 
-    const valor = input.value.trim();
+    let valor = input.value.trim();
+    
+    // Valida e formata o valor
+    if (valor !== "") {
+      let num = parseFloat(valor);
+      if (!isNaN(num)) {
+        // Garante que está entre 0 e 10
+        num = Math.max(0, Math.min(10, num));
+        valor = num.toFixed(2);
+        input.value = valor;
+      }
+    }
 
     if (!turma.notas) turma.notas = {};
     if (!turma.notas[ra]) turma.notas[ra] = {};
@@ -964,11 +1052,11 @@ function salvarNotasColuna(sigla, tabela) {
   salvarTurmasStorage(turmas);
 }
 
-
 // Fechar modal ao clicar no X
 if (fecharModalNotas) {
   fecharModalNotas.addEventListener("click", () => {
     if (modalNotas) modalNotas.style.display = "none";
+    colunaEditandoSigla = null;
   });
 }
 
@@ -976,8 +1064,331 @@ if (fecharModalNotas) {
 window.addEventListener("click", (e) => {
   if (modalNotas && e.target === modalNotas) {
     modalNotas.style.display = "none";
+    colunaEditandoSigla = null;
   }
 });
+
+
+
+// //================================================================================================================
+// //                       MODAL DE NOTAS (VISUALIZAÇÃO DA TABELA ALUNOS E COLUNAS DOS COMPONENTES)
+// //================================================================================================================
+
+// // Elementos da modal (confirme que IDs existem no HTML)
+// const modalNotas = document.getElementById("modal-notas");
+// if (modalNotas) modalNotas.style.display = "none";
+// const fecharModalNotas = document.getElementById("fecharModalNotas");
+// const conteudoNotas = document.getElementById("conteudoNotas");
+
+// // Warn se algum elemento não existir
+// //if (!modalNotas) console.warn("modal-notas não encontrado no DOM");
+// //if (!fecharModalNotas) console.warn("fecharModalNotas não encontrado no DOM");
+// //if (!conteudoNotas) console.warn("conteudoNotas não encontrado no DOM");
+
+// // Variável global para turma atual no modal e índice da coluna em edição
+// let turmaAtualNotasId = null;
+// let colunaEditando = null; // índice da coluna que está em edição
+
+// // Helper para normalizar strings
+// function _norm(v) {
+//   return (v === undefined || v === null) ? "" : String(v).trim().toLowerCase();
+// }
+
+// // Ler turmas do localStorage de forma segura
+// function lerTurmasStorageSafe() {
+//   try {
+//     return JSON.parse(localStorage.getItem("turmas")) || [];
+//   } catch {
+//     return [];
+//   }
+// }
+
+// // Salvar turmas no localStorage
+// function salvarTurmasStorage(turmas) {
+//   localStorage.setItem("turmas", JSON.stringify(turmas));
+// }
+
+// // Abrir modal e montar tabela
+// function abrirModalNotas(turmaId) {
+//   turmaAtualNotasId = turmaId;
+
+//   if (modalNotas) modalNotas.style.display = "flex";
+
+//   const turmasAgora = lerTurmasStorageSafe();
+//   const turma = turmasAgora.find(t => String(t.id) === String(turmaId));
+
+//   if (!turma) {
+//     if (conteudoNotas) {
+//       conteudoNotas.innerHTML = `
+//         <div class="nada-cadastrado">
+//           <p>TURMA NÃO ENCONTRADA.</p>
+//         </div>
+//       `;
+//     }
+//     return;
+//   }
+
+//   const alunos = Array.isArray(turma.alunos) ? turma.alunos : [];
+
+//   const discNomeTurma = _norm(turma.disciplinaNome || turma.disciplina || "");
+//   const discCodigoTurma = _norm(turma.disciplinaCodigo || "");
+
+//   if (!discNomeTurma && !discCodigoTurma) {
+//     if (conteudoNotas) {
+//       conteudoNotas.innerHTML = `
+//         <div class="nada-cadastrado">
+//           <p>ESTA TURMA NÃO POSSUI DISCIPLINA DEFINIDA!</p>
+//           <img src="../images/imagem_alunos.png" class="img-nada-cadastrado">
+//         </div>
+//       `;
+//     }
+//     return;
+//   }
+
+//   const componentesAll = JSON.parse(localStorage.getItem("componentes")) || [];
+
+//   const componentesDaDisciplina = componentesAll.filter(c => {
+//     const cDisc = _norm(c.disciplinaNome || c.disciplina || "");
+//     const cDiscCode = _norm(c.disciplinaCodigo || "");
+//     return (cDisc && (cDisc === discNomeTurma || cDisc === discCodigoTurma))
+//       || (cDiscCode && (cDiscCode === discCodigoTurma || cDiscCode === discNomeTurma));
+//   });
+
+//   if (!componentesDaDisciplina || componentesDaDisciplina.length === 0) {
+//     if (conteudoNotas) {
+//       conteudoNotas.innerHTML = `
+//         <div class="nada-cadastrado">
+//           <p>VOCÊ AINDA NÃO CADASTROU NENHUMA ATIVIDADE PARA ESTA DISCIPLINA...</p>
+//           <img src="../images/imagem_alunos.png" class="img-nada-cadastrado">
+//         </div>
+//         <div style="margin-top:10px">
+//           <a href="../Pagina_atividades/atividades.html" id="atividades-modal">ACESSE A PÁGINA DE ATIVIDADES E CADASTRE!</a>
+//         </div>
+//       `;
+//     }
+//     return;
+//   }
+
+//   // Montar tabela
+//   let html = `
+//     <div class="tabela-notas-container">
+//       <table class="tabela-notas">
+//         <thead>
+//           <tr>
+//             <th>RA</th>
+//             <th>NOME</th>
+//   `;
+
+//   componentesDaDisciplina.forEach(comp => {
+//     const titulo = comp.sigla ? comp.sigla : (comp.nome ? comp.nome.slice(0, 6) : "ATV");
+
+//     html += `<th class="col-nota" title="${comp.nome || ''}">
+//       ${titulo}
+//       <span
+//         class="btn-editar-coluna"
+//         data-sigla="${comp.sigla}"
+//         title="Editar notas dessa coluna"
+//         tabindex="0"
+//         role="button"
+//         aria-label="Editar notas da coluna ${comp.sigla}"
+//       >✏️</span>
+//     </th>`;
+//   });
+
+//   if (componentesDaDisciplina.length > 0) {
+//     html += `<th class="col-nota-final">Notas Finais</th>`;
+//   }
+
+//   html += `
+//           </tr>
+//         </thead>
+//         <tbody>
+//   `;
+
+//   if (alunos.length === 0) {
+//     html += `
+//       <tr>
+//         <td colspan="${2 + componentesDaDisciplina.length}" class="nenhum-aluno">
+//           Nenhum aluno cadastrado nesta turma.
+//         </td>
+//       </tr>`;
+//   } else {
+//     alunos.forEach(aluno => {
+//       const ra = aluno.ra || "";
+//       const nome = aluno.nome || "";
+
+//       html += `<tr data-ra="${ra}">`;
+//       html += `<td>${ra}</td>`;
+//       html += `<td class="col-nome">${nome}</td>`;
+
+//       componentesDaDisciplina.forEach(comp => {
+//         const notaSalva = turma.notas?.[ra]?.[comp.sigla] ?? "";
+
+//         html += `
+//           <td class="col-nota">
+//           <input class="nota-input" type="number" step="1" style="background-color:#eee;" readonly>
+//           </td>
+//         `;
+//       });
+
+//       const notaFinal = turma.notas?.[ra]?.['FINAL'] ?? "";
+
+//       html += `
+//         <td class="col-nota-final">
+//           <input class="nota-input nota-final" type="number" value="${notaFinal}" style="background-color:#eee;">
+//         </td>
+//       `;
+
+//       html += `</tr>`;
+//     });
+//   }
+
+//   html += `
+//         </tbody>
+//       </table>
+//     </div>
+//   `;
+
+//   if (conteudoNotas) conteudoNotas.innerHTML = html;
+
+//   ativarEdicaoNotas();
+// }
+
+
+// function ativarEdicaoNotas() {
+//   const botoesEditar = document.querySelectorAll("#modal-notas .btn-editar-coluna");
+//   const tabela = document.querySelector("#modal-notas table.tabela-notas");
+//   if (!tabela) return;
+
+//   botoesEditar.forEach(btn => {
+//     btn.textContent = "✏️";
+
+//     btn.onclick = () => {
+//       const sigla = btn.getAttribute("data-sigla");
+
+//       // Descobre índice da coluna
+//       let idxColuna = -1;
+//       tabela.querySelectorAll("thead th").forEach((th, idx) => {
+//         const btnCol = th.querySelector(".btn-editar-coluna");
+//         if (btnCol && btnCol.getAttribute("data-sigla") === sigla) {
+//           idxColuna = idx;
+//         }
+//       });
+//       if (idxColuna === -1) return;
+
+//       // Se já está editando essa coluna, salva e bloqueia ela
+//       if (colunaEditando === idxColuna) {
+//         salvarNotasColuna(sigla, tabela);
+//         bloquearColuna(tabela, idxColuna);
+//         btn.textContent = "✏️";
+//         colunaEditando = null;
+//         alert("Notas salvas!");
+//         return;
+//       }
+
+//       // Se está editando outra coluna, pede para salvar antes
+//       if (colunaEditando !== null) {
+//         alert("Finalize a edição da outra coluna antes.");
+//         return;
+//       }
+
+//       // Bloqueia todas as colunas primeiro (readonly=true e fundo cinza)
+//       bloquearTodosInputs(tabela);
+
+//       // Libera só a coluna clicada (readonly=false e fundo branco)
+//       liberarColuna(tabela, idxColuna);
+
+//       // Atualiza estado
+//       colunaEditando = idxColuna;
+
+//       // Atualiza botões
+//       botoesEditar.forEach(b => b.textContent = "✏️");
+//       btn.textContent = "✅";
+
+//       // Não muda o foco automaticamente (deixa o usuário decidir)
+//     };
+//   });
+// }
+
+// function bloquearTodosInputs(tabela) {
+//   tabela.querySelectorAll("tbody tr input.nota-input").forEach(input => {
+//     input.readOnly = true;
+//     input.style.backgroundColor = "#eee";
+//   });
+// }
+
+// function bloquearColuna(tabela, idxColuna) {
+//   tabela.querySelectorAll("tbody tr").forEach(tr => {
+//     const td = tr.cells[idxColuna];
+//     if (!td) return;
+//     const input = td.querySelector("input.nota-input");
+//     if (!input) return;
+//     input.readOnly = true;
+//     input.style.backgroundColor = "#eee";
+//   });
+// }
+
+// function liberarColuna(tabela, idxColuna) {
+//   tabela.querySelectorAll("tbody tr").forEach(tr => {
+//     const td = tr.cells[idxColuna];
+//     if (!td) return;
+//     const input = td.querySelector("input.nota-input");
+//     if (!input) return;
+//     input.readOnly = false;
+//     input.style.backgroundColor = "#fff";
+//   });
+// }
+
+// function salvarNotasColuna(sigla, tabela) {
+//   const turmas = lerTurmasStorageSafe();
+//   const turma = turmas.find(t => String(t.id) === String(turmaAtualNotasId));
+//   if (!turma) return alert("Turma não encontrada ao salvar.");
+
+//   let idxCol = -1;
+//   tabela.querySelectorAll("thead th").forEach((th, idx) => {
+//     const btnCol = th.querySelector(".btn-editar-coluna");
+//     if (btnCol && btnCol.getAttribute("data-sigla") === sigla) {
+//       idxCol = idx;
+//     }
+//   });
+//   if (idxCol === -1) return;
+
+//   tabela.querySelectorAll("tbody tr").forEach(tr => {
+//     const ra = tr.getAttribute("data-ra");
+//     const td = tr.cells[idxCol];
+//     if (!td) return;
+//     const input = td.querySelector("input.nota-input");
+//     if (!input) return;
+
+//     const valor = input.value.trim();
+
+//     if (!turma.notas) turma.notas = {};
+//     if (!turma.notas[ra]) turma.notas[ra] = {};
+
+//     turma.notas[ra][sigla] = valor;
+//   });
+
+//   salvarTurmasStorage(turmas);
+// }
+
+
+// // Fechar modal ao clicar no X
+// if (fecharModalNotas) {
+//   fecharModalNotas.addEventListener("click", () => {
+//     if (modalNotas) modalNotas.style.display = "none";
+//   });
+// }
+
+// // Fechar modal clicando fora
+// window.addEventListener("click", (e) => {
+//   if (modalNotas && e.target === modalNotas) {
+//     modalNotas.style.display = "none";
+//   }
+// });
+
+
+
+
 
 
 //================================================================================================================
