@@ -269,13 +269,9 @@ function criarCardComponente(comp) {
   });
 
   // EXCLUIR
-  card.querySelector(".excluir").addEventListener("click", () => {
-    if (confirm(`Deseja excluir o componente "${comp.nome}"?`)) {
-      componentes = componentes.filter(c => c.id !== comp.id);
-      localStorage.setItem("componentes", JSON.stringify(componentes));
-      atualizarListaComponentes();
-    }
-  });
+card.querySelector(".excluir").addEventListener("click", () => {
+    abrirModalConfirmacao(comp.id);
+});
 
   return card;
 }
@@ -331,5 +327,35 @@ function mostrarSucesso(texto = "Operação realizada com sucesso!") {
     setTimeout(() => overlay.remove(), 1000);
   }, 2000);
 }
+// ======================= MODAL DE CONFIRMAÇÃO =======================
+
+let idParaExcluir = null;
+
+function abrirModalConfirmacao(id) {
+    idParaExcluir = id;
+    document.getElementById("modalConfirmacao").style.display = "flex";
+}
+
+// Botão NÃO
+document.getElementById("confirmarNao").addEventListener("click", () => {
+    document.getElementById("modalConfirmacao").style.display = "none";
+    idParaExcluir = null;
+});
+
+// Botão SIM
+document.getElementById("confirmarSim").addEventListener("click", () => {
+    if (idParaExcluir !== null) {
+
+        // excluir componente
+        componentes = componentes.filter(c => c.id !== idParaExcluir);
+        localStorage.setItem("componentes", JSON.stringify(componentes));
+        atualizarListaComponentes();
+
+        mostrarSucesso("Atividade excluída com sucesso!");
+    }
+
+    document.getElementById("modalConfirmacao").style.display = "none";
+    idParaExcluir = null;
+});
 
 //===============================================================================================================
