@@ -86,7 +86,7 @@ if (data.firstAccess) {
   window.location.href = "../Primeiro_acesso/primeiro_acesso.html";
 } else {
   // Já fez acesso antes -> ir para página de Instituição
-  window.location.href = "../Instituição_cadastro/Instituição.html";
+  window.location.href = "../Instituicao_cadastro/Instituicao.html";
 }
 
 
