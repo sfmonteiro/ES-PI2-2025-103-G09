@@ -21,6 +21,10 @@ function salvar(data) {
 const lista = document.getElementById("lista-instituicoes");
 const modal = document.getElementById("modalInstituicao");
 
+const modalConfirmacao = document.getElementById("modalConfirmacao");
+const btnConfirmSim = document.getElementById("confirmarSim");
+const btnConfirmNao = document.getElementById("confirmarNao");
+
 const btnAbrir = document.getElementById("abrirModalInstituicao");
 const btnFechar = document.getElementById("fecharModal");
 const btnSalvar = document.getElementById("salvarInstituicao");
@@ -30,11 +34,15 @@ const tituloModal = document.getElementById("tituloModal");
 
 let instituicoes = carregar();
 let editandoId = null;
+let idParaExcluir = null;
 
 // ===== MODAL =====
 btnAbrir.onclick = () => abrirModal();
 btnFechar.onclick = () => fecharModal();
-window.onclick = e => { if (e.target === modal) fecharModal(); };
+window.onclick = e => { 
+  if (e.target === modal) fecharModal();
+  if (e.target === modalConfirmacao) modalConfirmacao.style.display = "none";
+};
 
 function abrirModal(edit = false, item = null) {
   modal.style.display = "flex";
@@ -63,16 +71,36 @@ btnSalvar.onclick = () => {
   if (editandoId) {
     const idx = instituicoes.findIndex(i => i.id === editandoId);
     instituicoes[idx] = { ...instituicoes[idx], nome };
+    mostrarSucesso("Instituição editada com sucesso!");
   } else {
     instituicoes.push({
       id: Date.now(),
       nome
     });
+    mostrarSucesso("Instituição cadastrada com sucesso!");
   }
 
   salvar(instituicoes);
   render();
   fecharModal();
+};
+
+// ===== CONFIRMAR EXCLUSÃO PADRÃO =====
+function confirmarExclusao(id) {
+  idParaExcluir = id;
+  modalConfirmacao.style.display = "flex";
+}
+
+btnConfirmSim.onclick = () => {
+  instituicoes = instituicoes.filter(i => i.id !== idParaExcluir);
+  salvar(instituicoes);
+  render();
+  modalConfirmacao.style.display = "none";
+  mostrarSucesso("Instituição excluída com sucesso!");
+};
+
+btnConfirmNao.onclick = () => {
+  modalConfirmacao.style.display = "none";
 };
 
 // ===== RENDER =====
@@ -107,13 +135,7 @@ function render() {
 
     card.querySelector(".btn-editar").onclick = () => abrirModal(true, inst);
 
-    card.querySelector(".btn-excluir").onclick = () => {
-      if (confirm("Deseja excluir esta instituição?")) {
-        instituicoes = instituicoes.filter(i => i.id !== inst.id);
-        salvar(instituicoes);
-        render();
-      }
-    };
+    card.querySelector(".btn-excluir").onclick = () => confirmarExclusao(inst.id);
 
     lista.appendChild(card);
   });
@@ -121,3 +143,24 @@ function render() {
 
 render();
 
+
+// ============== POPUP DE SUCESSO ==============
+function mostrarSucesso(texto = "Operação realizada com sucesso!") {
+  const overlay = document.createElement("div");
+  overlay.className = "overlay-sucesso";
+  overlay.style.transition = "opacity 1s";
+
+  overlay.innerHTML = `
+    <div class="caixa-sucesso">
+        <img src="../images/icone_NotaDez.png" class="icone-sucesso">
+        <p>${texto}</p>
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+
+  setTimeout(() => {
+    overlay.style.opacity = "0";
+    setTimeout(() => overlay.remove(), 1000);
+  }, 2000);
+}

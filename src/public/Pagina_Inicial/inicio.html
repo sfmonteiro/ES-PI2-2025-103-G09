@@ -1,4 +1,5 @@
-<!---* ALUNO: SARA FERNANDES MONTEIRO || RA: 25024107 -->
+<!--- ALUNO: SARA FERNANDES MONTEIRO || RA: 25024107 -->
+<!-- Ajustes: Gabriel Figueira Albasini || RA: 25019916 (criação do dashboard) -->
 
 
 <!DOCTYPE html>
@@ -79,6 +80,86 @@
 
     <div class="dashboard">
         <a href="inicio.html" class="pagina-ref">dashboard</a>
+
+        <!-- Grid de Cards do Dashboard -->
+        <div class="dashboard-grid">
+            
+            <!-- Card: Instituições -->
+            <div class="dashboard-card card-instituicoes">
+                <div class="card-header">
+                    <img src="../images/icone_instituicao_azul.png" alt="Instituições" class="card-icon">
+                    <h3>Instituições</h3>
+                </div>
+                <div class="card-body">
+                    <div class="card-numero" id="total-instituicoes">0</div>
+                    <p class="card-label">Cadastradas</p>
+                </div>
+                <a href="../Instituiçao_editar/instituicao2.html" class="card-link">Ver todas →</a>
+            </div>
+
+            <!-- Card: Cursos -->
+            <div class="dashboard-card card-cursos">
+                <div class="card-header">
+                    <img src="../images/icone_NotaDez.png" alt="Cursos" class="card-icon">
+                    <h3>Cursos</h3>
+                </div>
+                <div class="card-body">
+                    <div class="card-numero" id="total-cursos">0</div>
+                    <p class="card-label">Cadastrados</p>
+                    <div class="card-detalhe">
+                        <span id="total-disciplinas">0</span> disciplinas
+                    </div>
+                </div>
+                <a href="../cursos/cursos.html" class="card-link">Ver todos →</a>
+            </div>
+
+            <!-- Card: Turmas -->
+            <div class="dashboard-card card-turmas">
+                <div class="card-header">
+                    <img src="../images/icone_NotaDez.png" alt="Turmas" class="card-icon">
+                    <h3>Turmas</h3>
+                </div>
+                <div class="card-body">
+                    <div class="card-numero" id="total-turmas">0</div>
+                    <p class="card-label">Cadastradas</p>
+                    <div class="card-detalhe">
+                        <span id="total-alunos">0</span> alunos
+                    </div>
+                </div>
+                <a href="../pagina_turmas/turma.html" class="card-link">Ver todas →</a>
+            </div>
+
+            <!-- Card: Atividades -->
+            <div class="dashboard-card card-atividades">
+                <div class="card-header">
+                    <img src="../images/icone_NotaDez.png" alt="Atividades" class="card-icon">
+                    <h3>Componentes</h3>
+                </div>
+                <div class="card-body">
+                    <div class="card-numero" id="total-componentes">0</div>
+                    <p class="card-label">Cadastrados</p>
+                </div>
+                <a href="../Pagina_atividades/atividades.html" class="card-link">Ver todos →</a>
+            </div>
+
+        </div>
+
+        <!-- Seção: Últimas Turmas -->
+        <div class="secao-recentes">
+            <h2 class="secao-titulo">Turmas Recentes</h2>
+            <div class="lista-recentes" id="lista-turmas-recentes">
+                <!-- Será preenchido via JS -->
+            </div>
+        </div>
+
+        <!-- Seção: Cursos por Disciplinas -->
+        <div class="secao-recentes">
+            <h2 class="secao-titulo">Cursos com Mais Disciplinas</h2>
+            <div class="lista-recentes lista-cursos" id="lista-cursos-disciplinas">
+                <!-- Será preenchido via JS -->
+            </div>
+        </div>
+
     </div>
 
     <script src="inicio.js"></script>

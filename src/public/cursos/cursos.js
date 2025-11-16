@@ -42,7 +42,6 @@ const btnSalvarCurso = document.getElementById("salvarCurso");
 
 const inputNomeDisciplina = document.getElementById("nomeDisciplina");
 const inputCodigoDisciplina = document.getElementById("codigoDisciplina");
-
 const inputSiglaDisciplina = document.getElementById("siglaDisciplina");
 
 const btnAdicionarDisciplina = document.getElementById("adicionarDisciplina");
@@ -70,7 +69,7 @@ if (userBtn && userMenu) {
   });
 }
 
-// ======== MODAIS (abrir/fechar) ========
+// ======== MODAIS ========
 if (btnCloseModalCurso) btnCloseModalCurso.onclick = () => modalCurso.style.display = "none";
 if (btnCloseModalDisciplina) btnCloseModalDisciplina.onclick = () => modalDisciplina.style.display = "none";
 
@@ -79,7 +78,6 @@ window.addEventListener("click", e => {
   if (e.target === modalDisciplina) modalDisciplina.style.display = "none";
   if (e.target === modalConfirmacao) modalConfirmacao.style.display = "none";
 });
-
 
 // ======== RENDERIZAÇÃO ========
 function limparListaCursosDOM() {
@@ -132,9 +130,7 @@ function renderCursos() {
     listaCursosEl.innerHTML = `
       <div class="nada-cadastrado">
         <p>NENHUM CURSO CADASTRADO AINDA...</p>
-        <img src="../images/imagem_alunos.png" 
-             alt="Nenhum curso cadastrado ainda." 
-             class="img-nada-cadastrado">
+        <img src="../images/imagem_alunos.png" class="img-nada-cadastrado">
       </div>
     `;
     return;
@@ -198,6 +194,7 @@ if (btnSalvarCurso) {
     salvarCursos(cursos);
     renderCursos();
     modalCurso.style.display = "none";
+    mostrarSucesso("Curso cadastrado com sucesso!");
   });
 }
 
@@ -205,6 +202,7 @@ if (btnSalvarCurso) {
 function abrirModalDisciplina(cursoId) {
   const curso = cursos.find(c => c.id === cursoId);
   if (!curso) return alert("Curso não encontrado.");
+
   cursoAtual = curso;
   atualizarListaDisciplinas();
   modalDisciplina.style.display = "flex";
@@ -235,14 +233,17 @@ function atualizarListaDisciplinas() {
         <button class="btn-del" data-idx="${idx}">Excluir</button>
       </div>
     `;
+
     item.querySelector(".btn-edit").addEventListener("click", (e) => {
       e.stopPropagation();
       editarDisciplina(idx);
     });
+
     item.querySelector(".btn-del").addEventListener("click", (e) => {
       e.stopPropagation();
       confirmarExclusao(idx);
     });
+
     listaDisciplinasEl.appendChild(item);
   });
 }
@@ -272,6 +273,7 @@ if (btnAdicionarDisciplina) {
 
     atualizarListaDisciplinas();
     renderCursos();
+    mostrarSucesso("Disciplina cadastrada com sucesso!");
 
     inputCodigoDisciplina.value = "";
     inputNomeDisciplina.value = "";
@@ -300,7 +302,6 @@ function editarDisciplina(index) {
   atualizarListaDisciplinas();
   renderCursos();
 }
-
 // ======== EXCLUIR DISCIPLINA ========
 function confirmarExclusao(index) {
   indexParaExcluir = index;
@@ -318,6 +319,7 @@ if (btnConfirmSim) {
       }
       atualizarListaDisciplinas();
       renderCursos();
+      mostrarSucesso("Disciplina excluída com sucesso!");
     }
     modalConfirmacao.style.display = "none";
     indexParaExcluir = null;
@@ -335,11 +337,15 @@ if (btnConfirmNao) {
 function confirmarExclusaoCurso(id) {
   cursoAtual = cursos.find(c => c.id === id);
   if (!cursoAtual) return;
+
   modalConfirmacao.style.display = "flex";
+
   btnConfirmSim.onclick = () => {
     excluirCursoPorId(id);
     modalConfirmacao.style.display = "none";
+    mostrarSucesso("Curso excluído com sucesso!");
   };
+
   btnConfirmNao.onclick = () => {
     modalConfirmacao.style.display = "none";
   };
@@ -350,12 +356,28 @@ function excluirCursoPorId(id) {
   salvarCursos(cursos);
   renderCursos();
 }
-
-// ======== DESTACAR PÁGINA ATUAL ========
-const paginaAtual = "cursos";
-const botaoAtivo = document.getElementById(paginaAtual);
-if (botaoAtivo) botaoAtivo.classList.add("active");
-
 // ======== INICIALIZAÇÃO ========
 renderCursos();
 
+
+// ============== POPUP DE SUCESSO ==============
+
+function mostrarSucesso(texto = "Operação realizada com sucesso!") {
+  const overlay = document.createElement("div");
+  overlay.className = "overlay-sucesso";
+  overlay.style.transition = "opacity 1s";
+
+  overlay.innerHTML = `
+    <div class="caixa-sucesso">
+        <img src="../images/icone_NotaDez.png" class="icone-sucesso">
+        <p>${texto}</p>
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+
+  setTimeout(() => {
+    overlay.style.opacity = "0";
+    setTimeout(() => overlay.remove(), 1000);
+  }, 2000);
+}
