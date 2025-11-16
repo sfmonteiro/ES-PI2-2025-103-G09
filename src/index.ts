@@ -2,6 +2,7 @@ import express from "express";
 import path from "path";
 import authRouter from "./routes/auth";
 import instituicaoRouter from "./routes/instituicao";
+import turmasCsvRouter from "./routes/turmascsv";
 import { initPool } from "./database/pool";
 
 const app = express();
@@ -22,6 +23,34 @@ app.get("/", (req, res) => {
 // registrar rotas
 app.use("/api", authRouter);
 app.use("/api/instituicao", instituicaoRouter);
+app.use("/api/turmas", turmasCsvRouter);
+
+//Checagem de JSON
+app.use(
+  (
+    err: any,
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
+    // Erro de JSON inválido vindo do express.json()
+    if (
+      err instanceof SyntaxError &&
+      "body" in err &&
+      (err as any).status === 400
+    ) {
+      return res
+        .status(400)
+        .json({ ok: false, error: "JSON inválido no corpo da requisição." });
+    }
+
+    // Qualquer outro erro cai aqui
+    console.error("Erro não tratado:", err);
+    return res
+      .status(500)
+      .json({ ok: false, error: "Erro interno no servidor." });
+  }
+);
 
 // inicializar pool e iniciar servidor
 (async () => {

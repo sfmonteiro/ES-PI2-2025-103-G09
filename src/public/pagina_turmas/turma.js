@@ -1217,56 +1217,172 @@ function abrirModalNotasComPesos(turmaId) {
 }
 
 //================================================================================================================
-//                                    MODAL DE IMPORTAÇÃO DE ALUNOS VIA CSV.
+//                          MODAL DE IMPORTAÇÃO DE ALUNOS VIA CSV (BACKEND)
 //================================================================================================================
 
-const modalImportar = document.getElementById('modal-importar-alunos');
-const btnAbrirImportar = document.getElementById('import-aluno');
-const btnImportar = document.getElementById('btn-importar-alunos');
-const selectTurmas = document.getElementById('select-turmas');
+// Elementos do modal
+const modalImportar = document.getElementById("modal-importar-alunos");
+const btnAbrirImportar = document.getElementById("import-aluno");       // botão que abre o modal
+const btnImportar = document.getElementById("btn-importar-alunos");     // botão IMPORTAR dentro do modal
+const selectTurmas = document.getElementById("select-turmas");          // select com as turmas
+const inputArquivoCsv = document.getElementById("arquivo-csv-alunos");  // input file escondido
 
-if (btnAbrirImportar) {
-  btnAbrirImportar.addEventListener('click', () => {
-    preencherSelectTurmas();
-    if (modalImportar) modalImportar.style.display = 'flex';
+// Abre o modal ao clicar no botão "IMPORTAR ALUNO" da tela principal
+if (btnAbrirImportar && modalImportar) {
+  btnAbrirImportar.addEventListener("click", () => {
+    preencherSelectTurmasImport();   // carrega as turmas no select
+    modalImportar.style.display = "flex";
   });
 }
 
-function preencherSelectTurmas() {
-  const turmas = JSON.parse(localStorage.getItem('turmas')) || [];
-  selectTurmas.innerHTML = '<option value="">SELECIONE UMA TURMA</option>';
+// Fecha o modal clicando fora da janelinha
+if (modalImportar) {
+  modalImportar.addEventListener("click", (e) => {
+    if (e.target === modalImportar) {
+      modalImportar.style.display = "none";
+    }
+  });
+}
 
-  if (turmas.length === 0) {
-    const option = document.createElement('option');
-    option.value = '';
-    option.textContent = 'NENHUMA TURMA CADASTRADA';
+// Preenche o select com as turmas salvas no localStorage
+function preencherSelectTurmasImport() {
+  const turmas = JSON.parse(localStorage.getItem("turmas")) || [];
+  if (!selectTurmas) return;
+
+  selectTurmas.innerHTML = `<option value="">SELECIONE A TURMA</option>`;
+
+  if (!turmas.length) {
+    const option = document.createElement("option");
+    option.value = "";
+    option.textContent = "NENHUMA TURMA CADASTRADA";
     selectTurmas.appendChild(option);
     return;
   }
 
-  turmas.forEach(t => {
-    const option = document.createElement('option');
-    option.value = t.id;
+  turmas.forEach((t) => {
+    const option = document.createElement("option");
+    option.value = t.id;      // esse id será usado na rota /api/turmas/:id/...
     option.textContent = t.nome;
     selectTurmas.appendChild(option);
   });
 }
 
-if (modalImportar) {
-  modalImportar.addEventListener('click', (e) => {
-    if (e.target === modalImportar) modalImportar.style.display = 'none';
-  });
-}
-
-if (btnImportar) {
-  btnImportar.addEventListener('click', () => {
+// Quando clica no botão IMPORTAR, abrimos o seletor de arquivo
+if (btnImportar && inputArquivoCsv && selectTurmas) {
+  btnImportar.addEventListener("click", () => {
     const turmaSelecionada = selectTurmas.value;
+
     if (!turmaSelecionada) {
-      alert('Selecione uma turma!');
+      alert("Selecione uma turma antes de importar.");
       return;
     }
 
-    mostrarSucesso(`Alunos da turma "${selectTurmas.selectedOptions[0].text}" importados com sucesso!`);
-    modalImportar.style.display = 'none';
+    // Abre o seletor de arquivo (.csv)
+    inputArquivoCsv.click();
+  });
+
+  // Quando o usuário escolhe o arquivo .csv
+  inputArquivoCsv.addEventListener("change", async () => {
+    try {
+      const turmaSelecionada = selectTurmas.value;
+      const arquivo = inputArquivoCsv.files && inputArquivoCsv.files[0];
+
+      if (!turmaSelecionada) {
+        alert("Selecione uma turma antes de importar.");
+        return;
+      }
+
+      if (!arquivo) {
+        alert("Selecione um arquivo CSV.");
+        return;
+      }
+
+      if (!arquivo.name.toLowerCase().endsWith(".csv")) {
+        alert("O arquivo precisa ser do tipo .csv");
+        inputArquivoCsv.value = "";
+        return;
+      }
+
+      // Lê o conteúdo do arquivo como texto
+      const textoCsv = await arquivo.text();
+
+      // Envia para o backend
+      const resposta = await fetch(`/api/turmas/${turmaSelecionada}/alunos/importar-csv`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "text/csv"   // importante: bater com express.text({ type: ['text/csv', ...] })
+        },
+        body: textoCsv
+      });
+
+      if (!resposta.ok) {
+        let msg = "Erro ao importar CSV.";
+        try {
+          const erro = await resposta.json();
+          if (erro && erro.error) msg = erro.error;
+        } catch (_) {}
+        alert(msg);
+        return;
+      }
+
+      const dados = await resposta.json(); // opcional: ver o que o backend devolve
+      console.log("Importação CSV OK:", dados);
+
+      if (typeof mostrarSucesso === "function") {
+        const nomeTurmaSelecionada = selectTurmas.selectedOptions[0]?.text || "";
+        mostrarSucesso(`Alunos da turma "${nomeTurmaSelecionada}" importados com sucesso!`);
+      } else {
+        alert("Alunos importados com sucesso!");
+      }
+
+      modalImportar.style.display = "none";
+    } catch (erro) {
+      console.error("Erro inesperado ao importar CSV:", erro);
+      alert("Erro inesperado ao importar CSV.");
+    } finally {
+      // limpa o input pra poder escolher o mesmo arquivo depois, se quiser
+      inputArquivoCsv.value = "";
+    }
+  });
+}
+
+//================================================================================================================
+//                             EXPORTAR NOTAS PARA CSV (BACKEND)
+//================================================================================================================
+
+const btnExportarNotas = document.getElementById("btn-exportar-notas");
+
+if (btnExportarNotas) {
+  btnExportarNotas.addEventListener("click", async () => {
+
+    if (!turmaAtualNotasId) {
+      alert("Abra o modal de notas de uma turma antes de exportar.");
+      return;
+    }
+
+    try {
+      const resposta = await fetch(`/api/turmas/${turmaAtualNotasId}/notas/exportar-csv`);
+
+      if (!resposta.ok) {
+        const textoErro = await resposta.text();
+        console.error("Erro ao exportar CSV:", textoErro);
+        alert("Erro ao exportar notas em CSV.");
+        return;
+      }
+
+      const blob = await resposta.blob();
+      const url = URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `notas_turma_${turmaAtualNotasId}.csv`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+    } catch (erro) {
+      console.error("Erro inesperado ao exportar CSV:", erro);
+      alert("Erro inesperado ao exportar notas em CSV.");
+    }
   });
 }
