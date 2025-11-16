@@ -189,8 +189,7 @@ btnSalvarComp.addEventListener("click", () => {
 
     // fechar modal
     fecharModalComp();
-
-    alert("Componente salvo com sucesso!");
+    mostrarSucesso("Atividade salva com sucesso!");
 
     });
 
@@ -313,17 +312,24 @@ atualizarListaComponentes();
 
 //==================ALERTA=======================================================================================
 
-function mostrarToast(texto) {
-  const toast = document.getElementById("toast");
-  toast.textContent = texto;
+function mostrarSucesso(texto = "Operação realizada com sucesso!") {
+  const overlay = document.createElement("div");
+  overlay.className = "overlay-sucesso";
+  overlay.style.transition = "opacity 1s";
 
-  toast.classList.add("mostrar");
+  overlay.innerHTML = `
+        <div class="caixa-sucesso">
+            <img src="../images/icone_NotaDez.png" alt="Sucesso" class="icone-sucesso">
+            <p>${texto}</p>
+        </div>
+    `;
 
-  // remove depois de 5 segundos
+  document.body.appendChild(overlay);
+
   setTimeout(() => {
-    toast.classList.remove("mostrar");
-  }, 5000);
+    overlay.style.opacity = "0";
+    setTimeout(() => overlay.remove(), 1000);
+  }, 2000);
 }
-
 
 //===============================================================================================================

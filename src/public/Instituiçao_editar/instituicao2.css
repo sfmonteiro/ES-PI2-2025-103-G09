@@ -89,12 +89,6 @@ body {
   z-index: 10;
 }
 
-.logo-area {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
 .logo { height: 50px; }
 
 /* ---------- LOCALIZAÇÃO ---------- */
@@ -135,14 +129,14 @@ body {
 
 /* ---------- MENU USUÁRIO ---------- */
 .user-menu {
-    position: absolute;
-    right: 25px;   /* distância da borda direita */
-    top: 50%;
-    transform: translateY(-50%);
-    display: flex;
-    align-items: center;
-    gap: 10px; /* espaço entre ícone e texto */
-    font-weight: bold;
+  position: absolute;
+  right: 25px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: bold;
 }
 
 .pessoa-icon { width: 18px; height: 18px; }
@@ -196,7 +190,7 @@ body {
 
 /* ---------- CONTEÚDO ---------- */
 .pagina-atual {
-  margin-top: 50px;       
+  margin-top: 50px;
   margin-left: 175px;
   margin-right: 50px;
   display: flex;
@@ -268,8 +262,6 @@ button:hover { background-color: #1d6f86; }
   color: #333;
 }
 
-.card-info p { margin: 6px 0; }
-
 .card-botoes {
   display: flex;
   justify-content: center;
@@ -288,11 +280,11 @@ button:hover { background-color: #1d6f86; }
   transition: 0.2s;
 }
 
-.card-botoes button:hover { opacity: 0.85; }
-
-.btn-alunos { background: #00c896; }
 .btn-editar { background: #ffc107; }
 .btn-excluir { background: #ff5252; }
+.btn-alunos { background: #00c896; }
+
+.card-botoes button:hover { opacity: 0.85; }
 
 /* ---------- MODAIS ---------- */
 .modal {
@@ -342,7 +334,6 @@ button:hover { background-color: #1d6f86; }
 }
 
 .form-group label {
-  display: block;
   margin-bottom: 6px;
   font-weight: 600;
   color: #333;
@@ -354,13 +345,12 @@ button:hover { background-color: #1d6f86; }
   border: 2px solid #aaa;
   border-radius: 10px;
   padding: 8px 12px;
-  font-family: "Comfortaa", sans-serif;
   font-size: 12px;
   outline: none;
 }
 
 /* ---------- BOTÕES ---------- */
-.btn-save, .btn-add, #btnDisciplina {
+.btn-save, .btn-add {
   width: 100%;
   margin-top: 15px;
   padding: 9px 14px;
@@ -373,52 +363,8 @@ button:hover { background-color: #1d6f86; }
   transition: 0.3s ease;
 }
 
-#btnDisciplina {
-  background-color: #2bb8d4;
-  margin-top: 10px;
-}
-
-#btnDisciplina:hover { background-color: #2193a7; }
-.btn-save:hover, .btn-add:hover { background-color: #1d6f86; }
-
-/* ---------- DISCIPLINAS LISTA ---------- */
-.disciplinas-list {
-  background-color: #f2f2f2;
-  border-radius: 10px;
-  padding: 10px;
-  margin-top: 20px;
-  max-height: 150px;
-  overflow-y: auto;
-}
-
-.disciplinas-list div {
-  background: white;
-  border-radius: 8px;
-  padding: 6px 10px;
-  margin-bottom: 5px;
-  font-size: 12px;
-}
-
-.disciplinas-list .disc-buttons {
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-}
-
-.disciplinas-list .btn-edit {
-  background-color: #ffc107;
-}
-
-.disciplinas-list .btn-edit:hover {
-  background-color: #e0a800;
-}
-
-.disciplinas-list .btn-del {
-  background-color: #ff5252;
-}
-
-.disciplinas-list .btn-del:hover {
-  background-color: #e04848;
+.btn-save:hover, .btn-add:hover {
+  background-color: #1d6f86;
 }
 
 /* ---------- MODAL CONFIRMAÇÃO ---------- */
@@ -447,3 +393,50 @@ button:hover { background-color: #1d6f86; }
 #confirmarNao { background: #aaa; }
 #confirmarSim:hover { background: #166b82; }
 #confirmarNao:hover { background: #888; }
+
+/* ---------- SUCESSO  ---------- */
+.overlay-sucesso {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  animation: fadeIn 0.3s ease forwards;
+}
+
+.caixa-sucesso {
+  background-color: white;
+  padding: 40px 60px;
+  border-radius: 30px;
+  text-align: center;
+  box-shadow: 0 0 20px rgba(0,0,0,0.3);
+  animation: popIn 0.3s ease;
+}
+
+.icone-sucesso {
+  width: 100px;
+  height: 100px;
+  margin-bottom: 15px;
+}
+
+.caixa-sucesso p {
+  color: #1e87a3;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+/* ANIMAÇÕES */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes popIn {
+  from { transform: scale(0.7); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
