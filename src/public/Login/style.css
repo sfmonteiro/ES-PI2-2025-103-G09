@@ -81,7 +81,7 @@ form {
 }
 
 .input-email {
-    background: url(icone_pessoa.png) no-repeat 10px center; /*usado para colocar icone dentro do input, no-repeat para que seja usado apenas uma vez, sem repetir para preencher o bloco */
+    background: url(../images/icone_pessoa.png) no-repeat 10px center; /*usado para colocar icone dentro do input, no-repeat para que seja usado apenas uma vez, sem repetir para preencher o bloco */
     background-size: 20px;
     width: 100%;
     padding: 12px;
@@ -94,7 +94,7 @@ form {
 }
 
 .input-senha {
-    background: url(icone_cadeado.png) no-repeat 10px center;
+    background: url(../images/icone_cadeado.png) no-repeat 10px center;
     background-size: 20px;
     width: 100%;
     padding: 12px;
