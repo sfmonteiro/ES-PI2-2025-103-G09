@@ -43,6 +43,7 @@ const btnSalvarCurso = document.getElementById("salvarCurso");
 const inputNomeDisciplina = document.getElementById("nomeDisciplina");
 const inputCodigoDisciplina = document.getElementById("codigoDisciplina");
 const inputSiglaDisciplina = document.getElementById("siglaDisciplina");
+const inputPeriodoDisciplina = document.getElementById("periodTurma");
 
 const btnAdicionarDisciplina = document.getElementById("adicionarDisciplina");
 
@@ -90,7 +91,7 @@ function criarCardDOM(curso) {
   card.dataset.id = curso.id;
 
   const disciplinasText = (curso.disciplinas && curso.disciplinas.length > 0)
-    ? curso.disciplinas.map(d => `${d.codigo} - ${d.sigla}`).join(", ")
+    ? curso.disciplinas.map(d => `${d.codigo} - ${d.sigla} (${d.periodo || 'S/ período'})`).join(", ")
     : "Nenhuma disciplina cadastrada";
 
   card.innerHTML = `
@@ -204,8 +205,17 @@ function abrirModalDisciplina(cursoId) {
   if (!curso) return alert("Curso não encontrado.");
 
   cursoAtual = curso;
+  limparCamposDisciplina();
   atualizarListaDisciplinas();
   modalDisciplina.style.display = "flex";
+}
+
+// ======== LIMPAR CAMPOS DE DISCIPLINA ========
+function limparCamposDisciplina() {
+  inputCodigoDisciplina.value = "";
+  inputNomeDisciplina.value = "";
+  inputSiglaDisciplina.value = "";
+  inputPeriodoDisciplina.value = "";
 }
 
 // ======== ATUALIZAR LISTA DE DISCIPLINAS ========
@@ -227,7 +237,7 @@ function atualizarListaDisciplinas() {
     const item = document.createElement("div");
     item.className = "disc-item";
     item.innerHTML = `
-      <span>${d.codigo} - ${d.nome} (${d.sigla})</span>
+      <span>${d.codigo} - ${d.nome} (${d.sigla}) - ${d.periodo || 'S/ período'}</span>
       <div class="disc-buttons">
         <button class="btn-edit" data-idx="${idx}">Editar</button>
         <button class="btn-del" data-idx="${idx}">Excluir</button>
@@ -256,14 +266,16 @@ if (btnAdicionarDisciplina) {
     const codigo = inputCodigoDisciplina.value.trim();
     const nome = inputNomeDisciplina.value.trim();
     const sigla = inputSiglaDisciplina.value.trim().toUpperCase();
+    const periodo = inputPeriodoDisciplina.value.trim();
 
-    if (!codigo || !nome || !sigla)
-      return alert("Preencha CÓDIGO, NOME e SIGLA!");
+    if (!codigo || !nome || !sigla || !periodo) {
+      return alert("Preencha todos os campos: CÓDIGO, NOME, SIGLA e PERÍODO!");
+    }
 
     if (!Array.isArray(cursoAtual.disciplinas))
       cursoAtual.disciplinas = [];
 
-    cursoAtual.disciplinas.push({ codigo, nome, sigla });
+    cursoAtual.disciplinas.push({ codigo, nome, sigla, periodo });
 
     const idx = cursos.findIndex(c => c.id === cursoAtual.id);
     if (idx !== -1) {
@@ -275,9 +287,7 @@ if (btnAdicionarDisciplina) {
     renderCursos();
     mostrarSucesso("Disciplina cadastrada com sucesso!");
 
-    inputCodigoDisciplina.value = "";
-    inputNomeDisciplina.value = "";
-    inputSiglaDisciplina.value = "";
+    limparCamposDisciplina();
   });
 }
 
@@ -290,6 +300,7 @@ function editarDisciplina(index) {
   inputCodigoDisciplina.value = disc.codigo;
   inputNomeDisciplina.value = disc.nome;
   inputSiglaDisciplina.value = disc.sigla;
+  inputPeriodoDisciplina.value = disc.periodo || "";
 
   cursoAtual.disciplinas.splice(index, 1);
 
@@ -302,6 +313,7 @@ function editarDisciplina(index) {
   atualizarListaDisciplinas();
   renderCursos();
 }
+
 // ======== EXCLUIR DISCIPLINA ========
 function confirmarExclusao(index) {
   indexParaExcluir = index;
@@ -356,12 +368,11 @@ function excluirCursoPorId(id) {
   salvarCursos(cursos);
   renderCursos();
 }
+
 // ======== INICIALIZAÇÃO ========
 renderCursos();
 
-
 // ============== POPUP DE SUCESSO ==============
-
 function mostrarSucesso(texto = "Operação realizada com sucesso!") {
   const overlay = document.createElement("div");
   overlay.className = "overlay-sucesso";
