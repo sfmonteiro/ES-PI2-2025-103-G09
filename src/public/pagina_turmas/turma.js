@@ -87,7 +87,6 @@ const selectDisciplina = document.getElementById("disciplinaTurma");
 
 const inputCodigo = document.getElementById("codTurma");
 const inputNome = document.getElementById("nomeTurma");
-const inputPeriodo = document.getElementById("periodTurma");
 
 // ===============================
 // DADOS (leitura atual do storage sempre que necessário)
@@ -298,7 +297,6 @@ function criarCardTurma(turma) {
   card.innerHTML = `
     <h3>${turma.nome}</h3>
     <p><strong>Código:</strong> ${turma.codigo}</p>
-    <p><strong>Período:</strong> ${turma.periodo}</p>
     <p><strong>Curso:</strong> ${turma.cursoNome || turma.curso || ''}</p>
     <p><strong>Disciplina:</strong><br>• ${turma.disciplinaNome || turma.disciplina || ''}</p>
 
@@ -383,7 +381,6 @@ function abrirModalEdicaoTurma(turma) {
   // preencher campos básicos
   if (inputCodigo) inputCodigo.value = turma.codigo || "";
   if (inputNome) inputNome.value = turma.nome || "";
-  if (inputPeriodo) inputPeriodo.value = turma.periodo || "";
 
   // setar curso (cursoId) – comparar por string
   if (selectCurso) selectCurso.value = turma.cursoId ? String(turma.cursoId) : "";
@@ -443,11 +440,10 @@ if (btnSalvarTurma) {
     // ler e validar campos
     const codigo = inputCodigo ? inputCodigo.value.trim() : "";
     const nome = inputNome ? inputNome.value.trim() : "";
-    const periodo = inputPeriodo ? inputPeriodo.value.trim() : "";
     const cursoId = selectCurso ? selectCurso.value : "";
     const disciplinaValue = selectDisciplina ? selectDisciplina.value : "";
 
-    if (!codigo || !nome || !periodo || !cursoId || !disciplinaValue) {
+    if (!codigo || !nome || !cursoId || !disciplinaValue) {
       alert("Preencha todos os campos obrigatórios.");
       return;
     }
@@ -473,7 +469,6 @@ if (btnSalvarTurma) {
       // editar
       turmaEditando.codigo = codigo;
       turmaEditando.nome = nome;
-      turmaEditando.periodo = periodo;
       turmaEditando.cursoId = String(cursoObj.id);
       turmaEditando.cursoNome = cursoObj.nome;
       turmaEditando.disciplinaNome = disciplinaNome;
@@ -487,7 +482,6 @@ if (btnSalvarTurma) {
         id: Date.now(),
         codigo,
         nome,
-        periodo,
         cursoId: String(cursoObj.id),
         cursoNome: cursoObj.nome,
         disciplinaNome,
@@ -505,7 +499,6 @@ if (btnSalvarTurma) {
     if (modalTurma) modalTurma.style.display = "none";
     if (inputCodigo) inputCodigo.value = "";
     if (inputNome) inputNome.value = "";
-    if (inputPeriodo) inputPeriodo.value = "";
     if (selectCurso) selectCurso.value = "";
     resetDisciplinaSelect();
   });

@@ -513,3 +513,80 @@ button:hover { background-color: #1d6f86; }
   from { transform: scale(0.7); opacity: 0; }
   to { transform: scale(1); opacity: 1; }
 }
+
+
+/* ===== DROPDOWN COM LABEL FIXA ===== */
+.grupo-select {
+  position: relative;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+/* Label fixa acima do select */
+.grupo-select label {
+  position: absolute;
+  left: 18px;
+  top: -4px;
+  /* bem rente à borda */
+  font-size: 10px;
+  background-color: #fff;
+  color: #a5a5a5;
+  font-family: Comfortaa;
+  font-weight: bold;
+  padding: 0 4px;
+  pointer-events: none;
+  transition: 0.3s ease all;
+
+  z-index: 10;
+  /* 🔧 NOVO → garante que a label fica acima do select */
+}
+
+/* Select estilizado */
+.grupo-select select {
+  width: 100%;
+  padding: 10px 20px;
+  border-radius: 50px;
+  border: 2px solid rgb(165, 165, 165);
+  font-family: Comfortaa;
+  font-size: 10px;
+  font-weight: bold;
+  color: black;
+  background-color: white;
+  appearance: none;
+  transition: 0.3s ease all;
+
+  position: relative;
+  /* 🔧 NOVO → necessário pro z-index funcionar */
+  z-index: 1;
+  /* 🔧 NOVO → faz o select ficar abaixo da label */
+
+  /* seta personalizada */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3E%3Cpath fill='%231e87a3' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 18px center;
+  background-size: 10px;
+  appearance: none;
+  transition: 0.3s ease all;
+}
+
+
+.grupo-select select:focus {
+  outline: none !important;
+  /* tira o contorno preto */
+  box-shadow: 0 0 0 0 transparent !important;
+  /* garante */
+}
+
+/* Quando QUALQUER opção que não seja a primeira estiver selecionada */
+.grupo-select:has(select option:checked:not(:first-child)) select {
+  border-color: #25e4d1 !important;
+  color: black !important;
+  /* 🔥 texto continua preto */
+}
+
+/* Muda a label também */
+.grupo-select:has(select option:checked:not(:first-child)) label {
+  color: #25e4d1 !important;
+  outline: none;
+
+}
