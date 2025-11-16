@@ -3,10 +3,10 @@
 // Adições e melhorias: ChatGPT (comentadas)
 
 import { Router, Request, Response } from "express";
-import { body, validationResult } from "express-validator";
-import bcrypt from "bcryptjs";
-import jwt, { Secret } from "jsonwebtoken";
-import oracledb from "oracledb";
+import { body, validationResult } from 'express-validator';
+import bcrypt from 'bcryptjs';
+import jwt, { Secret } from 'jsonwebtoken';
+import oracledb from 'oracledb';
 import { getConnectionFromPool } from "../database/pool";
 import { requireAuth, AuthRequest } from "../middleware/auth";
 

@@ -1,5 +1,5 @@
-import oracledb from "oracledb";
-import dotenv from "dotenv";
+import oracledb from 'oracledb';
+import dotenv from 'dotenv'; dotenv.config();
 
 dotenv.config();
 

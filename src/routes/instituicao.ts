@@ -3,7 +3,7 @@
 //        POST /api/instituicao => cria instituição (owner_user_id = user) e o curso opcional
 
 import { Router, Response } from "express";
-import oracledb from "oracledb";
+import oracledb from 'oracledb';
 import { getConnectionFromPool } from "../database/pool";
 import { requireAuth, AuthRequest } from "../middleware/auth";
 
