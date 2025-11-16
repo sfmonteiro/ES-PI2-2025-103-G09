@@ -1,7 +1,5 @@
 // ALUNO: SARA FERNANDES MONTEIRO   ||   RA: 25024107
 
-
-
 //================================================================================================================
 //                                    BOTAO DE MENU (ABRIR E FECHAR O DROPDOWN)
 //================================================================================================================
@@ -24,13 +22,35 @@ function redirecionar(id, destino) {
   const elemento = document.getElementById(id);
   if (elemento) {
     elemento.addEventListener('click', (e) => {
-      e.preventDefault(); // 
+      e.preventDefault();
       window.location.href = destino;
     });
   }
 }
 
+//================================================================================================================
+//                                    FUNÇÃO DE SUCESSO (PADRÃO CURSOS)
+//================================================================================================================
 
+function mostrarSucesso(texto = "Operação realizada com sucesso!") {
+  const overlay = document.createElement("div");
+  overlay.className = "overlay-sucesso";
+  overlay.style.transition = "opacity 1s";
+
+  overlay.innerHTML = `
+    <div class="caixa-sucesso">
+        <img src="../images/icone_NotaDez.png" class="icone-sucesso">
+        <p>${texto}</p>
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+
+  setTimeout(() => {
+    overlay.style.opacity = "0";
+    setTimeout(() => overlay.remove(), 1000);
+  }, 2000);
+}
 
 //================================================================================================================
 //                  FUNCIONAMENTO DOS BOTOES MODAL DA PAGINA (CADASTRO DE TURMAS E IMPORTAR ALUNOS)
@@ -54,9 +74,6 @@ function configurarModal(botaoId, modalId) {
 configurarModal("cadastro-turma", "modal-turma");
 configurarModal("import-aluno", "modal-importar-alunos");
 
-
-
-
 //========================================================================================================================
 //                                                   BTN CADASTRO DE TURMAS
 //========================================================================================================================
@@ -71,13 +88,6 @@ const selectDisciplina = document.getElementById("disciplinaTurma");
 const inputCodigo = document.getElementById("codTurma");
 const inputNome = document.getElementById("nomeTurma");
 const inputPeriodo = document.getElementById("periodTurma");
-
-// segurança: se algo não existe, evita crash e loga
-//if (!containerTurmas) console.warn("container-turmas não encontrado");
-//if (!modalTurma) console.warn("modal-turma não encontrado");
-//if (!btnSalvarTurma) console.warn("confirmar-cadastro-turma não encontrado");
-//if (!selectCurso) console.warn("cursoTurma (select) não encontrado");
-//if (!selectDisciplina) console.warn("disciplinaTurma (select) não encontrado");
 
 // ===============================
 // DADOS (leitura atual do storage sempre que necessário)
@@ -192,6 +202,92 @@ if (selectCurso) {
   });
 }
 
+//================================================================================================================
+//                        VARIÁVEIS GLOBAIS PARA CONTROLE DE EXCLUSÃO
+//================================================================================================================
+
+const modalConfirmacao = document.getElementById('modalConfirmacao');
+const btnConfirmarSim = document.getElementById('confirmarSim');
+const btnConfirmarNao = document.getElementById('confirmarNao');
+
+let itemParaExcluir = null; // Armazena { tipo: 'turma'|'aluno', id/index, dados }
+
+//================================================================================================================
+//                            FUNÇÕES DE CONFIRMAÇÃO DE EXCLUSÃO
+//================================================================================================================
+
+function confirmarExclusaoTurma(turmaId) {
+  itemParaExcluir = { tipo: 'turma', id: turmaId };
+  modalConfirmacao.style.display = 'flex';
+}
+
+function confirmarExclusaoAluno(index) {
+  itemParaExcluir = { tipo: 'aluno', index: index };
+  modalConfirmacao.style.display = 'flex';
+}
+
+// Botão SIM
+if (btnConfirmarSim) {
+  btnConfirmarSim.addEventListener('click', () => {
+    if (!itemParaExcluir) {
+      modalConfirmacao.style.display = 'none';
+      return;
+    }
+
+    if (itemParaExcluir.tipo === 'turma') {
+      excluirTurmaPorId(itemParaExcluir.id);
+      mostrarSucesso("Turma excluída com sucesso!");
+    } else if (itemParaExcluir.tipo === 'aluno') {
+      excluirAlunoConfirmado(itemParaExcluir.index);
+      mostrarSucesso("Aluno excluído com sucesso!");
+    }
+
+    modalConfirmacao.style.display = 'none';
+    itemParaExcluir = null;
+  });
+}
+
+// Botão NÃO
+if (btnConfirmarNao) {
+  btnConfirmarNao.addEventListener('click', () => {
+    modalConfirmacao.style.display = 'none';
+    itemParaExcluir = null;
+  });
+}
+
+// Fechar clicando fora
+window.addEventListener('click', (e) => {
+  if (e.target === modalConfirmacao) {
+    modalConfirmacao.style.display = 'none';
+    itemParaExcluir = null;
+  }
+});
+
+//================================================================================================================
+//                                    FUNÇÕES DE EXCLUSÃO
+//================================================================================================================
+
+function excluirTurmaPorId(id) {
+  turmas = turmas.filter(t => String(t.id) !== String(id));
+  salvarTurmasLS(turmas);
+  atualizarListaTurmas();
+}
+
+function excluirAlunoConfirmado(index) {
+  const turmaAtual = obterTurmaAtual();
+  if (!turmaAtual || !Array.isArray(turmaAtual.alunos)) return;
+
+  turmaAtual.alunos.splice(index, 1);
+
+  // salva no storage
+  let turmasAgora = lerTurmasStorageSafe();
+  turmasAgora = turmasAgora.map(t => String(t.id) === String(turmaSelecionadaId) ? turmaAtual : t);
+  salvarTurmasComFallback(turmasAgora);
+
+  atualizarListaAlunos();
+  limparFormularioAluno();
+}
+
 // ===============================
 // criar card (inclui botão Alunos igual antes)
 // ===============================
@@ -215,16 +311,14 @@ function criarCardTurma(turma) {
     </div>
   `;
 
-  // BOTÃO ALUNOS — abre o modal de alunos para a turma correta (usa id)
+  // BOTÃO ALUNOS
   const btnAlunos = card.querySelector(".adicionar");
   if (btnAlunos) {
     btnAlunos.addEventListener("click", (e) => {
       e.stopPropagation();
-      // chama a função robusta que sugeri antes
       if (typeof abrirModalAlunos === "function") {
         abrirModalAlunos(turma.id);
       } else {
-        // fallback antigo (se você ainda usa turmaSelecionada)
         turmaSelecionada = turma;
         if (typeof atualizarListaAlunos === "function") atualizarListaAlunos();
         if (typeof modalAluno !== "undefined" && modalAluno) modalAluno.style.display = "flex";
@@ -237,7 +331,6 @@ function criarCardTurma(turma) {
   if (btnEditar) {
     btnEditar.addEventListener("click", (e) => {
       e.stopPropagation();
-      // usa a função de editar (que no código reforçado se chama abrirModalEdicaoTurma)
       if (typeof abrirModalEdicaoTurma === "function") {
         abrirModalEdicaoTurma(turma);
       } else if (typeof editarTurma === "function") {
@@ -246,32 +339,16 @@ function criarCardTurma(turma) {
     });
   }
 
-  // EXCLUIR
+  // EXCLUIR - AGORA COM CONFIRMAÇÃO
   const btnExcluir = card.querySelector(".excluir");
   if (btnExcluir) {
     btnExcluir.addEventListener("click", (e) => {
       e.stopPropagation();
-      if (confirm(`Deseja excluir a turma "${turma.nome}"?`)) {
-        // remover por id (mais seguro)
-        if (Array.isArray(turmas)) {
-          turmas = turmas.filter(t => String(t.id) !== String(turma.id));
-          // salvar usando sua função se existir
-          if (typeof salvarTurmasLS === "function") {
-            salvarTurmasLS();
-          } else if (typeof salvarTurmasLocalStorage === "function") {
-            salvarTurmasLocalStorage();
-          } else {
-            localStorage.setItem("turmas", JSON.stringify(turmas));
-          }
-          if (typeof atualizarListaTurmas === "function") atualizarListaTurmas();
-        }
-      }
+      confirmarExclusaoTurma(turma.id); // Chama modal de confirmação
     });
   }
 
-  // dentro de criarCardTurma(turma)...
-
-  // BOTÃO NOTAS — abre o modal de notas para a turma correta (usa id)
+  // BOTÃO NOTAS
   const btnNotas = card.querySelector(".notas");
   if (btnNotas) {
     btnNotas.addEventListener("click", (e) => {
@@ -280,7 +357,6 @@ function criarCardTurma(turma) {
       if (typeof abrirModalNotas === "function") {
         abrirModalNotas(turma.id);
       } else {
-        // fallback, caso não tenha a função abrirModalNotas implementada
         turmaSelecionada = turma;
         if (typeof atualizarListaNotas === "function") {
           atualizarListaNotas();
@@ -292,10 +368,8 @@ function criarCardTurma(turma) {
     });
   }
 
-
   return card;
 }
-
 
 // ===============================
 // abrir modal em edição (preenche e abre)
@@ -311,7 +385,7 @@ function abrirModalEdicaoTurma(turma) {
   if (inputNome) inputNome.value = turma.nome || "";
   if (inputPeriodo) inputPeriodo.value = turma.periodo || "";
 
-  // setar curso (cursoId) — comparar por string
+  // setar curso (cursoId) – comparar por string
   if (selectCurso) selectCurso.value = turma.cursoId ? String(turma.cursoId) : "";
 
   // carregar disciplinas do curso selecionado (procura curso atual)
@@ -320,10 +394,9 @@ function abrirModalEdicaoTurma(turma) {
   if (cursoObj) {
     carregarDisciplinasDoCursoObj(cursoObj);
 
-    // selecionar disciplina (usamos disciplinaCodigo se existir, senão disciplinaNome)
+    // selecionar disciplina
     const wanted = turma.disciplinaCodigo || turma.disciplinaNome || turma.disciplina;
     if (wanted && selectDisciplina) {
-      // pode ser codigo ou nome: tentar casar ambos
       const optionToSelect = Array.from(selectDisciplina.options).find(opt => String(opt.value) === String(wanted) || opt.textContent.includes(String(wanted)));
       if (optionToSelect) selectDisciplina.value = optionToSelect.value;
     }
@@ -407,6 +480,7 @@ if (btnSalvarTurma) {
       turmaEditando.disciplinaCodigo = disciplinaCodigo;
       turmaEditando = null;
       if (btnSalvarTurma) btnSalvarTurma.textContent = "CADASTRAR";
+      mostrarSucesso("Turma editada com sucesso!");
     } else {
       // novo
       const novo = {
@@ -421,6 +495,7 @@ if (btnSalvarTurma) {
         alunos: []
       };
       turmas.push(novo);
+      mostrarSucesso("Turma cadastrada com sucesso!");
     }
 
     salvarTurmasLS(turmas);
@@ -436,19 +511,14 @@ if (btnSalvarTurma) {
   });
 }
 
-
-
 // ==================== INICIAR LISTA =====================
 
 atualizarListaTurmas();
-
-
 
 // =========================
 // LISTAGEM E CADASTRO DE ALUNOS
 // =========================
 
-// Elementos do formulário e tabela
 const modalAluno = document.getElementById('modal-aluno');
 const btnFecharAluno = document.getElementById('fecharModalAluno');
 const btnConfirmarCadastroAluno = document.getElementById('confirmar-cadastro-aluno');
@@ -456,11 +526,9 @@ const raInput = document.getElementById('raAluno');
 const nomeInput = document.getElementById('nomeAluno');
 const tbodyAlunos = document.getElementById('corpo-lista-alunos');
 
-// Identificador da turma selecionada (mais robusto que guardar o objeto)
 let turmaSelecionadaId = null;
 let alunoEditandoIndex = null;
 
-// Helper: ler turmas atualizadas do storage
 function lerTurmasStorageSafe() {
   try {
     return JSON.parse(localStorage.getItem('turmas')) || [];
@@ -470,16 +538,13 @@ function lerTurmasStorageSafe() {
   }
 }
 
-// Helper: salvar turmas com fallback (salvarTurmasLS ou salvarTurmasLocalStorage)
 function salvarTurmasComFallback(turmasArray) {
   try {
     if (typeof salvarTurmasLS === 'function') {
       salvarTurmasLS(turmasArray);
     } else if (typeof salvarTurmasLocalStorage === 'function') {
-      // alguns códigos usam esse nome antigo
       salvarTurmasLocalStorage(turmasArray);
     } else {
-      // fallback direto
       localStorage.setItem('turmas', JSON.stringify(turmasArray));
     }
   } catch (e) {
@@ -487,14 +552,12 @@ function salvarTurmasComFallback(turmasArray) {
   }
 }
 
-// Retorna a turma atual (objeto) buscada por id — sempre pega do storage para evitar referências obsoletas
 function obterTurmaAtual() {
   const turmasAgora = lerTurmasStorageSafe();
   if (!turmaSelecionadaId) return null;
   return turmasAgora.find(t => String(t.id) === String(turmaSelecionadaId)) || null;
 }
 
-// Atualiza a tabela HTML de alunos a partir da turma atual
 function atualizarListaAlunos() {
   tbodyAlunos.innerHTML = '';
 
@@ -519,7 +582,6 @@ function atualizarListaAlunos() {
     tbodyAlunos.appendChild(tr);
   });
 
-  // eventos (delegação simples)
   tbodyAlunos.querySelectorAll('button.editar').forEach(btn => {
     btn.addEventListener('click', e => {
       const idx = Number(e.target.getAttribute('data-index'));
@@ -530,24 +592,20 @@ function atualizarListaAlunos() {
   tbodyAlunos.querySelectorAll('button.excluir').forEach(btn => {
     btn.addEventListener('click', e => {
       const idx = Number(e.target.getAttribute('data-index'));
-      excluirAluno(idx);
+      confirmarExclusaoAluno(idx); // Chama modal de confirmação
     });
   });
 }
 
-// Abre modal de alunos para a turma que foi clicada — chamada pelo botão "Alunos" no card
-// Passe a id da turma quando abrir: abrirModalAlunos(turmaId)
 function abrirModalAlunos(turmaId) {
   turmaSelecionadaId = String(turmaId);
   alunoEditandoIndex = null;
   btnConfirmarCadastroAluno.textContent = 'CADASTRAR';
 
-  // atualiza lista e abre modal
   atualizarListaAlunos();
   if (modalAluno) modalAluno.style.display = 'flex';
 }
 
-// Carrega aluno para edição
 function carregarAlunoParaEdicao(index) {
   const turmaAtual = obterTurmaAtual();
   if (!turmaAtual || !Array.isArray(turmaAtual.alunos)) return;
@@ -562,26 +620,6 @@ function carregarAlunoParaEdicao(index) {
   if (modalAluno) modalAluno.style.display = 'flex';
 }
 
-// Excluir aluno por índice
-function excluirAluno(index) {
-  const turmaAtual = obterTurmaAtual();
-  if (!turmaAtual || !Array.isArray(turmaAtual.alunos)) return;
-
-  if (!confirm('Deseja realmente excluir este aluno?')) return;
-
-  turmaAtual.alunos.splice(index, 1);
-
-  // salva no storage (pega turmas atuais e substitui a que tem o mesmo id)
-  let turmasAgora = lerTurmasStorageSafe();
-  turmasAgora = turmasAgora.map(t => String(t.id) === String(turmaSelecionadaId) ? turmaAtual : t);
-  salvarTurmasComFallback(turmasAgora);
-
-  // atualiza view e limpa form
-  atualizarListaAlunos();
-  limparFormularioAluno();
-}
-
-// Limpar form de aluno
 function limparFormularioAluno() {
   if (raInput) raInput.value = '';
   if (nomeInput) nomeInput.value = '';
@@ -589,7 +627,6 @@ function limparFormularioAluno() {
   btnConfirmarCadastroAluno.textContent = 'CADASTRAR';
 }
 
-// Evento do botão cadastrar/salvar aluno
 if (btnConfirmarCadastroAluno) {
   btnConfirmarCadastroAluno.addEventListener('click', () => {
     const ra = raInput ? raInput.value.trim() : '';
@@ -600,7 +637,6 @@ if (btnConfirmarCadastroAluno) {
       return;
     }
 
-    // pega turma atual do storage
     const turmaAtual = obterTurmaAtual();
     if (!turmaAtual) {
       alert('Selecione uma turma antes de cadastrar alunos.');
@@ -609,10 +645,8 @@ if (btnConfirmarCadastroAluno) {
 
     if (!Array.isArray(turmaAtual.alunos)) turmaAtual.alunos = [];
 
-    // Verifica duplicidade de RA no cadastro novo da turma selecionada
-    // (usa comparação como string e ignora caso seja edição do mesmo índice)
     const raExiste = turmaAtual.alunos.some((a, idx) => {
-      if (alunoEditandoIndex !== null && Number(alunoEditandoIndex) === Number(idx)) return false; // mesmo aluno em edição
+      if (alunoEditandoIndex !== null && Number(alunoEditandoIndex) === Number(idx)) return false;
       return String(a.ra) === String(ra);
     });
 
@@ -622,25 +656,22 @@ if (btnConfirmarCadastroAluno) {
     }
 
     if (alunoEditandoIndex !== null) {
-      // editar
       turmaAtual.alunos[alunoEditandoIndex] = { ra, nome };
+      mostrarSucesso("Aluno editado com sucesso!");
     } else {
-      // novo
       turmaAtual.alunos.push({ ra, nome });
+      mostrarSucesso("Aluno cadastrado com sucesso!");
     }
 
-    // salva turmas atualizadas no storage
     let turmasAgora = lerTurmasStorageSafe();
     turmasAgora = turmasAgora.map(t => String(t.id) === String(turmaSelecionadaId) ? turmaAtual : t);
     salvarTurmasComFallback(turmasAgora);
 
-    // atualiza UI e limpa form (não fecha modal)
     atualizarListaAlunos();
     limparFormularioAluno();
   });
 }
 
-// fechar modal alunos
 if (btnFecharAluno) {
   btnFecharAluno.addEventListener('click', () => {
     if (modalAluno) modalAluno.style.display = 'none';
@@ -649,7 +680,6 @@ if (btnFecharAluno) {
   });
 }
 
-// Fecha modal clicando fora
 window.addEventListener('click', (e) => {
   if (e.target === modalAluno) {
     if (modalAluno) modalAluno.style.display = 'none';
@@ -658,41 +688,26 @@ window.addEventListener('click', (e) => {
   }
 });
 
-
 //================================================================================================================
 //                       MODAL DE NOTAS (VISUALIZAÇÃO DA TABELA ALUNOS E COLUNAS DOS COMPONENTES)
 //================================================================================================================
 
-// Elementos da modal (confirme que IDs existem no HTML)
 const modalNotas = document.getElementById("modal-notas");
 if (modalNotas) modalNotas.style.display = "none";
 const fecharModalNotas = document.getElementById("fecharModalNotas");
 const conteudoNotas = document.getElementById("conteudoNotas");
 
-// Variável global para turma atual no modal e sigla da coluna em edição
 let turmaAtualNotasId = null;
-let colunaEditandoSigla = null; // sigla da coluna que está em edição
+let colunaEditandoSigla = null;
 
-// Helper para normalizar strings
 function _norm(v) {
   return (v === undefined || v === null) ? "" : String(v).trim().toLowerCase();
 }
 
-// Ler turmas do localStorage de forma segura
-function lerTurmasStorageSafe() {
-  try {
-    return JSON.parse(localStorage.getItem("turmas")) || [];
-  } catch {
-    return [];
-  }
-}
-
-// Salvar turmas no localStorage
 function salvarTurmasStorage(turmas) {
   localStorage.setItem("turmas", JSON.stringify(turmas));
 }
 
-// Abrir modal e montar tabela
 function abrirModalNotas(turmaId) {
   turmaAtualNotasId = turmaId;
 
@@ -753,7 +768,6 @@ function abrirModalNotas(turmaId) {
     return;
   }
 
-  // Montar tabela
   let html = `
     <div class="tabela-notas-container">
       <table class="tabela-notas">
@@ -775,7 +789,7 @@ function abrirModalNotas(turmaId) {
         tabindex="0"
         role="button"
         aria-label="Editar notas da coluna ${comp.sigla}"
-      >✏️</span>
+      >🔒</span>
     </th>`;
   });
 
@@ -854,19 +868,16 @@ function abrirModalNotas(turmaId) {
   aplicarValidacaoNotas();
 }
 
-// Aplicar validação nos inputs para garantir valores entre 0 e 10
 function aplicarValidacaoNotas() {
   const inputs = document.querySelectorAll("#modal-notas input.nota-input");
   
   inputs.forEach(input => {
-    // Substitui vírgula por ponto ao digitar
     input.addEventListener('keydown', function(e) {
       if (e.key === ',') {
         e.preventDefault();
         const cursorPos = this.selectionStart;
         const value = this.value;
         
-        // Adiciona ponto se não existir um
         if (!value.includes('.')) {
           this.value = value.slice(0, cursorPos) + '.' + value.slice(cursorPos);
           this.selectionStart = this.selectionEnd = cursorPos + 1;
@@ -877,27 +888,22 @@ function aplicarValidacaoNotas() {
     input.addEventListener('input', function() {
       let valor = parseFloat(this.value);
       
-      // Se o valor for maior que 10, limita a 10
       if (valor > 10) {
         this.value = 10;
       }
-      // Se o valor for menor que 0, limita a 0
       else if (valor < 0) {
         this.value = 0;
       }
     });
 
-    // Formata ao sair do campo - SEMPRE COM PONTO
     input.addEventListener('blur', function() {
       let valor = this.value.trim();
       
-      // Substitui vírgula por ponto
       valor = valor.replace(',', '.');
       
       if (valor && !isNaN(valor)) {
         let num = parseFloat(valor);
         num = Math.max(0, Math.min(10, num));
-        // Usa toFixed para garantir formato com ponto
         this.value = num.toFixed(2);
       } else if (valor !== '') {
         this.value = '';
@@ -921,7 +927,6 @@ function ativarEdicaoNotas() {
       
       const sigla = btn.getAttribute("data-sigla");
 
-      // Descobre índice da coluna
       let idxColuna = -1;
       tabela.querySelectorAll("thead th").forEach((th, idx) => {
         const btnCol = th.querySelector(".btn-editar-coluna");
@@ -932,23 +937,20 @@ function ativarEdicaoNotas() {
       
       if (idxColuna === -1) return;
 
-      // Se a coluna está desbloqueada (✅), bloqueia e salva
       if (btn.textContent === "✅") {
         salvarNotasColuna(sigla, tabela);
         bloquearColuna(tabela, idxColuna);
         btn.textContent = "🔒";
         colunaEditandoSigla = null;
-        alert("Notas salvas com sucesso!");
+        mostrarSucesso("Notas salvas com sucesso!");
         return;
       }
 
-      // Se já tem outra coluna editando, avisa
       if (colunaEditandoSigla !== null && colunaEditandoSigla !== sigla) {
         alert("Salve a coluna atual antes de editar outra!");
         return;
       }
 
-      // Se está bloqueada (🔒), desbloqueia
       liberarColuna(tabela, idxColuna);
       btn.textContent = "✅";
       colunaEditandoSigla = sigla;
@@ -988,24 +990,20 @@ function liberarColuna(tabela, idxColuna) {
     const input = td.querySelector("input.nota-input");
     if (!input) return;
     
-    // Remove disabled de todas as formas possíveis
     input.disabled = false;
     input.removeAttribute("disabled");
     input.readOnly = false;
     input.removeAttribute("readonly");
     
-    // Aplica estilos
     input.style.backgroundColor = "#fff";
     input.style.cursor = "text";
     input.style.border = "2px solid #1e87a3";
     input.style.outline = "none";
     input.style.pointerEvents = "auto";
     
-    // Force focus capability
     input.tabIndex = 0;
   });
   
-  // Força um reflow
   tabela.offsetHeight;
 }
 
@@ -1032,11 +1030,9 @@ function salvarNotasColuna(sigla, tabela) {
 
     let valor = input.value.trim();
     
-    // Valida e formata o valor
     if (valor !== "") {
       let num = parseFloat(valor);
       if (!isNaN(num)) {
-        // Garante que está entre 0 e 10
         num = Math.max(0, Math.min(10, num));
         valor = num.toFixed(2);
         input.value = valor;
@@ -1052,7 +1048,6 @@ function salvarNotasColuna(sigla, tabela) {
   salvarTurmasStorage(turmas);
 }
 
-// Fechar modal ao clicar no X
 if (fecharModalNotas) {
   fecharModalNotas.addEventListener("click", () => {
     if (modalNotas) modalNotas.style.display = "none";
@@ -1060,7 +1055,6 @@ if (fecharModalNotas) {
   });
 }
 
-// Fechar modal clicando fora
 window.addEventListener("click", (e) => {
   if (modalNotas && e.target === modalNotas) {
     modalNotas.style.display = "none";
@@ -1068,362 +1062,33 @@ window.addEventListener("click", (e) => {
   }
 });
 
-
-
-// //================================================================================================================
-// //                       MODAL DE NOTAS (VISUALIZAÇÃO DA TABELA ALUNOS E COLUNAS DOS COMPONENTES)
-// //================================================================================================================
-
-// // Elementos da modal (confirme que IDs existem no HTML)
-// const modalNotas = document.getElementById("modal-notas");
-// if (modalNotas) modalNotas.style.display = "none";
-// const fecharModalNotas = document.getElementById("fecharModalNotas");
-// const conteudoNotas = document.getElementById("conteudoNotas");
-
-// // Warn se algum elemento não existir
-// //if (!modalNotas) console.warn("modal-notas não encontrado no DOM");
-// //if (!fecharModalNotas) console.warn("fecharModalNotas não encontrado no DOM");
-// //if (!conteudoNotas) console.warn("conteudoNotas não encontrado no DOM");
-
-// // Variável global para turma atual no modal e índice da coluna em edição
-// let turmaAtualNotasId = null;
-// let colunaEditando = null; // índice da coluna que está em edição
-
-// // Helper para normalizar strings
-// function _norm(v) {
-//   return (v === undefined || v === null) ? "" : String(v).trim().toLowerCase();
-// }
-
-// // Ler turmas do localStorage de forma segura
-// function lerTurmasStorageSafe() {
-//   try {
-//     return JSON.parse(localStorage.getItem("turmas")) || [];
-//   } catch {
-//     return [];
-//   }
-// }
-
-// // Salvar turmas no localStorage
-// function salvarTurmasStorage(turmas) {
-//   localStorage.setItem("turmas", JSON.stringify(turmas));
-// }
-
-// // Abrir modal e montar tabela
-// function abrirModalNotas(turmaId) {
-//   turmaAtualNotasId = turmaId;
-
-//   if (modalNotas) modalNotas.style.display = "flex";
-
-//   const turmasAgora = lerTurmasStorageSafe();
-//   const turma = turmasAgora.find(t => String(t.id) === String(turmaId));
-
-//   if (!turma) {
-//     if (conteudoNotas) {
-//       conteudoNotas.innerHTML = `
-//         <div class="nada-cadastrado">
-//           <p>TURMA NÃO ENCONTRADA.</p>
-//         </div>
-//       `;
-//     }
-//     return;
-//   }
-
-//   const alunos = Array.isArray(turma.alunos) ? turma.alunos : [];
-
-//   const discNomeTurma = _norm(turma.disciplinaNome || turma.disciplina || "");
-//   const discCodigoTurma = _norm(turma.disciplinaCodigo || "");
-
-//   if (!discNomeTurma && !discCodigoTurma) {
-//     if (conteudoNotas) {
-//       conteudoNotas.innerHTML = `
-//         <div class="nada-cadastrado">
-//           <p>ESTA TURMA NÃO POSSUI DISCIPLINA DEFINIDA!</p>
-//           <img src="../images/imagem_alunos.png" class="img-nada-cadastrado">
-//         </div>
-//       `;
-//     }
-//     return;
-//   }
-
-//   const componentesAll = JSON.parse(localStorage.getItem("componentes")) || [];
-
-//   const componentesDaDisciplina = componentesAll.filter(c => {
-//     const cDisc = _norm(c.disciplinaNome || c.disciplina || "");
-//     const cDiscCode = _norm(c.disciplinaCodigo || "");
-//     return (cDisc && (cDisc === discNomeTurma || cDisc === discCodigoTurma))
-//       || (cDiscCode && (cDiscCode === discCodigoTurma || cDiscCode === discNomeTurma));
-//   });
-
-//   if (!componentesDaDisciplina || componentesDaDisciplina.length === 0) {
-//     if (conteudoNotas) {
-//       conteudoNotas.innerHTML = `
-//         <div class="nada-cadastrado">
-//           <p>VOCÊ AINDA NÃO CADASTROU NENHUMA ATIVIDADE PARA ESTA DISCIPLINA...</p>
-//           <img src="../images/imagem_alunos.png" class="img-nada-cadastrado">
-//         </div>
-//         <div style="margin-top:10px">
-//           <a href="../Pagina_atividades/atividades.html" id="atividades-modal">ACESSE A PÁGINA DE ATIVIDADES E CADASTRE!</a>
-//         </div>
-//       `;
-//     }
-//     return;
-//   }
-
-//   // Montar tabela
-//   let html = `
-//     <div class="tabela-notas-container">
-//       <table class="tabela-notas">
-//         <thead>
-//           <tr>
-//             <th>RA</th>
-//             <th>NOME</th>
-//   `;
-
-//   componentesDaDisciplina.forEach(comp => {
-//     const titulo = comp.sigla ? comp.sigla : (comp.nome ? comp.nome.slice(0, 6) : "ATV");
-
-//     html += `<th class="col-nota" title="${comp.nome || ''}">
-//       ${titulo}
-//       <span
-//         class="btn-editar-coluna"
-//         data-sigla="${comp.sigla}"
-//         title="Editar notas dessa coluna"
-//         tabindex="0"
-//         role="button"
-//         aria-label="Editar notas da coluna ${comp.sigla}"
-//       >✏️</span>
-//     </th>`;
-//   });
-
-//   if (componentesDaDisciplina.length > 0) {
-//     html += `<th class="col-nota-final">Notas Finais</th>`;
-//   }
-
-//   html += `
-//           </tr>
-//         </thead>
-//         <tbody>
-//   `;
-
-//   if (alunos.length === 0) {
-//     html += `
-//       <tr>
-//         <td colspan="${2 + componentesDaDisciplina.length}" class="nenhum-aluno">
-//           Nenhum aluno cadastrado nesta turma.
-//         </td>
-//       </tr>`;
-//   } else {
-//     alunos.forEach(aluno => {
-//       const ra = aluno.ra || "";
-//       const nome = aluno.nome || "";
-
-//       html += `<tr data-ra="${ra}">`;
-//       html += `<td>${ra}</td>`;
-//       html += `<td class="col-nome">${nome}</td>`;
-
-//       componentesDaDisciplina.forEach(comp => {
-//         const notaSalva = turma.notas?.[ra]?.[comp.sigla] ?? "";
-
-//         html += `
-//           <td class="col-nota">
-//           <input class="nota-input" type="number" step="1" style="background-color:#eee;" readonly>
-//           </td>
-//         `;
-//       });
-
-//       const notaFinal = turma.notas?.[ra]?.['FINAL'] ?? "";
-
-//       html += `
-//         <td class="col-nota-final">
-//           <input class="nota-input nota-final" type="number" value="${notaFinal}" style="background-color:#eee;">
-//         </td>
-//       `;
-
-//       html += `</tr>`;
-//     });
-//   }
-
-//   html += `
-//         </tbody>
-//       </table>
-//     </div>
-//   `;
-
-//   if (conteudoNotas) conteudoNotas.innerHTML = html;
-
-//   ativarEdicaoNotas();
-// }
-
-
-// function ativarEdicaoNotas() {
-//   const botoesEditar = document.querySelectorAll("#modal-notas .btn-editar-coluna");
-//   const tabela = document.querySelector("#modal-notas table.tabela-notas");
-//   if (!tabela) return;
-
-//   botoesEditar.forEach(btn => {
-//     btn.textContent = "✏️";
-
-//     btn.onclick = () => {
-//       const sigla = btn.getAttribute("data-sigla");
-
-//       // Descobre índice da coluna
-//       let idxColuna = -1;
-//       tabela.querySelectorAll("thead th").forEach((th, idx) => {
-//         const btnCol = th.querySelector(".btn-editar-coluna");
-//         if (btnCol && btnCol.getAttribute("data-sigla") === sigla) {
-//           idxColuna = idx;
-//         }
-//       });
-//       if (idxColuna === -1) return;
-
-//       // Se já está editando essa coluna, salva e bloqueia ela
-//       if (colunaEditando === idxColuna) {
-//         salvarNotasColuna(sigla, tabela);
-//         bloquearColuna(tabela, idxColuna);
-//         btn.textContent = "✏️";
-//         colunaEditando = null;
-//         alert("Notas salvas!");
-//         return;
-//       }
-
-//       // Se está editando outra coluna, pede para salvar antes
-//       if (colunaEditando !== null) {
-//         alert("Finalize a edição da outra coluna antes.");
-//         return;
-//       }
-
-//       // Bloqueia todas as colunas primeiro (readonly=true e fundo cinza)
-//       bloquearTodosInputs(tabela);
-
-//       // Libera só a coluna clicada (readonly=false e fundo branco)
-//       liberarColuna(tabela, idxColuna);
-
-//       // Atualiza estado
-//       colunaEditando = idxColuna;
-
-//       // Atualiza botões
-//       botoesEditar.forEach(b => b.textContent = "✏️");
-//       btn.textContent = "✅";
-
-//       // Não muda o foco automaticamente (deixa o usuário decidir)
-//     };
-//   });
-// }
-
-// function bloquearTodosInputs(tabela) {
-//   tabela.querySelectorAll("tbody tr input.nota-input").forEach(input => {
-//     input.readOnly = true;
-//     input.style.backgroundColor = "#eee";
-//   });
-// }
-
-// function bloquearColuna(tabela, idxColuna) {
-//   tabela.querySelectorAll("tbody tr").forEach(tr => {
-//     const td = tr.cells[idxColuna];
-//     if (!td) return;
-//     const input = td.querySelector("input.nota-input");
-//     if (!input) return;
-//     input.readOnly = true;
-//     input.style.backgroundColor = "#eee";
-//   });
-// }
-
-// function liberarColuna(tabela, idxColuna) {
-//   tabela.querySelectorAll("tbody tr").forEach(tr => {
-//     const td = tr.cells[idxColuna];
-//     if (!td) return;
-//     const input = td.querySelector("input.nota-input");
-//     if (!input) return;
-//     input.readOnly = false;
-//     input.style.backgroundColor = "#fff";
-//   });
-// }
-
-// function salvarNotasColuna(sigla, tabela) {
-//   const turmas = lerTurmasStorageSafe();
-//   const turma = turmas.find(t => String(t.id) === String(turmaAtualNotasId));
-//   if (!turma) return alert("Turma não encontrada ao salvar.");
-
-//   let idxCol = -1;
-//   tabela.querySelectorAll("thead th").forEach((th, idx) => {
-//     const btnCol = th.querySelector(".btn-editar-coluna");
-//     if (btnCol && btnCol.getAttribute("data-sigla") === sigla) {
-//       idxCol = idx;
-//     }
-//   });
-//   if (idxCol === -1) return;
-
-//   tabela.querySelectorAll("tbody tr").forEach(tr => {
-//     const ra = tr.getAttribute("data-ra");
-//     const td = tr.cells[idxCol];
-//     if (!td) return;
-//     const input = td.querySelector("input.nota-input");
-//     if (!input) return;
-
-//     const valor = input.value.trim();
-
-//     if (!turma.notas) turma.notas = {};
-//     if (!turma.notas[ra]) turma.notas[ra] = {};
-
-//     turma.notas[ra][sigla] = valor;
-//   });
-
-//   salvarTurmasStorage(turmas);
-// }
-
-
-// // Fechar modal ao clicar no X
-// if (fecharModalNotas) {
-//   fecharModalNotas.addEventListener("click", () => {
-//     if (modalNotas) modalNotas.style.display = "none";
-//   });
-// }
-
-// // Fechar modal clicando fora
-// window.addEventListener("click", (e) => {
-//   if (modalNotas && e.target === modalNotas) {
-//     modalNotas.style.display = "none";
-//   }
-// });
-
-
-
-
-
-
 //================================================================================================================
 //                       SISTEMA DE PESOS (PARA CÁLCULO DE MÉDIA SIMPLES E PONDERADA)
 //================================================================================================================
 
-// Elementos do sistema de pesos
 const selectTipoMedia = document.getElementById('tipo-media');
 const containerPesos = document.getElementById('container-pesos');
 const listaPesos = document.getElementById('lista-pesos');
 const btnSalvarPesos = document.getElementById('btn-salvar-pesos');
 const btnMostrarPesos = document.getElementById('btn-mostrar-pesos');
 
-// Listener para mudança no tipo de média
 if (selectTipoMedia) {
   selectTipoMedia.addEventListener('change', (e) => {
     const tipoSelecionado = e.target.value;
     
     if (tipoSelecionado === 'ponderada') {
-      // Mostrar container de pesos
       carregarPesosParaEdicao();
       containerPesos.classList.remove('oculto');
       btnMostrarPesos.classList.add('oculto');
     } else if (tipoSelecionado === 'simples') {
-      // Esconder tudo relacionado a pesos
       containerPesos.classList.add('oculto');
       btnMostrarPesos.classList.add('oculto');
       
-      // Salvar tipo de média como simples
       salvarTipoMedia('simples');
     }
   });
 }
 
-// Carregar os componentes da turma para edição de pesos
 function carregarPesosParaEdicao() {
   if (!turmaAtualNotasId) return;
   
@@ -1432,7 +1097,6 @@ function carregarPesosParaEdicao() {
   
   if (!turma) return;
   
-  // Pegar componentes da disciplina da turma
   const discNomeTurma = _norm(turma.disciplinaNome || turma.disciplina || "");
   const discCodigoTurma = _norm(turma.disciplinaCodigo || "");
   
@@ -1449,10 +1113,8 @@ function carregarPesosParaEdicao() {
     return;
   }
   
-  // Carregar pesos salvos anteriormente (se existirem)
   const pesosSalvos = turma.pesos || {};
   
-  // Criar interface de seleção de pesos
   listaPesos.innerHTML = '';
   componentesDaDisciplina.forEach(comp => {
     const itemDiv = document.createElement('div');
@@ -1473,7 +1135,6 @@ function carregarPesosParaEdicao() {
   });
 }
 
-// Salvar os pesos configurados
 if (btnSalvarPesos) {
   btnSalvarPesos.addEventListener('click', () => {
     if (!turmaAtualNotasId) return;
@@ -1483,7 +1144,6 @@ if (btnSalvarPesos) {
     
     if (!turma) return;
     
-    // Coletar pesos dos selects
     const selects = listaPesos.querySelectorAll('select[data-componente]');
     const pesos = {};
     
@@ -1493,24 +1153,20 @@ if (btnSalvarPesos) {
       pesos[componente] = peso;
     });
     
-    // Salvar na turma
     turma.pesos = pesos;
     turma.tipoMedia = 'ponderada';
     
-    // Atualizar no storage
     let todasTurmas = lerTurmasStorageSafe();
     todasTurmas = todasTurmas.map(t => String(t.id) === String(turmaAtualNotasId) ? turma : t);
     salvarTurmasComFallback(todasTurmas);
     
-    // Esconder container de pesos e mostrar botão
     containerPesos.classList.add('oculto');
     btnMostrarPesos.classList.remove('oculto');
     
-    alert('Pesos salvos com sucesso!');
+    mostrarSucesso('Pesos salvos com sucesso!');
   });
 }
 
-// Mostrar pesos novamente para edição
 if (btnMostrarPesos) {
   btnMostrarPesos.addEventListener('click', () => {
     carregarPesosParaEdicao();
@@ -1519,7 +1175,6 @@ if (btnMostrarPesos) {
   });
 }
 
-// Função para salvar tipo de média simples
 function salvarTipoMedia(tipo) {
   if (!turmaAtualNotasId) return;
   
@@ -1530,7 +1185,7 @@ function salvarTipoMedia(tipo) {
   
   turma.tipoMedia = tipo;
   if (tipo === 'simples') {
-    delete turma.pesos; // Remove pesos se for média simples
+    delete turma.pesos;
   }
   
   let todasTurmas = lerTurmasStorageSafe();
@@ -1538,19 +1193,15 @@ function salvarTipoMedia(tipo) {
   salvarTurmasComFallback(todasTurmas);
 }
 
-// Atualizar a função abrirModalNotas para configurar o sistema de pesos
 function abrirModalNotasComPesos(turmaId) {
   turmaAtualNotasId = String(turmaId);
   
-  // Chamar a função original de abrir modal
   abrirModalNotas(turmaId);
   
-  // Configurar o select de tipo de média baseado no que está salvo
   const turmasAgora = lerTurmasStorageSafe();
   const turma = turmasAgora.find(t => String(t.id) === String(turmaId));
   
   if (turma && selectTipoMedia) {
-    // Resetar estado
     containerPesos.classList.add('oculto');
     btnMostrarPesos.classList.add('oculto');
     
@@ -1565,17 +1216,13 @@ function abrirModalNotasComPesos(turmaId) {
   }
 }
 
-
-
-
 //================================================================================================================
 //                                    MODAL DE IMPORTAÇÃO DE ALUNOS VIA CSV.
 //================================================================================================================
 
-// Modal e select
 const modalImportar = document.getElementById('modal-importar-alunos');
-const btnAbrirImportar = document.getElementById('import-aluno'); // id do botão certo
-const btnImportar = document.getElementById('importar-alunos');
+const btnAbrirImportar = document.getElementById('import-aluno');
+const btnImportar = document.getElementById('btn-importar-alunos');
 const selectTurmas = document.getElementById('select-turmas');
 
 if (btnAbrirImportar) {
@@ -1585,8 +1232,6 @@ if (btnAbrirImportar) {
   });
 }
 
-
-// Função para preencher select
 function preencherSelectTurmas() {
   const turmas = JSON.parse(localStorage.getItem('turmas')) || [];
   selectTurmas.innerHTML = '<option value="">SELECIONE UMA TURMA</option>';
@@ -1607,22 +1252,12 @@ function preencherSelectTurmas() {
   });
 }
 
-// Abrir modal
-if (btnAbrirImportar) {
-  btnAbrirImportar.addEventListener('click', () => {
-    preencherSelectTurmas();
-    if (modalImportar) modalImportar.style.display = 'flex';
-  });
-}
-
-// Fechar clicando fora
 if (modalImportar) {
   modalImportar.addEventListener('click', (e) => {
     if (e.target === modalImportar) modalImportar.style.display = 'none';
   });
 }
 
-// Botão importar
 if (btnImportar) {
   btnImportar.addEventListener('click', () => {
     const turmaSelecionada = selectTurmas.value;
@@ -1631,14 +1266,7 @@ if (btnImportar) {
       return;
     }
 
-    alert(`Alunos da turma "${selectTurmas.selectedOptions[0].text}" importados com sucesso!`);
+    mostrarSucesso(`Alunos da turma "${selectTurmas.selectedOptions[0].text}" importados com sucesso!`);
     modalImportar.style.display = 'none';
   });
 }
-
-
-
-
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
