@@ -37,7 +37,7 @@ function mostrarSucesso() {
         overlay.style.transition = "opacity 1s";
         overlay.innerHTML = `
             <div class="caixa-sucesso">
-                <img src="icone_NotaDez.png" alt="Sucesso" class="icone-sucesso">
+                <img src="../images/icone_NotaDez.png" alt="Sucesso" class="icone-sucesso">
                 <p>Email enviado com sucesso!</p>
             </div>
         `;
