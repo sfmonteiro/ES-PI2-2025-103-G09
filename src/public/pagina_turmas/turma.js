@@ -1,3 +1,11 @@
+// ALUNO: SARA FERNANDES MONTEIRO   ||   RA: 25024107
+
+
+
+//================================================================================================================
+//                                    BOTAO DE MENU (ABRIR E FECHAR O DROPDOWN)
+//================================================================================================================
+
 const userMenu = document.querySelector('.user-menu');
 const userBtn = document.querySelector('#user-btn');
 
@@ -16,17 +24,18 @@ function redirecionar(id, destino) {
   const elemento = document.getElementById(id);
   if (elemento) {
     elemento.addEventListener('click', (e) => {
-      e.preventDefault(); // impede recarregar a página com o #
+      e.preventDefault(); // 
       window.location.href = destino;
     });
   }
 }
 
-// ===============================
-// TURMAS - VERSÃO REFORÇADA (coloque no lugar do código antigo)
-// ===============================
 
-// configuração modal (mantive sua função original para compatibilidade)
+
+//================================================================================================================
+//                  FUNCIONAMENTO DOS BOTOES MODAL DA PAGINA (CADASTRO DE TURMAS E IMPORTAR ALUNOS)
+//================================================================================================================
+
 function configurarModal(botaoId, modalId) {
   const modal = document.getElementById(modalId);
   const btnAbrir = document.getElementById(botaoId);
@@ -42,14 +51,16 @@ function configurarModal(botaoId, modalId) {
   });
 }
 
-// chamar (verifique que os ids existem no HTML)
 configurarModal("cadastro-turma", "modal-turma");
 configurarModal("import-aluno", "modal-importar-alunos");
 
 
-// ===============================
-// ELEMENTOS PRINCIPAIS (safe-get)
-// ===============================
+
+
+//========================================================================================================================
+//                                                   BTN CADASTRO DE TURMAS
+//========================================================================================================================
+
 const containerTurmas = document.querySelector(".container-turmas");
 const modalTurma = document.getElementById("modal-turma");
 const btnSalvarTurma = document.getElementById("confirmar-cadastro-turma");
@@ -62,11 +73,11 @@ const inputNome = document.getElementById("nomeTurma");
 const inputPeriodo = document.getElementById("periodTurma");
 
 // segurança: se algo não existe, evita crash e loga
-if (!containerTurmas) console.warn("container-turmas não encontrado");
-if (!modalTurma) console.warn("modal-turma não encontrado");
-if (!btnSalvarTurma) console.warn("confirmar-cadastro-turma não encontrado");
-if (!selectCurso) console.warn("cursoTurma (select) não encontrado");
-if (!selectDisciplina) console.warn("disciplinaTurma (select) não encontrado");
+//if (!containerTurmas) console.warn("container-turmas não encontrado");
+//if (!modalTurma) console.warn("modal-turma não encontrado");
+//if (!btnSalvarTurma) console.warn("confirmar-cadastro-turma não encontrado");
+//if (!selectCurso) console.warn("cursoTurma (select) não encontrado");
+//if (!selectDisciplina) console.warn("disciplinaTurma (select) não encontrado");
 
 // ===============================
 // DADOS (leitura atual do storage sempre que necessário)
@@ -434,8 +445,7 @@ atualizarListaTurmas();
 
 
 // =========================
-// LISTAGEM E CADASTRO DE ALUNOS (VERSÃO REFORÇADA)
-// Substitua a sua seção antiga por esta
+// LISTAGEM E CADASTRO DE ALUNOS
 // =========================
 
 // Elementos do formulário e tabela
@@ -650,41 +660,50 @@ window.addEventListener('click', (e) => {
 
 
 
-//================================================================================================
-//==================    MODAL NOTAS (TABELA DOS COMPONENTES DA TURMA)   ==========================
-//================================================================================================
+//================================================================================================================
+//                       MODAL DE NOTAS (VISUALIZAÇÃO DA TABELA ALUNOS E COLUNAS DOS COMPONENTES)
+//================================================================================================================
 
-// ===========================================
-// MODAL DE NOTAS (gera tabela RA | Nome | P1 P2 ...)
-// - Não grava notas ainda (inputs readonly)
-// - Filtra componentes pela disciplina da turma
-// ===========================================
-
-// elementos da modal (certifique-se que IDs existam no HTML)
+// Elementos da modal (confirme que IDs existem no HTML)
 const modalNotas = document.getElementById("modal-notas");
 if (modalNotas) modalNotas.style.display = "none";
 const fecharModalNotas = document.getElementById("fecharModalNotas");
 const conteudoNotas = document.getElementById("conteudoNotas");
 
-// safe-get (evita crash se não existir)
-if (!modalNotas) console.warn("modal-notas não encontrado no DOM");
-if (!fecharModalNotas) console.warn("fecharModalNotas não encontrado no DOM");
-if (!conteudoNotas) console.warn("conteudoNotas não encontrado no DOM");
+// Warn se algum elemento não existir
+//if (!modalNotas) console.warn("modal-notas não encontrado no DOM");
+//if (!fecharModalNotas) console.warn("fecharModalNotas não encontrado no DOM");
+//if (!conteudoNotas) console.warn("conteudoNotas não encontrado no DOM");
 
-// helper para normalizar strings (comparação robusta)
+// Variável global para turma atual no modal e índice da coluna em edição
+let turmaAtualNotasId = null;
+let colunaEditando = null; // índice da coluna que está em edição
+
+// Helper para normalizar strings
 function _norm(v) {
   return (v === undefined || v === null) ? "" : String(v).trim().toLowerCase();
 }
 
-// Abre modal de notas para a turmaId (id interno da turma)
-let turmaAtualNotasId = null; // coloque no topo
+// Ler turmas do localStorage de forma segura
+function lerTurmasStorageSafe() {
+  try {
+    return JSON.parse(localStorage.getItem("turmas")) || [];
+  } catch {
+    return [];
+  }
+}
 
+// Salvar turmas no localStorage
+function salvarTurmasStorage(turmas) {
+  localStorage.setItem("turmas", JSON.stringify(turmas));
+}
+
+// Abrir modal e montar tabela
 function abrirModalNotas(turmaId) {
   turmaAtualNotasId = turmaId;
-  // abrir modal mesmo que conteúdo mostre aviso (visual)
+
   if (modalNotas) modalNotas.style.display = "flex";
 
-  // pegar turma atual
   const turmasAgora = lerTurmasStorageSafe();
   const turma = turmasAgora.find(t => String(t.id) === String(turmaId));
 
@@ -699,10 +718,8 @@ function abrirModalNotas(turmaId) {
     return;
   }
 
-  // assegurar que turma tenha lista de alunos
   const alunos = Array.isArray(turma.alunos) ? turma.alunos : [];
 
-  // extrair identificação da disciplina da turma (será comparada)
   const discNomeTurma = _norm(turma.disciplinaNome || turma.disciplina || "");
   const discCodigoTurma = _norm(turma.disciplinaCodigo || "");
 
@@ -718,19 +735,15 @@ function abrirModalNotas(turmaId) {
     return;
   }
 
-  // carregar componentes do storage e filtrar apenas os da disciplina
   const componentesAll = JSON.parse(localStorage.getItem("componentes")) || [];
 
   const componentesDaDisciplina = componentesAll.filter(c => {
-    // c.disciplinaNome é o que você salvou ao criar componente
     const cDisc = _norm(c.disciplinaNome || c.disciplina || "");
     const cDiscCode = _norm(c.disciplinaCodigo || "");
-    // corresponde por nome ou por código (robusto)
     return (cDisc && (cDisc === discNomeTurma || cDisc === discCodigoTurma))
       || (cDiscCode && (cDiscCode === discCodigoTurma || cDiscCode === discNomeTurma));
   });
 
-  // se não há componentes para essa disciplina -> mensagem e link
   if (!componentesDaDisciplina || componentesDaDisciplina.length === 0) {
     if (conteudoNotas) {
       conteudoNotas.innerHTML = `
@@ -746,7 +759,7 @@ function abrirModalNotas(turmaId) {
     return;
   }
 
-  // montar a tabela: cabeçalho RA | Nome | siglas...
+  // Montar tabela
   let html = `
     <div class="tabela-notas-container">
       <table class="tabela-notas">
@@ -758,17 +771,23 @@ function abrirModalNotas(turmaId) {
 
   componentesDaDisciplina.forEach(comp => {
     const titulo = comp.sigla ? comp.sigla : (comp.nome ? comp.nome.slice(0, 6) : "ATV");
-    carregarPesosParaTurma(turma, componentesDaDisciplina);
-    html += `<th class="col-nota" title="${comp.nome || ''}">${titulo}</th>`;
 
+    html += `<th class="col-nota" title="${comp.nome || ''}">
+      ${titulo}
+      <span
+        class="btn-editar-coluna"
+        data-sigla="${comp.sigla}"
+        title="Editar notas dessa coluna"
+        tabindex="0"
+        role="button"
+        aria-label="Editar notas da coluna ${comp.sigla}"
+      >✏️</span>
+    </th>`;
   });
 
-
-  // adiciona a coluna "Notas Finais" depois dos componentes
   if (componentesDaDisciplina.length > 0) {
     html += `<th class="col-nota-final">Notas Finais</th>`;
   }
-
 
   html += `
           </tr>
@@ -783,8 +802,7 @@ function abrirModalNotas(turmaId) {
           Nenhum aluno cadastrado nesta turma.
         </td>
       </tr>`;
-  }
-  else {
+  } else {
     alunos.forEach(aluno => {
       const ra = aluno.ra || "";
       const nome = aluno.nome || "";
@@ -794,23 +812,20 @@ function abrirModalNotas(turmaId) {
       html += `<td class="col-nome">${nome}</td>`;
 
       componentesDaDisciplina.forEach(comp => {
-        const notaSalva =
-          turma.notas?.[ra]?.[comp.sigla] ?? "";
+        const notaSalva = turma.notas?.[ra]?.[comp.sigla] ?? "";
 
         html += `
-        <td class="col-nota">
-          <input class="nota-input" type="text" value="${notaSalva}" readonly>
-        </td>
-      `;
-
+          <td class="col-nota">
+          <input class="nota-input" type="number" step="1" style="background-color:#eee;" readonly>
+          </td>
+        `;
       });
 
-      // AQUI você coloca o código para a coluna "Notas Finais":
       const notaFinal = turma.notas?.[ra]?.['FINAL'] ?? "";
 
       html += `
         <td class="col-nota-final">
-          <input class="nota-input nota-final" type="text" value="${notaFinal}" readonly>
+          <input class="nota-input nota-final" type="number" value="${notaFinal}" style="background-color:#eee;">
         </td>
       `;
 
@@ -824,21 +839,137 @@ function abrirModalNotas(turmaId) {
     </div>
   `;
 
-
-  // inserir no DOM
   if (conteudoNotas) conteudoNotas.innerHTML = html;
 
-  // (opcional) você pode adicionar listeners para futuras edições aqui
+  ativarEdicaoNotas();
 }
 
-// fechar modal ao clicar no X
+
+function ativarEdicaoNotas() {
+  const botoesEditar = document.querySelectorAll("#modal-notas .btn-editar-coluna");
+  const tabela = document.querySelector("#modal-notas table.tabela-notas");
+  if (!tabela) return;
+
+  botoesEditar.forEach(btn => {
+    btn.textContent = "✏️";
+
+    btn.onclick = () => {
+      const sigla = btn.getAttribute("data-sigla");
+
+      // Descobre índice da coluna
+      let idxColuna = -1;
+      tabela.querySelectorAll("thead th").forEach((th, idx) => {
+        const btnCol = th.querySelector(".btn-editar-coluna");
+        if (btnCol && btnCol.getAttribute("data-sigla") === sigla) {
+          idxColuna = idx;
+        }
+      });
+      if (idxColuna === -1) return;
+
+      // Se já está editando essa coluna, salva e bloqueia ela
+      if (colunaEditando === idxColuna) {
+        salvarNotasColuna(sigla, tabela);
+        bloquearColuna(tabela, idxColuna);
+        btn.textContent = "✏️";
+        colunaEditando = null;
+        alert("Notas salvas!");
+        return;
+      }
+
+      // Se está editando outra coluna, pede para salvar antes
+      if (colunaEditando !== null) {
+        alert("Finalize a edição da outra coluna antes.");
+        return;
+      }
+
+      // Bloqueia todas as colunas primeiro (readonly=true e fundo cinza)
+      bloquearTodosInputs(tabela);
+
+      // Libera só a coluna clicada (readonly=false e fundo branco)
+      liberarColuna(tabela, idxColuna);
+
+      // Atualiza estado
+      colunaEditando = idxColuna;
+
+      // Atualiza botões
+      botoesEditar.forEach(b => b.textContent = "✏️");
+      btn.textContent = "✅";
+
+      // Não muda o foco automaticamente (deixa o usuário decidir)
+    };
+  });
+}
+
+function bloquearTodosInputs(tabela) {
+  tabela.querySelectorAll("tbody tr input.nota-input").forEach(input => {
+    input.readOnly = true;
+    input.style.backgroundColor = "#eee";
+  });
+}
+
+function bloquearColuna(tabela, idxColuna) {
+  tabela.querySelectorAll("tbody tr").forEach(tr => {
+    const td = tr.cells[idxColuna];
+    if (!td) return;
+    const input = td.querySelector("input.nota-input");
+    if (!input) return;
+    input.readOnly = true;
+    input.style.backgroundColor = "#eee";
+  });
+}
+
+function liberarColuna(tabela, idxColuna) {
+  tabela.querySelectorAll("tbody tr").forEach(tr => {
+    const td = tr.cells[idxColuna];
+    if (!td) return;
+    const input = td.querySelector("input.nota-input");
+    if (!input) return;
+    input.readOnly = false;
+    input.style.backgroundColor = "#fff";
+  });
+}
+
+function salvarNotasColuna(sigla, tabela) {
+  const turmas = lerTurmasStorageSafe();
+  const turma = turmas.find(t => String(t.id) === String(turmaAtualNotasId));
+  if (!turma) return alert("Turma não encontrada ao salvar.");
+
+  let idxCol = -1;
+  tabela.querySelectorAll("thead th").forEach((th, idx) => {
+    const btnCol = th.querySelector(".btn-editar-coluna");
+    if (btnCol && btnCol.getAttribute("data-sigla") === sigla) {
+      idxCol = idx;
+    }
+  });
+  if (idxCol === -1) return;
+
+  tabela.querySelectorAll("tbody tr").forEach(tr => {
+    const ra = tr.getAttribute("data-ra");
+    const td = tr.cells[idxCol];
+    if (!td) return;
+    const input = td.querySelector("input.nota-input");
+    if (!input) return;
+
+    const valor = input.value.trim();
+
+    if (!turma.notas) turma.notas = {};
+    if (!turma.notas[ra]) turma.notas[ra] = {};
+
+    turma.notas[ra][sigla] = valor;
+  });
+
+  salvarTurmasStorage(turmas);
+}
+
+
+// Fechar modal ao clicar no X
 if (fecharModalNotas) {
   fecharModalNotas.addEventListener("click", () => {
     if (modalNotas) modalNotas.style.display = "none";
   });
 }
 
-// fechar clicando fora
+// Fechar modal clicando fora
 window.addEventListener("click", (e) => {
   if (modalNotas && e.target === modalNotas) {
     modalNotas.style.display = "none";
@@ -846,117 +977,187 @@ window.addEventListener("click", (e) => {
 });
 
 
+//================================================================================================================
+//                       SISTEMA DE PESOS (PARA CÁLCULO DE MÉDIA SIMPLES E PONDERADA)
+//================================================================================================================
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
+// Elementos do sistema de pesos
+const selectTipoMedia = document.getElementById('tipo-media');
+const containerPesos = document.getElementById('container-pesos');
+const listaPesos = document.getElementById('lista-pesos');
+const btnSalvarPesos = document.getElementById('btn-salvar-pesos');
+const btnMostrarPesos = document.getElementById('btn-mostrar-pesos');
 
-// =====================================================================
-//       SISTEMA DE PESOS — VERSÃO FINAL E FUNCIONAL
-// =====================================================================
-
-// elementos da interface
-const tipoMedia = document.getElementById("tipo-media");
-const containerPesos = document.getElementById("container-pesos");
-const listaPesos = document.getElementById("lista-pesos");
-const btnSalvarPesos = document.getElementById("btn-salvar-pesos");
-const btnMostrarPesos = document.getElementById("btn-mostrar-pesos");
-
-let turmaPesosAtiva = null;
-
-
-// =====================================================================
-// CARREGAR A LISTA DE PESOS COM OS COMPONENTES EXISTENTES
-// =====================================================================
-function carregarPesosParaTurma(turma, componentes) {
-  turmaPesosAtiva = turma;
-
-  listaPesos.innerHTML = "";
-
-  componentes.forEach(comp => {
-    const pesoAtual = turma.pesos?.[comp.sigla] ?? 1;
-
-    const linha = document.createElement("div");
-    linha.classList.add("linha-peso");
-
-    linha.innerHTML = `
-        <span class="sigla-peso">${comp.sigla}</span>
-        <input type="number" 
-              min="1" max="10" 
-              value="${pesoAtual}" 
-              class="input-peso"
-              data-componente="${comp.sigla}">
-    `;
-
-
-    listaPesos.appendChild(linha);
+// Listener para mudança no tipo de média
+if (selectTipoMedia) {
+  selectTipoMedia.addEventListener('change', (e) => {
+    const tipoSelecionado = e.target.value;
+    
+    if (tipoSelecionado === 'ponderada') {
+      // Mostrar container de pesos
+      carregarPesosParaEdicao();
+      containerPesos.classList.remove('oculto');
+      btnMostrarPesos.classList.add('oculto');
+    } else if (tipoSelecionado === 'simples') {
+      // Esconder tudo relacionado a pesos
+      containerPesos.classList.add('oculto');
+      btnMostrarPesos.classList.add('oculto');
+      
+      // Salvar tipo de média como simples
+      salvarTipoMedia('simples');
+    }
   });
+}
+
+// Carregar os componentes da turma para edição de pesos
+function carregarPesosParaEdicao() {
+  if (!turmaAtualNotasId) return;
+  
+  const turmasAgora = lerTurmasStorageSafe();
+  const turma = turmasAgora.find(t => String(t.id) === String(turmaAtualNotasId));
+  
+  if (!turma) return;
+  
+  // Pegar componentes da disciplina da turma
+  const discNomeTurma = _norm(turma.disciplinaNome || turma.disciplina || "");
+  const discCodigoTurma = _norm(turma.disciplinaCodigo || "");
+  
+  const componentesAll = JSON.parse(localStorage.getItem("componentes")) || [];
+  const componentesDaDisciplina = componentesAll.filter(c => {
+    const cDisc = _norm(c.disciplinaNome || c.disciplina || "");
+    const cDiscCode = _norm(c.disciplinaCodigo || "");
+    return (cDisc && (cDisc === discNomeTurma || cDisc === discCodigoTurma))
+        || (cDiscCode && (cDiscCode === discCodigoTurma || cDiscCode === discNomeTurma));
+  });
+  
+  if (componentesDaDisciplina.length === 0) {
+    listaPesos.innerHTML = '<p style="text-align:center; color:#999;">Nenhum componente encontrado.</p>';
+    return;
+  }
+  
+  // Carregar pesos salvos anteriormente (se existirem)
+  const pesosSalvos = turma.pesos || {};
+  
+  // Criar interface de seleção de pesos
+  listaPesos.innerHTML = '';
+  componentesDaDisciplina.forEach(comp => {
+    const itemDiv = document.createElement('div');
+    itemDiv.className = 'item-peso';
+    
+    const pesoAtual = pesosSalvos[comp.sigla] || 1;
+    
+    itemDiv.innerHTML = `
+    <label>${comp.sigla}</label>
+      <select data-componente="${comp.sigla}">
+        ${[1,2,3,4,5,6,7,8,9,10].map(p => 
+          `<option value="${p}" ${p === pesoAtual ? 'selected' : ''}>${p}</option>`
+        ).join('')}
+      </select>
+    `;
+    
+    listaPesos.appendChild(itemDiv);
+  });
+}
+
+// Salvar os pesos configurados
+if (btnSalvarPesos) {
+  btnSalvarPesos.addEventListener('click', () => {
+    if (!turmaAtualNotasId) return;
+    
+    const turmasAgora = lerTurmasStorageSafe();
+    const turma = turmasAgora.find(t => String(t.id) === String(turmaAtualNotasId));
+    
+    if (!turma) return;
+    
+    // Coletar pesos dos selects
+    const selects = listaPesos.querySelectorAll('select[data-componente]');
+    const pesos = {};
+    
+    selects.forEach(select => {
+      const componente = select.getAttribute('data-componente');
+      const peso = parseInt(select.value);
+      pesos[componente] = peso;
+    });
+    
+    // Salvar na turma
+    turma.pesos = pesos;
+    turma.tipoMedia = 'ponderada';
+    
+    // Atualizar no storage
+    let todasTurmas = lerTurmasStorageSafe();
+    todasTurmas = todasTurmas.map(t => String(t.id) === String(turmaAtualNotasId) ? turma : t);
+    salvarTurmasComFallback(todasTurmas);
+    
+    // Esconder container de pesos e mostrar botão
+    containerPesos.classList.add('oculto');
+    btnMostrarPesos.classList.remove('oculto');
+    
+    alert('Pesos salvos com sucesso!');
+  });
+}
+
+// Mostrar pesos novamente para edição
+if (btnMostrarPesos) {
+  btnMostrarPesos.addEventListener('click', () => {
+    carregarPesosParaEdicao();
+    containerPesos.classList.remove('oculto');
+    btnMostrarPesos.classList.add('oculto');
+  });
+}
+
+// Função para salvar tipo de média simples
+function salvarTipoMedia(tipo) {
+  if (!turmaAtualNotasId) return;
+  
+  const turmasAgora = lerTurmasStorageSafe();
+  const turma = turmasAgora.find(t => String(t.id) === String(turmaAtualNotasId));
+  
+  if (!turma) return;
+  
+  turma.tipoMedia = tipo;
+  if (tipo === 'simples') {
+    delete turma.pesos; // Remove pesos se for média simples
+  }
+  
+  let todasTurmas = lerTurmasStorageSafe();
+  todasTurmas = todasTurmas.map(t => String(t.id) === String(turmaAtualNotasId) ? turma : t);
+  salvarTurmasComFallback(todasTurmas);
+}
+
+// Atualizar a função abrirModalNotas para configurar o sistema de pesos
+function abrirModalNotasComPesos(turmaId) {
+  turmaAtualNotasId = String(turmaId);
+  
+  // Chamar a função original de abrir modal
+  abrirModalNotas(turmaId);
+  
+  // Configurar o select de tipo de média baseado no que está salvo
+  const turmasAgora = lerTurmasStorageSafe();
+  const turma = turmasAgora.find(t => String(t.id) === String(turmaId));
+  
+  if (turma && selectTipoMedia) {
+    // Resetar estado
+    containerPesos.classList.add('oculto');
+    btnMostrarPesos.classList.add('oculto');
+    
+    if (turma.tipoMedia === 'simples') {
+      selectTipoMedia.value = 'simples';
+    } else if (turma.tipoMedia === 'ponderada') {
+      selectTipoMedia.value = 'ponderada';
+      btnMostrarPesos.classList.remove('oculto');
+    } else {
+      selectTipoMedia.value = '';
+    }
+  }
 }
 
 
 
 
-// =====================================================================
-// MOSTRAR / ESCONDER CONTAINER AO MUDAR O SELECT
-// =====================================================================
-tipoMedia.addEventListener("change", () => {
-  if (tipoMedia.value === "ponderada") {
-    containerPesos.classList.remove("oculto");
-    btnMostrarPesos.classList.add("oculto");
-  } else {
-    containerPesos.classList.add("oculto");
-    btnMostrarPesos.classList.add("oculto");
-  }
-});
+//================================================================================================================
+//                                    MODAL DE IMPORTAÇÃO DE ALUNOS VIA CSV.
+//================================================================================================================
 
-
-// =====================================================================
-// BOTÃO **SALVAR PESOS**
-// =====================================================================
-btnSalvarPesos.addEventListener('click', () => {
-
-  if (!turmaAtualNotasId) return;
-
-  const turmasAgora = lerTurmasStorageSafe();
-  const turma = turmasAgora.find(t => String(t.id) === String(turmaAtualNotasId));
-  if (!turma) return;
-
-  // coleta dos pesos
-  const inputs = listaPesos.querySelectorAll('.input-peso');
-  const pesos = {};
-
-  inputs.forEach(input => {
-    const componente = input.getAttribute("data-componente");
-    pesos[componente] = Number(input.value) || 1;
-  });
-
-  // salva na turma
-  turma.pesos = pesos;
-  turma.tipoMedia = "ponderada";
-
-  // atualiza storage
-  let todas = lerTurmasStorageSafe();
-  todas = todas.map(t => String(t.id) === String(turmaAtualNotasId) ? turma : t);
-  salvarTurmasComFallback(todas);
-
-  // 💥 após salvar → esconder tabela e mostrar botão
-  containerPesos.classList.add("oculto");
-  btnMostrarPesos.classList.remove("oculto");
-
-  alert("Pesos salvos com sucesso!");
-});
-
-
-// =====================================================================
-// BOTÃO **MOSTRAR COMPONENTES**
-// =====================================================================
-btnMostrarPesos.addEventListener("click", () => {
-  containerPesos.classList.remove("oculto");
-  btnMostrarPesos.classList.add("oculto");
-});
-
-
-
-
-// =====================IMPORTAR ALUNOS VIA CSV.===============================================
 // Modal e select
 const modalImportar = document.getElementById('modal-importar-alunos');
 const btnAbrirImportar = document.getElementById('import-aluno'); // id do botão certo
@@ -979,7 +1180,7 @@ function preencherSelectTurmas() {
   if (turmas.length === 0) {
     const option = document.createElement('option');
     option.value = '';
-    option.textContent = 'Nenhuma turma cadastrada';
+    option.textContent = 'NENHUMA TURMA CADASTRADA';
     selectTurmas.appendChild(option);
     return;
   }
@@ -1020,6 +1221,10 @@ if (btnImportar) {
     modalImportar.style.display = 'none';
   });
 }
+
+
+
+
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -896,7 +896,7 @@ select:disabled+label,
 .col-nota {
   width: 50px;
   /* por exemplo */
-  max-width: 50px;
+  max-width: 70px;
   padding: 2px 5px;
   text-align: center;
 }
@@ -933,6 +933,8 @@ select:disabled+label,
   border-top-right-radius: 15px;
   /* canto arredondado topo direito */
 }
+
+
 
 /* =============================================
    SISTEMA DE CÁLCULO DE NOTAS - COMPACTO
@@ -1069,6 +1071,20 @@ select:disabled+label,
   display: none;
 }
 
+.item-peso select {
+  padding: 4px 6px;
+  border-radius: 10px;      /* bordas redondas */
+  border: 1px solid #419cb6;
+  background-color: white;
+  font-family: Comfortaa;
+  font-size: 10px;
+  font-weight: bold;
+  color: #00576f;
+  cursor: pointer;
+  outline: none;
+}
+
+
 
 /* Linha que organiza sistema de cálculo + botão exportar lado a lado */
 .acoes-notas {
@@ -1087,6 +1103,8 @@ select:disabled+label,
   margin-top: 5px;
 }
 
+
+
 /*==============IMPORAR ALUNOS VIA CSV.================================================*/
 
 #modal-importar-alunos {
@@ -1100,3 +1118,12 @@ select:disabled+label,
   padding-top: 50px;
   overflow: hidden; /* evita scroll na página */
 }
+
+
+.nota-input.editavel {
+  background-color: #fff !important;
+  border: 1px solid #333 !important;
+  outline: none;
+}
+
+
