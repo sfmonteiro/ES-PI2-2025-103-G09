@@ -5,7 +5,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
+  font-family: comfortaa;
 }
 
 /* LAYOUT GERAL  */
@@ -16,6 +16,7 @@ body {
   align-items: center; 
   height: 100vh;
   padding-top: 0;
+  font-family: comfortaa;
 }
 
 .wrapper {
@@ -26,35 +27,17 @@ body {
 
 /* LOGO (ÍCONE + TEXTO) */
 .logo {
-    width: 35px; 
+    width: 200px; 
     height: auto;
     margin-right: 8px;
 }
 
-.logo-area {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    margin-bottom: 35px;
-}
-
-.icon-logo {
-    width: 35px; 
-    height: auto;
-}
-
-.logo-text {
-    font-size: 1.45rem;
-    font-weight: 700;
-    color: #232b70;
-}
 
 /* TÍTULO */
 h2 {
   color: #232b70;
-  font-size: 1.8rem;
-  font-weight: 500;
+  font-size: 20px;
+  font-weight: bold;
   margin-top: 15px;
   margin-bottom: 35px;
 }
@@ -72,12 +55,6 @@ h2 {
   margin: 0 auto 15px;
   background-color: #fff;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-}
-
-.input-icon {
-  font-size: 20px;
-  color: #9e9e9e;
-  margin-right: 10px;
 }
 
 select {
@@ -102,9 +79,9 @@ select {
 
 /* IMAGEM DENTRO DO SELECT */
 .img-instituicao {
-  width: 35px;
+  width: 20px;
+  margin-right: 15px;
   height: auto;
-  border-radius: 0;
   object-fit: contain;
   background: none;
 }
@@ -116,7 +93,7 @@ select {
   color: #18819b;
   font-size: 0.9rem;
   text-decoration: none;
-  font-weight: 500;
+  font-weight: bold;
 }
 
 .add-link:hover {
@@ -131,10 +108,10 @@ button {
   color: #fff;
   border: none;
   border-radius: 50px;
-  padding: 16px 75px;
+  padding: 8px 50px;
   font-size: 1.1rem;
   cursor: pointer;
-  font-weight: 500;
+  font-weight: bold;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   transition: all 0.25s ease-in-out;
 }

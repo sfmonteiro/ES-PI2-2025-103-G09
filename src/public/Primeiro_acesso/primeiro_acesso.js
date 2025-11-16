@@ -82,7 +82,7 @@ async function handlerSubmit(e) {
     }
 
     // se for sucesso redireciona para página de gestão de instituições
-    window.location.href = "../Instituição_cadastro/Instituição.html";
+    window.location.href = "../Instituicao_cadastro/Instituicao.html";
   } catch (err) {
     console.error(err);
     alert(err.message || "Erro ao salvar. Veja o console para detalhes.");

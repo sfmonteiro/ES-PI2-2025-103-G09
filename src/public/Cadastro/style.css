@@ -3,7 +3,7 @@
 
 /* ---------- GERAL ---------- */
 body {
-    font-family: 'comfortaa', sans-serif,;
+    font-family: comfortaa;
     background-color: #1e87a3;
     display: flex;
     align-items: center;
@@ -25,6 +25,7 @@ body {
     width: 100%;
     padding: 30px 5vw;
     margin: auto;
+
 }
 
 /* ---------- TÍTULO ---------- */

@@ -39,14 +39,26 @@ small{
     color: gray;
 }
 
+.hint {
+    display: block;
+    margin-top: 3px;
+    margin-bottom: 5px;
+}
+
 /*Formulário e inputs*/
 label{
     font-size: 25px;
+    color: #2a3a8e;
+}
+
+.asterisco {
+    color: #d33;
+    font-weight: bold;
 }
 
 .textconfirmar {
   display: block;
-  margin-top: 10px;
+  margin-top: 15px;
 }
 
 .senhabox{
@@ -118,6 +130,16 @@ input:focus {
     border-color: #6db0c1;
     box-shadow: 0 0 0 3px #9ed9e9;
     outline: none;
+}
+
+/* ---------- MENSAGENS DE ERRO ---------- */
+.erro {
+  color: #d33;
+  font-size: 13px;
+  font-weight: bold;
+  margin-top: 4px;
+  display: block;
+  text-align: center;
 }
 
 /*Botões*/
