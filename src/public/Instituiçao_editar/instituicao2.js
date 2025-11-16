@@ -121,20 +121,3 @@ function render() {
 
 render();
 
-// ===== REDIRECIONAMENTOS =====
-function redirecionar(id, destino) {
-  const el = document.getElementById(id);
-  if (el) el.addEventListener("click", e => {
-    e.preventDefault();
-    window.location.href = destino;
-  });
-}
-
-redirecionar("inicio", "../Pagina_Inicial/inicio.html");
-redirecionar("instituicao", "../Instituiçao_editar/instituicao2.html");
-redirecionar("cursos", "../cursos/cursos.html");
-redirecionar("turmas", "../pagina_turmas/turma.html");
-redirecionar("atividades", "../Pagina_atividades/atividades.html");
-redirecionar("conta", "../Minha_Conta/minha_conta.html");
-redirecionar("sair", "../Login/login.html");
-redirecionar("trocar-inst", "../Instituição_cadastro/instituição.html");

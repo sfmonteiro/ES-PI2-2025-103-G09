@@ -19,29 +19,6 @@ if (userBtn && userMenu) {
   });
 }
 
-// função de redirecionamento reutilizável (mantida)
-function redirecionar(id, destino) {
-  const elemento = document.getElementById(id);
-  if (elemento) {
-    elemento.addEventListener('click', (e) => {
-      e.preventDefault(); // impede recarregar a página com o #
-      window.location.href = destino;
-    });
-  }
-}
-
-// --- Corrige/atualiza os redirecionamentos ---
-// adição ChatGPT – Marialvo: use nomes de pasta conforme seu repositório
-redirecionar("inicio", "../Pagina_Inicial/inicio.html");
-redirecionar("instituicao", "../Instituicao_editar/instituicao2.html");
-redirecionar("cursos", "../cursos/cursos.html");
-redirecionar("disciplinas", "");
-redirecionar("alunos", "../Pagina_alunos/alunos.html");
-redirecionar("atividades", "../Pagina_atividades/atividades.html");
-redirecionar("conta", "../Minha_Conta/minha_conta.html");
-redirecionar("sair", "../Login/login.html");
-<<<<<<< HEAD
-
 // ======================= Mostrar instituição e nome do usuário =======================
 
 // Tenta obter o nome da instituição salva (pelo select da página anterior)
@@ -127,6 +104,3 @@ function populateHeader() {
 document.addEventListener('DOMContentLoaded', () => {
   populateHeader();
 });
-=======
-redirecionar("trocar-inst", "../Instituição_cadastro/instituição.html");
->>>>>>> ae0d47b614c6c8aacf846075489a36500b18025b

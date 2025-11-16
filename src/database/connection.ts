@@ -1,6 +1,6 @@
 // src/database/connection.ts
-import oracledb from "oracledb";
-import dotenv from "dotenv";
+import oracledb from 'oracledb';
+import dotenv from 'dotenv'; dotenv.config();
 import path from "path";
 
 dotenv.config({ path: path.resolve(__dirname, "../.env") });
