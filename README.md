@@ -1,5 +1,7 @@
 # ES-PI2-2025-103-G09
-
+<p align="center">
+  <img src="src/public/images/logo_NotaDez.png" width="300" alt="Logo Nota Dez">
+</p>
 
 O *NotaDez* é um sistema web desenvolvido para auxiliar docentes no controle pessoal de notas de seus estudantes. Diferente dos sistemas institucionais, o NotaDez é focado exclusivamente na organização, lançamento e exportação de notas, atendendo necessidades reais do professor de forma simples, rápida e eficiente.
 
@@ -77,13 +79,13 @@ Compile o ES_PI2_2025_T1_G07 a partir do código-fonte e instale as dependência
 1. *Clone o repositório:*
 
     sh
-    ❯ git clone https://github.com/MiguelFMont/ES_PI2_2025_T1_G07
+    ❯ git clone https://github.com/sfmonteiro/ES-PI2-2025-103-G09
     
 
 2. *Entre no diretório do repositório:*
     
     ```sh
-    ❯ cd ES_PI2_2025_T1_G07
+    ❯ cd ES_PI2_2025_103_G09
     ```
 
 3. *:*Instale todas as dependencias
@@ -106,7 +108,7 @@ npm start
 
 ### 🧪 Testes
 
-Es_pi2_2025_t1_g07 utiliza o framework de testes {_test_framework_}. Execute o conjunto de testes com:
+Es_pi2_2025_103_g09 utiliza o framework de testes {_test_framework_}. Execute o conjunto de testes com:
 
 **Usando [npm](https://www.npmjs.com/):**
 
