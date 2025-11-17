@@ -1,21 +1,61 @@
 # ES-PI2-2025-103-G09
 
-# 🎓 University Notes App
 
-Um *aplicativo universitário para professores*, que facilita a gestão de matérias, notas, trabalhos e tarefas, tornando o ensino mais organizado e eficiente.
+O *NotaDez* é um sistema web desenvolvido para auxiliar docentes no controle pessoal de notas de seus estudantes. Diferente dos sistemas institucionais, o NotaDez é focado exclusivamente na organização, lançamento e exportação de notas, atendendo necessidades reais do professor de forma simples, rápida e eficiente.
+
+
+## Visão Geral
+
+O NotaDez é um sistema web projetado para simplificar o controle de notas realizado por docentes, permitindo organizar instituições, cursos, disciplinas, turmas, estudantes e avaliações de forma clara e centralizada.
+
+Muitos professores utilizam planilhas para organizar notas, porém esse processo pode ser trabalhoso e suscetível a erros. O NotaDez oferece uma solução moderna e eficiente, com interface intuitiva, estrutura organizada e fluxo de trabalho que acompanha o processo real utilizado em sala de aula.
+
+A aplicação funciona totalmente via navegador, podendo ser hospedada em servidor ou nuvem, e permite importar, registrar, calcular e exportar notas com facilidade.
+
+# Funcionalidades Principais
+
+## 🏫 Instituições, Cursos, Disciplinas e Turmas
+
+Cadastro de instituições onde o docente leciona.
+Cadastro de cursos e disciplinas com informações essenciais.
+Criação de múltiplas turmas vinculadas às disciplinas.
+Exclusão respeitando dependências para evitar perda inadvertida de dados.
+
+## 👥 Cadastro e Importação de Estudantes
+
+Cadastro manual de alunos em cada turma.
+Importação de estudantes via arquivo CSV.
+Identificação única por matrícula/RA e nome completo.
+Tratamento automático de duplicidade para evitar inconsistências.
+
+## 📝 Componentes de Nota
+
+Cadastro de cada atividade avaliativa: provas, trabalhos, atividades etc.
+Cada componente possui Nome, Sigla e Descrição.
+Os componentes são vinculados à disciplina e aplicados às suas turmas.
+
+## ✏️ Lançamento de Notas
+
+Tabela organizada exibindo alunos × componentes de nota.
+Edição prática de notas por componente.
+Validação e persistência no banco de dados.
+
+## 📊 Cálculo da Nota Final
+
+Cálculo automático de nota final usando:
+Média simples, ou Média ponderada definida pelo docente.
+
+## 📁 Exportação de Dados
+
+Exportação das notas completas da turma em CSV.
+Somente permitida quando todas as notas estiverem preenchidas.
+
+## 🧾 Registro de Alterações
+
+Toda alteração de nota é registrada como log interno no banco.
+Garante rastreabilidade e segurança no histórico das avaliações.
 
 ---
-
-## 🏆 Funcionalidades
-
-- 📝 *Gerenciar matérias*: Crie, edite e organize disciplinas.  
-- 🏅 *Atribuir notas*: Lance notas de maneira rápida e segura.  
-- 📂 *Gerenciar trabalhos e tarefas*: Crie, acompanhe e organize atividades acadêmicas.  
-- 👥 *Controle de turmas*: Visualize alunos e acompanhe o desempenho de cada um.  
-- 💻 *Interface intuitiva e responsiva*: Fácil de usar em qualquer dispositivo.  
-
----
-
 ## 🛠️ Tecnologias Utilizadas
 
 ![HTML](https://img.shields.io/badge/HTML-E34F26?style=for-the-badge&logo=html5&logoColor=white)
@@ -41,18 +81,18 @@ Compile o ES_PI2_2025_T1_G07 a partir do código-fonte e instale as dependência
     
 
 2. *Entre no diretório do repositório:*
-
-    sh
-    ❯ cd ES_PI2_2025_T1_G07
     
+    ```sh
+    ❯ cd ES_PI2_2025_T1_G07
+    ```
 
 3. *:*Instale todas as dependencias
 
 **Using [npm](https://www.npmjs.com/):**
 
-sh
+```sh
 ❯ npm install
-
+```
 
 ### 💻 Uso
 
@@ -60,9 +100,9 @@ Rode o projeto com:
 
 **Usando [npm](https://www.npmjs.com/):**
 
-sh
+```sh
 npm start
-
+```
 
 ### 🧪 Testes
 
@@ -70,12 +110,12 @@ Es_pi2_2025_t1_g07 utiliza o framework de testes {_test_framework_}. Execute o c
 
 **Usando [npm](https://www.npmjs.com/):**
 
-sh
+```sh
 npm test
-
-sh
+```
+```sh
 Observação: Para o correto funcionamento de todo o projeto, é necessário configurar e utilizar chaves de APIs externas, como por exemplo a chave da Resend, responsável pelo envio de e-mails.
-
+```
 Antes de utilizar todas as funcionalidades do sistema, certifique-se de que todas as variáveis de ambiente necessárias estejam corretamente configuradas.
 
 
@@ -84,10 +124,10 @@ Antes de utilizar todas as funcionalidades do sistema, certifique-se de que toda
 
 ## 👥 Equipe de Desenvolvimento
 
-- *Cezar Augusto Fernandez Rull*  
-- *Miguel Fernandes Monteiro*  
-- *Juan Desiderio de Souza*  
-- *Davi José Betuolo Vioreti*  
-- *Rafael Almeida Moreira*  
+- *Bruno Lobo de Jesus*  
+- *Gabriel Figueira Albasini*  
+- *Guilherme Mascarenhas Plácido*  
+- *Marialvo Corrêa de Freitas Júnior*  
+- *Sara Fernandes Monteiro*  
 
 ---
