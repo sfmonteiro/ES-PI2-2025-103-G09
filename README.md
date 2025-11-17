@@ -74,7 +74,7 @@ Garante rastreabilidade e segurança no histórico das avaliações.
 ---
 ### ⚙️ Instalação
 
-Compile o ES_PI2_2025_T1_G07 a partir do código-fonte e instale as dependências.
+Compile o ES_PI2_2025_T103_G09 a partir do código-fonte e instale as dependências.
 
 1. *Clone o repositório:*
 
