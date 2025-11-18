@@ -1,3 +1,43 @@
+// ==========================
+// USER HEADER
+// ==========================
+function getUserFirstName() {
+  try {
+    const u = localStorage.getItem("usuario");
+    if (u) {
+      const obj = JSON.parse(u);
+      const nomeFull = obj.nome ?? obj.NOME ?? obj.nome_usuario ?? obj.name ?? "";
+      if (nomeFull) return nomeFull.split(" ")[0];
+    }
+    const token = localStorage.getItem("token");
+    if (token) {
+      const parts = token.split('.');
+      if (parts.length === 3) {
+        try {
+          const payload = parts[1];
+          const decoded = JSON.parse(atob(payload.replace(/-/g,'+').replace(/_/g,'/')));
+          const nomeFull = decoded.nome ?? decoded.name ?? decoded.nome_usuario ?? decoded.username ?? "";
+          if (nomeFull) return nomeFull.split(" ")[0];
+        } catch {}
+      }
+    }
+  } catch {}
+  return null;
+}
+
+function populateHeader() {
+  const userBtnSpan = document.getElementById('user-btn');
+  const firstName = getUserFirstName();
+  if (userBtnSpan) {
+    userBtnSpan.textContent = firstName ? `Olá, ${firstName}! ▼` : `Olá, Usuário! ▼`;
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  populateHeader();
+  fetchInstituicoes();
+});
+
 // ===== MENU USUÁRIO =====
 const userMenu = document.querySelector('.user-menu');
 const userBtn = document.querySelector('#user-btn');
@@ -5,17 +45,6 @@ userBtn.addEventListener('click', () => userMenu.classList.toggle('open'));
 document.addEventListener('click', e => {
   if (!userMenu.contains(e.target)) userMenu.classList.remove('open');
 });
-
-// ===== STORAGE =====
-const STORAGE_KEY = "instituicoes";
-
-function carregar() {
-  return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-}
-
-function salvar(data) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-}
 
 // ===== ELEMENTOS =====
 const lista = document.getElementById("lista-instituicoes");
@@ -32,7 +61,7 @@ const btnSalvar = document.getElementById("salvarInstituicao");
 const inputNome = document.getElementById("nomeInstituicao");
 const tituloModal = document.getElementById("tituloModal");
 
-let instituicoes = carregar();
+let instituicoes = [];
 let editandoId = null;
 let idParaExcluir = null;
 
@@ -62,27 +91,115 @@ function fecharModal() {
   modal.style.display = "none";
 }
 
+// ===== FETCH / API =====
+async function fetchInstituicoes() {
+  try {
+    const res = await fetch("/api/instituicao", {
+      headers: { 'Authorization': `Bearer ${localStorage.getItem("token")}` }
+    });
+    const data = await res.json();
+    if (data.ok) {
+      instituicoes = data.rows.map(i => ({
+        id: i.ID_INSTITUICAO,
+        nome: i.NOME
+      }));
+      render();
+    } else {
+      alert("Erro ao carregar instituições");
+    }
+  } catch (err) {
+    console.error("Erro ao buscar instituições:", err);
+  }
+}
+
+async function criarInstituicao(nome) {
+  try {
+    const res = await fetch("/api/instituicao", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${localStorage.getItem("token")}`
+      },
+      body: JSON.stringify({ nome })
+    });
+    const data = await res.json();
+    if (data.ok) {
+      fetchInstituicoes();
+      mostrarSucesso("Instituição cadastrada com sucesso!");
+      fecharModal();
+    } else {
+      alert(data.message || "Erro ao criar instituição");
+    }
+  } catch (err) {
+    console.error("Erro POST instituição:", err);
+  }
+}
+
+async function editarInstituicao(id, nome) {
+  try {
+    const res = await fetch(`/api/instituicao/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${localStorage.getItem("token")}`
+      },
+      body: JSON.stringify({ nome })
+    });
+
+    const data = await res.json();
+
+    if (!data.ok) {
+      alert(data.message || "Erro ao editar instituição");
+      return;
+    }
+
+    mostrarSucesso("Instituição atualizada com sucesso!");
+    fecharModal();
+    fetchInstituicoes();
+
+  } catch (err) {
+    console.error("Erro PUT instituição:", err);
+    alert("Erro ao atualizar instituição.");
+  }
+}
+
+
+async function excluirInstituicao(id) {
+  try {
+    const res = await fetch(`/api/instituicao/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Authorization": `Bearer ${localStorage.getItem("token")}`
+      }
+    });
+
+    const data = await res.json();
+
+    if (!data.ok) {
+      alert(data.message || "Erro ao excluir instituição");
+      return;
+    }
+
+    mostrarSucesso("Instituição excluída com sucesso!");
+    fetchInstituicoes();
+
+  } catch (err) {
+    console.error("Erro DELETE instituição:", err);
+    alert("Erro ao excluir instituição.");
+  }
+}
+
+
 // ===== SALVAR / EDITAR =====
 btnSalvar.onclick = () => {
   const nome = inputNome.value.trim();
-
   if (!nome) return alert("Digite o nome da instituição!");
 
   if (editandoId) {
-    const idx = instituicoes.findIndex(i => i.id === editandoId);
-    instituicoes[idx] = { ...instituicoes[idx], nome };
-    mostrarSucesso("Instituição editada com sucesso!");
+    editarInstituicao(editandoId, nome);
   } else {
-    instituicoes.push({
-      id: Date.now(),
-      nome
-    });
-    mostrarSucesso("Instituição cadastrada com sucesso!");
+    criarInstituicao(nome);
   }
-
-  salvar(instituicoes);
-  render();
-  fecharModal();
 };
 
 // ===== CONFIRMAR EXCLUSÃO PADRÃO =====
@@ -92,11 +209,8 @@ function confirmarExclusao(id) {
 }
 
 btnConfirmSim.onclick = () => {
-  instituicoes = instituicoes.filter(i => i.id !== idParaExcluir);
-  salvar(instituicoes);
-  render();
+  excluirInstituicao(idParaExcluir);
   modalConfirmacao.style.display = "none";
-  mostrarSucesso("Instituição excluída com sucesso!");
 };
 
 btnConfirmNao.onclick = () => {
@@ -134,15 +248,11 @@ function render() {
     `;
 
     card.querySelector(".btn-editar").onclick = () => abrirModal(true, inst);
-
     card.querySelector(".btn-excluir").onclick = () => confirmarExclusao(inst.id);
 
     lista.appendChild(card);
   });
 }
-
-render();
-
 
 // ============== POPUP DE SUCESSO ==============
 function mostrarSucesso(texto = "Operação realizada com sucesso!") {

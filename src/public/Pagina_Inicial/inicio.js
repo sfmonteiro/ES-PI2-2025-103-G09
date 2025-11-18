@@ -1,18 +1,18 @@
 // Responsável original: Sara Fernandes
 // Ajustes: Marialvo (mostra instituição selecionada e primeiro nome do usuário)
 // Ajustes: Gabriel (carregar estatísticas do dashboard)
+// ALTERAÇÃO POR: Marialvo
+// Objetivo: buscar totais via API (/api/instituicao, /api/cursos, /api/turmas, /api/componentes)
+// Mantive fallback para localStorage se API falhar.
 
-// elementos
 const userMenu = document.querySelector('.user-menu');
 const userBtn = document.querySelector('#user-btn');
 
-// abre/fecha dropdown do usuário
 if (userBtn && userMenu) {
   userBtn.addEventListener('click', () => {
     userMenu.classList.toggle('open');
   });
 
-  // FECHAR SE CLICAR FORA
   document.addEventListener('click', (e) => {
     if (!userMenu.contains(e.target)) {
       userMenu.classList.remove('open');
@@ -20,24 +20,35 @@ if (userBtn && userMenu) {
   });
 }
 
-// ======================= Mostrar instituição e nome do usuário =======================
+// ----------------- helpers -----------------
+const AUTH_TOKEN_KEY = 'token';
 
-// Tenta obter o nome da instituição salva (pelo select da página anterior)
+async function apiGet(path) {
+  try {
+    const token = localStorage.getItem(AUTH_TOKEN_KEY);
+    const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+    const resp = await fetch(path, { headers });
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    return await resp.json();
+  } catch (e) {
+    // sinaliza falha ao chamar API
+    return { _error: true, error: e };
+  }
+}
+
+function safeParseJSON(str) {
+  try { return JSON.parse(str || '[]'); } catch { return []; }
+}
+
 function getSelectedInstitution() {
   try {
     const id = localStorage.getItem('selected_instituicao_id');
     const nome = localStorage.getItem('selected_instituicao_nome');
     if (id && nome) return { id, nome };
-  } catch (e) {
-    console.warn("Erro lendo selected_instituicao do localStorage:", e);
-  }
+  } catch (e) { /* ignore */ }
   return null;
 }
 
-// Tenta obter o nome do usuário:
-// 1) se houver um objeto 'usuario' salvo no localStorage (recomendado no login), usa ele
-// 2) senão tenta decodificar JWT do token (localStorage.token) e extrair 'nome' ou 'nome_usuario' do payload
-// 3) senão retorna null
 function getUserFirstName() {
   try {
     const u = localStorage.getItem("usuario");
@@ -46,103 +57,120 @@ function getUserFirstName() {
       const nomeFull = obj.nome ?? obj.NOME ?? obj.nome_usuario ?? obj.name ?? "";
       if (nomeFull) return nomeFull.split(" ")[0];
     }
-
     const token = localStorage.getItem("token");
     if (token) {
-      // decodifica sem verificar assinatura (só para extrair payload)
       const parts = token.split('.');
       if (parts.length === 3) {
-        const payload = parts[1];
         try {
+          const payload = parts[1];
           const decoded = JSON.parse(atob(payload.replace(/-/g, '+').replace(/_/g, '/')));
           const nomeFull = decoded.nome ?? decoded.name ?? decoded.nome_usuario ?? decoded.username ?? "";
           if (nomeFull) return String(nomeFull).split(" ")[0];
-        } catch (e) {
-          // ignora
-        }
+        } catch (e) { /* ignore */ }
       }
     }
-  } catch (e) {
-    console.warn("Erro obtendo nome do usuário:", e);
-  }
+  } catch (e) { /* ignore */ }
   return null;
 }
 
-// atualiza a UI com instituição e nome do usuário
+// ----------------- UI population -----------------
 function populateHeader() {
-  // instituição
   const instArea = document.querySelector('.faculdade-box');
   const inst = getSelectedInstitution();
   if (instArea) {
     if (inst) {
-      // adição Marialvo: mostra o nome da instituição selecionada
       instArea.innerHTML = `
         <img src="../images/icone_instituicao_verde.png" alt="Logo Instituição" class="instituicao-icon">
         <span class="instituicao-nome">${inst.nome}</span>
       `;
     } else {
-      // fallback: texto padrão
       instArea.innerHTML = `
         <img src="../images/icone_instituicao_verde.png" alt="Logo Instituição" class="instituicao-icon">
         <span class="instituicao-nome">Nenhuma instituição selecionada</span>
       `;
     }
   }
-
-  // usuário (primeiro nome)
   const userBtnSpan = document.getElementById('user-btn');
   const firstName = getUserFirstName();
   if (userBtnSpan) {
-    if (firstName) {
-      userBtnSpan.textContent = `Olá, ${firstName}!   ▼`;
-    } else {
-      userBtnSpan.textContent = `Olá, Usuário!   ▼`;
-    }
+    userBtnSpan.textContent = firstName ? `Olá, ${firstName}!   ▼` : `Olá, Usuário!   ▼`;
   }
 }
 
-// ======================= DASHBOARD: Carregar Estatísticas =======================
+// ----------------- Dashboard data -----------------
+async function carregarDashboard() {
+  // 1) Tenta obter dados da API (recomendado)
+  const [instRes, cursosRes, turmasRes, componentesRes] = await Promise.allSettled([
+    apiGet('/api/instituicao'),
+    apiGet('/api/cursos'),
+    apiGet('/api/turmas'),
+    apiGet('/api/componentes')
+  ]);
 
-function carregarDashboard() {
-  // Ler dados do localStorage
-  const instituicoes = JSON.parse(localStorage.getItem('instituicoes') || '[]');
-  const cursos = JSON.parse(localStorage.getItem('cursos') || '[]');
-  const turmas = JSON.parse(localStorage.getItem('turmas') || '[]');
-  const componentes = JSON.parse(localStorage.getItem('componentes') || '[]');
+  // Se todas as chamadas falharam, usamos localStorage fallback
+  const apiOkay = (r) => r && r.status === 'fulfilled' && r.value && !r.value._error;
 
-  // Contar totais
-  const totalInstituicoes = instituicoes.length;
-  const totalCursos = cursos.length;
-  const totalTurmas = turmas.length;
-  const totalComponentes = componentes.length;
+  let instituicoes = [];
+  let cursos = [];
+  let turmas = [];
+  let componentes = [];
 
-  // Contar disciplinas (soma de todas as disciplinas de todos os cursos)
-  const totalDisciplinas = cursos.reduce((acc, curso) => {
-    return acc + (Array.isArray(curso.disciplinas) ? curso.disciplinas.length : 0);
-  }, 0);
+  if (apiOkay(instRes)) {
+    // algumas APIs retornam { ok:true, rows: [...] } ou { ok:true, data: [...] } ou array
+    const v = instRes.value;
+    instituicoes = Array.isArray(v) ? v : (v.rows || v.data || []);
+  } else {
+    instituicoes = safeParseJSON(localStorage.getItem('instituicoes'));
+  }
 
-  // Contar alunos (soma de todos os alunos de todas as turmas)
-  const totalAlunos = turmas.reduce((acc, turma) => {
-    return acc + (Array.isArray(turma.alunos) ? turma.alunos.length : 0);
-  }, 0);
+  if (apiOkay(cursosRes)) {
+    const v = cursosRes.value;
+    cursos = Array.isArray(v) ? v : (v.rows || v.data || []);
+    // normalizar: front espera cursos com campo disciplinas (array)
+    cursos = cursos.map(c => ({ ...c, disciplinas: c.disciplinas || c.DISCIPLINAS || [] }));
+  } else {
+    cursos = safeParseJSON(localStorage.getItem('cursos'));
+  }
 
-  // Atualizar cards
-  document.getElementById('total-instituicoes').textContent = totalInstituicoes;
-  document.getElementById('total-cursos').textContent = totalCursos;
-  document.getElementById('total-disciplinas').textContent = totalDisciplinas;
-  document.getElementById('total-turmas').textContent = totalTurmas;
-  document.getElementById('total-alunos').textContent = totalAlunos;
-  document.getElementById('total-componentes').textContent = totalComponentes;
+  if (apiOkay(turmasRes)) {
+    const v = turmasRes.value;
+    turmas = Array.isArray(v) ? v : (v.rows || v.data || []);
+  } else {
+    turmas = safeParseJSON(localStorage.getItem('turmas'));
+  }
 
-  // Carregar listas
+  if (apiOkay(componentesRes)) {
+    const v = componentesRes.value;
+    componentes = Array.isArray(v) ? v : (v.rows || v.data || []);
+  } else {
+    componentes = safeParseJSON(localStorage.getItem('componentes'));
+  }
+
+  // Totais
+  const totalInstituicoes = instituicoes.length || 0;
+  const totalCursos = cursos.length || 0;
+  const totalTurmas = turmas.length || 0;
+  const totalComponentes = componentes.length || 0;
+
+  const totalDisciplinas = cursos.reduce((acc, curso) => acc + (Array.isArray(curso.disciplinas) ? curso.disciplinas.length : 0), 0);
+  const totalAlunos = turmas.reduce((acc, turma) => acc + (Array.isArray(turma.alunos) ? turma.alunos.length : 0), 0);
+
+  // Atualiza DOM (verifica existência dos elementos)
+  const el = (id) => document.getElementById(id);
+  if (el('total-instituicoes')) el('total-instituicoes').textContent = totalInstituicoes;
+  if (el('total-cursos')) el('total-cursos').textContent = totalCursos;
+  if (el('total-disciplinas')) el('total-disciplinas').textContent = totalDisciplinas;
+  if (el('total-turmas')) el('total-turmas').textContent = totalTurmas;
+  if (el('total-alunos')) el('total-alunos').textContent = totalAlunos;
+  if (el('total-componentes')) el('total-componentes').textContent = totalComponentes;
+
   carregarTurmasRecentes(turmas);
   carregarCursosComMaisDisciplinas(cursos);
 }
 
-// ======================= Turmas Recentes =======================
 function carregarTurmasRecentes(turmas) {
   const container = document.getElementById('lista-turmas-recentes');
-  
+  if (!container) return;
   if (!turmas || turmas.length === 0) {
     container.innerHTML = `
       <div class="dashboard-vazio">
@@ -152,12 +180,7 @@ function carregarTurmasRecentes(turmas) {
     `;
     return;
   }
-
-  // Ordenar por id (mais recentes primeiro) e pegar as 5 últimas
-  const turmasRecentes = [...turmas]
-    .sort((a, b) => (b.id || 0) - (a.id || 0))
-    .slice(0, 5);
-
+  const turmasRecentes = [...turmas].sort((a,b) => (b.id || 0) - (a.id || 0)).slice(0,5);
   container.innerHTML = turmasRecentes.map(turma => {
     const numAlunos = Array.isArray(turma.alunos) ? turma.alunos.length : 0;
     return `
@@ -165,10 +188,10 @@ function carregarTurmasRecentes(turmas) {
         <div class="item-info">
           <div class="item-nome">${turma.nome || 'Sem nome'}</div>
           <div class="item-detalhe">
-            ${turma.cursoNome || 'Curso não definido'} • ${turma.periodo || 'Período não definido'}
+            ${turma.cursoNome || turma.curso?.nome || 'Curso não definido'} • ${turma.periodo || 'Período não definido'}
           </div>
           <div class="item-detalhe">
-            ${turma.disciplinaNome || 'Disciplina não definida'}
+            ${turma.disciplinaNome || turma.disciplina?.nome || 'Disciplina não definida'}
           </div>
         </div>
         <div class="item-badge badge-alunos">
@@ -179,10 +202,9 @@ function carregarTurmasRecentes(turmas) {
   }).join('');
 }
 
-// ======================= Cursos com Mais Disciplinas =======================
 function carregarCursosComMaisDisciplinas(cursos) {
   const container = document.getElementById('lista-cursos-disciplinas');
-  
+  if (!container) return;
   if (!cursos || cursos.length === 0) {
     container.innerHTML = `
       <div class="dashboard-vazio">
@@ -192,18 +214,11 @@ function carregarCursosComMaisDisciplinas(cursos) {
     `;
     return;
   }
+  const cursosOrdenados = [...cursos].map(curso => ({ ...curso, numDisciplinas: Array.isArray(curso.disciplinas) ? curso.disciplinas.length : 0 }))
+    .sort((a,b) => b.numDisciplinas - a.numDisciplinas)
+    .slice(0,5);
 
-  // Ordenar por quantidade de disciplinas (maior primeiro) e pegar os 5 primeiros
-  const cursosOrdenados = [...cursos]
-    .map(curso => ({
-      ...curso,
-      numDisciplinas: Array.isArray(curso.disciplinas) ? curso.disciplinas.length : 0
-    }))
-    .sort((a, b) => b.numDisciplinas - a.numDisciplinas)
-    .slice(0, 5);
-
-  container.innerHTML = cursosOrdenados.map(curso => {
-    return `
+  container.innerHTML = cursosOrdenados.map(curso => `
       <div class="item-recente">
         <div class="item-info">
           <div class="item-nome">${curso.nome || 'Sem nome'}</div>
@@ -215,12 +230,10 @@ function carregarCursosComMaisDisciplinas(cursos) {
           ${curso.numDisciplinas}
         </div>
       </div>
-    `;
-  }).join('');
+  `).join('');
 }
 
-// ======================= Inicialização =======================
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   populateHeader();
-  carregarDashboard();
+  await carregarDashboard();
 });

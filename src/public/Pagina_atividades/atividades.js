@@ -1,3 +1,43 @@
+// ==========================
+// USER HEADER
+// ==========================
+function getUserFirstName() {
+  try {
+    const u = localStorage.getItem("usuario");
+    if (u) {
+      const obj = JSON.parse(u);
+      const nomeFull = obj.nome ?? obj.NOME ?? obj.nome_usuario ?? obj.name ?? "";
+      if (nomeFull) return nomeFull.split(" ")[0];
+    }
+    const token = localStorage.getItem("token");
+    if (token) {
+      const parts = token.split('.');
+      if (parts.length === 3) {
+        try {
+          const payload = parts[1];
+          const decoded = JSON.parse(atob(payload.replace(/-/g,'+').replace(/_/g,'/')));
+          const nomeFull = decoded.nome ?? decoded.name ?? decoded.nome_usuario ?? decoded.username ?? "";
+          if (nomeFull) return nomeFull.split(" ")[0];
+        } catch {}
+      }
+    }
+  } catch {}
+  return null;
+}
+
+function populateHeader() {
+  const userBtnSpan = document.getElementById('user-btn');
+  const firstName = getUserFirstName();
+  if (userBtnSpan) {
+    userBtnSpan.textContent = firstName ? `Olá, ${firstName}! ▼` : `Olá, Usuário! ▼`;
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  populateHeader();
+});
+
+
 const userMenu = document.querySelector('.user-menu');
 const userBtn = document.querySelector('#user-btn');
 

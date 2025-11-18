@@ -1,6 +1,8 @@
 // Bruno Lobo de Jesus RA:25019830
 // Revisado e adaptado por Marialvo
 
+
+
 // ======== ELEMENTOS DA PÁGINA ========
 const botao = document.getElementById('entrar');
 const select = document.getElementById('instituicao');
