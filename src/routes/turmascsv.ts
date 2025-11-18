@@ -60,7 +60,7 @@ function parseAlunosCsv(csv: string): { alunos: { ra: string; nome: string }[]; 
   return { alunos, erros };
 }
 
-/** POST — Importar CSV e gravar em ALUNO + MATRICULADO */
+/** POST – Importar CSV e gravar em ALUNO + MATRICULADO */
 router.post(
   "/:turmaId/alunos/importar-csv",
   express.text({ type: "text/csv" }),
@@ -87,11 +87,11 @@ router.post(
     try {
       conn = await getConnectionFromPool();
 
-      // Confirma se a turma pertence ao usuário pela cadeia disciplina → curso → instituição
+      // CORRIGIDO: ID_DISCIPLINAS -> ID_DISCIPLINA
       const verSql = `
         SELECT 1
         FROM TURMAS t
-        JOIN DISCIPLINAS d ON t.ID_DISCIPLINA = d.ID_DISCIPLINAS
+        JOIN DISCIPLINAS d ON t.ID_DISCIPLINA = d.ID_DISCIPLINA
         JOIN CURSO c ON d.CURSO_ID = c.CURSO_ID
         JOIN INSTITUICAO i ON c.ID_INSTITUICAO = i.ID_INSTITUICAO
         WHERE t.ID_TURMA = :tid AND i.OWNER_USER_ID = :uid
@@ -104,7 +104,7 @@ router.post(
       const inseridos: any[] = [];
 
       for (const a of alunos) {
-        // 1 — Buscar por RA_MATRICULA
+        // 1 – Buscar por RA_MATRICULA
         const s = await conn.execute(
           `SELECT ID_ALUNO FROM ALUNO WHERE RA_MATRICULA = :ra`,
           { ra: a.ra },
@@ -135,7 +135,7 @@ router.post(
           alunoId = ins.outBinds.id[0];
         }
 
-        // 2 — Criar matrícula se não existir
+        // 2 – Criar matrícula se não existir
         const m = await conn.execute(
           `SELECT 1 FROM MATRICULADO WHERE ID_ALUNO = :id AND ID_TURMA = :tid`,
           { id: alunoId, tid: turmaId },
@@ -171,7 +171,7 @@ router.post(
   }
 );
 
-/** GET — Exportar lista de alunos */
+/** GET – Exportar lista de alunos */
 router.get("/:turmaId/notas/exportar-csv", requireAuth, async (req: AuthRequest, res: Response) => {
 
   const userId = (() => { try { return ensureUserId(req.user?.id_usuario); } catch { return null; } })();
@@ -183,12 +183,12 @@ router.get("/:turmaId/notas/exportar-csv", requireAuth, async (req: AuthRequest,
   try {
     conn = await getConnectionFromPool();
 
-    // Valida dono
+    // CORRIGIDO: ID_DISCIPLINAS -> ID_DISCIPLINA
     const ver = await conn.execute(
       `
       SELECT 1
       FROM TURMAS t
-      JOIN DISCIPLINAS d ON t.ID_DISCIPLINA = d.ID_DISCIPLINAS
+      JOIN DISCIPLINAS d ON t.ID_DISCIPLINA = d.ID_DISCIPLINA
       JOIN CURSO c ON d.CURSO_ID = c.CURSO_ID
       JOIN INSTITUICAO i ON c.ID_INSTITUICAO = i.ID_INSTITUICAO
       WHERE t.ID_TURMA = :tid AND i.OWNER_USER_ID = :uid
@@ -218,7 +218,7 @@ router.get("/:turmaId/notas/exportar-csv", requireAuth, async (req: AuthRequest,
       nome: x.NOME
     }));
 
-    // Montar CSV — por enquanto sem notas
+    // Montar CSV – por enquanto sem notas
     const linhas = ["RA,NOME,COMPONENTE,NOTA"];
 
     for (const a of alunos) {

@@ -131,15 +131,15 @@ router.post("/", requireAuth, async (req: AuthRequest, res) => {
     if (Array.isArray(disciplinas)) {
       const sqlD = `
         INSERT INTO DISCIPLINAS (NOME, SIGLA, CODIGO, PERIODO_CURSO, CURSO_ID)
-        VALUES (:nome, :sigla, :codigo, :periodo, :curso)
+        VALUES (:n, :s, :c, :p, :cid)
       `;
       for (const d of disciplinas) {
         await conn.execute(sqlD, {
-          nome: d.NOME || null,
-          sigla: d.SIGLA || null,
-          codigo: d.CODIGO || null,
-          periodo: d.PERIODO_CURSO || null,
-          curso: newId
+          n: d.NOME || null,
+          s: d.SIGLA || null,
+          c: d.CODIGO || null,
+          p: d.PERIODO_CURSO || null,
+          cid: newId
         });
       }
     }
@@ -194,10 +194,7 @@ router.put("/:id", requireAuth, async (req: AuthRequest, res) => {
 
     // Atualizar nome do curso
     await conn.execute(
-      `
-      UPDATE CURSO SET NOME = :nome
-      WHERE CURSO_ID = :id
-      `,
+      `UPDATE CURSO SET NOME = :nome WHERE CURSO_ID = :id`,
       { nome, id: cursoId },
       { autoCommit: false }
     );

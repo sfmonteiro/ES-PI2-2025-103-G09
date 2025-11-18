@@ -1,23 +1,30 @@
 import oracledb from 'oracledb';
-import dotenv from 'dotenv'; dotenv.config();
+import dotenv from 'dotenv';
 
 dotenv.config();
 
-const host = process.env.ORACLE_HOST;
-const port = process.env.ORACLE_PORT ?? "1521";
+// Leitura das variáveis do .env
+const host = process.env.ORACLE_HOST?.trim();
+const port = process.env.ORACLE_PORT?.trim() || "1521";
+const serviceOrSid = (process.env.ORACLE_SERVICE || process.env.ORACLE_SID)?.trim();
+const user = process.env.ORACLE_USER?.trim();
+const password = process.env.ORACLE_PASSWORD?.trim();
 
-// prefer SERVICE_NAME, mas caia para SID se só tiver SID configurado
-const serviceOrSid = process.env.ORACLE_SERVICE ?? process.env.ORACLE_SID;
-if (!serviceOrSid) {
-  throw new Error("ERRO: variável ORACLE_SERVICE ou ORACLE_SID não informada no .env");
+// Verificações básicas
+if (!host || !serviceOrSid || !user || !password) {
+  throw new Error(
+    "ERRO: Variáveis do Oracle não configuradas corretamente no .env. " +
+    "Certifique-se de ORACLE_HOST, ORACLE_SID/ORACLE_SERVICE, ORACLE_USER e ORACLE_PASSWORD"
+  );
 }
 
-// monta connectString (ezconnect). Ex: host:1521/XE
+// Monta connectString (ezconnect) ex: host:1521/XE
 const connectString = `${host}:${port}/${serviceOrSid}`;
+console.log("Tentando criar pool com connectString:", connectString);
 
-const poolConfig = {
-  user: process.env.ORACLE_USER,
-  password: process.env.ORACLE_PASSWORD,
+const poolConfig: oracledb.PoolAttributes = {
+  user,
+  password,
   connectString,
   poolMin: 0,
   poolMax: 10,
@@ -28,7 +35,6 @@ let pool: oracledb.Pool | null = null;
 
 export async function initPool() {
   if (!pool) {
-    console.log("Tentando criar pool com connectString:", connectString);
     pool = await oracledb.createPool(poolConfig);
     console.log("✅ Oracle pool criado");
   }
