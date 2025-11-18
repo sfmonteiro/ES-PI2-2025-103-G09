@@ -1,6 +1,7 @@
 // src/routes/auth.ts
-// Responsável original: Guilherme...
-// Adições e melhorias: ChatGPT (comentadas)
+// Responsável original: Guilherme Mascarenhas Plácido Corrêa
+// Ra: 25020685
+
 
 import { Router, Request, Response } from "express";
 import { body, validationResult } from 'express-validator';

@@ -1,4 +1,4 @@
-// criado POR: Marialvo + Revisão Completa ChatGPT
+// criado POR: Marialvo
 // CRUD /api/cursos com Oracle, validação forte por usuário e PUT inteligente.
 
 import { Router } from "express";
