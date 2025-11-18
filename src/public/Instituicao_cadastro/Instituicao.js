@@ -128,7 +128,7 @@ window.addEventListener('click', (e) => {
 });
 
 // ======== ADICIONAR OPÇÃO NO SELECT (por ID e nome) ========
-// adição ChatGPT – Marialvo: mantém consistência com o backend
+// – Marialvo: mantém consistência com o backend
 function adicionarOpcaoSelectById(id, nome) {
   const existe = Array.from(select.options).some(opt => opt.textContent === nome);
   if (!existe) {
